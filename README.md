@@ -1,2 +1,2 @@
-# EECE571G-Project
-EECE 571G group project
+# EECE 571G Term Project
+Code & documentation for the EECE 571G term project.
