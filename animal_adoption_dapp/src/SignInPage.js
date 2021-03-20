@@ -27,7 +27,7 @@ class SignInPage extends Component{
                 <input type="text" id = "username"/><br/>
                 Password: <br/>
                 <input type="text" id = "password"/><br/>
-                <button type = "button" onClick = {()=>this.handleClick()}>submit</button>
+                <button type = "button" onClick = {()=>this.handleClick()}>Sign In</button>
             </form>
         )
     }

@@ -1,6 +1,6 @@
 //user
 export function signUp(username,passsword){
-    return {success: true, msg: "sign up successfully!"};
+    return {success: true, msg: "sign up successfully!", free_token:1};
 }
 
 export function signIn(username, password){
