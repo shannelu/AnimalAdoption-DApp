@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import {signIn} from './user_middleware';
+import React from 'react';
+import {signIn} from '../../user_middleware';
 
-class SignInPage extends Component{
+class SignInPage extends React.Component{
     constructor(){
         super();
         this.state = {
