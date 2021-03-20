@@ -3,8 +3,8 @@ export function signUp(username,passsword){
     return {success: true, msg: "sign up successfully!"};
 }
 
-export function signIn(username, passsword){
-    return {success: true, msg: "sign in successfully!"};
+export function signIn(username, password){
+    return {success: true, msg: "sign in successfully!", name: username, pwd: password};
 }
 
 export function getMyUsername(uuid){
