@@ -25,9 +25,9 @@ class Agent {
         };
     }
 
+    // User registeration
     async registeration(username, password, accountAddress) {
-
-        //await this.deployedAdoptionCentre.methods.approve(accountAddress, this.freeTokens).send({from: this.contractAddr});
+        await this.deployedAdoptionCentre.methods.approve(accountAddress, this.freeTokens).send({from: this.contractAddr});
         //await this.deployedAdoptionCentre.methods.allowance(this.contractAddr, accountAddress).send({from: this.contractAddr});
         const gasAmount = await this.deployedAdoptionCentre.methods.register(username, password, this.freeTokens).estimateGas({from: accountAddress});
         console.log(gasAmount);
@@ -37,6 +37,7 @@ class Agent {
         return [transReturn.success, transReturn.eventMsg];         
     }
 
+    // User login, will return uuid
     async login(username, password, accountAddress) {
         var currentTime = new Date();
         const gasAmount = await this.deployedAdoptionCentre.methods.login(username, password, currentTime.toLocaleString()).estimateGas({from: accountAddress});
@@ -49,6 +50,7 @@ class Agent {
         return [transReturn.success, transReturn.eventMsg, transReturn.uuid];  
     }
 
+    // User logout, nullify current uuid
     async logout(accountAddress) {
         console.log('logout uuid');
         console.log(this.uuid);
@@ -63,6 +65,22 @@ class Agent {
         let balance = await this.web3.eth.getBalance(accountAddress);
         return balance;
     }
+
+    // Add missing animal, image data must be converted to base64
+    async postAnimal(longitude, latitude, price, imageBase64, title, description, accountAddress) {
+        const gasAmount = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, this.uuid).estimateGas({from: accountAddress});
+        let transReceipt = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, this.uuid).send({from: accountAddress, gas: gasAmount});
+        let transReturn = transReceipt.events.OperationEvents.returnValues;
+        console.log(transReturn);
+        return [transReturn.success, transReturn.eventMsg];  
+    }
+
+    // Acquire nearby missing animal based on your current position(WARNING: this function is incomplete for now, only will return full list)
+    async getAnimalNearBy(accountAddress) {
+        let callsReturn = await this.deployedAdoptionCentre.methods.getAnimalNearBy(0, 0, 0, 0, 0, this.uuid).call({from: accountAddress});
+        return callsReturn;
+    }
+
 
 
 }

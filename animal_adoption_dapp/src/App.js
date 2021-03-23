@@ -11,7 +11,9 @@ class App extends React.Component{
       register : false,
       initialize : false,
       login : false,
-      logout : false
+      logout : false,
+      post : false,
+      get : false
     }
     
   }
@@ -31,7 +33,7 @@ class App extends React.Component{
     );
   }
 
-  async handleRegisteration(){
+  async handleRegisteration() {
     let result = await this.myAgent.registeration('bevis123', '0402', this.sellerAddr);
     if (result[0]) {
       this.setState(
@@ -43,7 +45,7 @@ class App extends React.Component{
     console.log(result[1]);
   }
 
-  async handleLogin(){
+  async handleLogin() {
     let result = await this.myAgent.login('bevis123', '0402', this.sellerAddr);
     if (result[0]) {
       this.setState(
@@ -68,6 +70,23 @@ class App extends React.Component{
       );
     }
     console.log(result[1]);
+  }
+
+  async handlePost() {
+    let result = await this.myAgent.postAnimal(0, 0, 10, 'imageBase64', 'Maomao', 'so cute', this.sellerAddr);
+    if (result[0]) {
+      this.setState(
+      {
+        post : !this.state.post
+      }
+      );
+    }
+    console.log(result[1]);
+  }
+
+  async handleGet() {
+    let result = await this.myAgent.getAnimalNearBy(this.sellerAddr);
+    console.log(result);
   }
 
   render(){
@@ -99,6 +118,20 @@ class App extends React.Component{
       >
         {
           this.state.logout ? 'logout success!' : 'logout'
+        }
+      </button>
+      <button type = "button" style = {this.state.post ? {color : "red"} : {color : "black"}}
+        onClick = {async ()=>this.handlePost()}
+      >
+        {
+          this.state.get ? 'posted!' : 'post'
+        }
+      </button>
+      <button type = "button" style = {this.state.get ? {color : "red"} : {color : "black"}}
+        onClick = {async ()=>this.handleGet()}
+      >
+        {
+          this.state.get ? 'got!' : 'get'
         }
       </button>
       </div>
