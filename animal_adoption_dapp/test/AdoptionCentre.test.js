@@ -24,22 +24,64 @@ contract('AdoptionCentre', (accounts) => {
     });
 
     it('Test user registeration', async () => {
-        let trans = await adoptionCentreInstance.register.sendTransaction("bevis", "0402", 100, user_1_address);
-        let calls = await adoptionCentreInstance.confirmRegistration.call("bevis", user_1_address);
-        assert(calls == "Successfully create user!", "User should be created successfully");
+        await adoptionCentreInstance.issueFreeTokens.sendTransaction(100, { from: user_1_address });
+        let transReceipt = await adoptionCentreInstance.register.sendTransaction("bevis", "0402", 100, { from: user_1_address });
+        truffleAssert.eventEmitted(transReceipt, 'OperationEvents', (ev) => {
+            if (ev.success) {
+                return true;
+            } else {
+                assert(false, ev.eventMsg);
+            }            
+        });
+        truffleAssert.eventEmitted(transReceipt, 'Transfer', (ev) => {
+            return ev.value == 100;
+        }); 
     });
 
     it('Test user login', async () => {
         var currentTime = new Date();
-        let calls = await adoptionCentreInstance.login.call("bevis", "0402", user_1_address, currentTime.toLocaleString());
-        if (calls[1] == "Login success!") {
-            let trans = await adoptionCentreInstance.login.sendTransaction("bevis", "0402", user_1_address, currentTime.toLocaleString());
-            console.log(calls[0]);
-        } else {
-            assert(false, "User should login successfully");
-        }      
-        
+        let transReceipt = await adoptionCentreInstance.login.sendTransaction("bevis", "0402", currentTime.toLocaleString(), { from: user_1_address });
+        truffleAssert.eventEmitted(transReceipt, 'LoginEvent', (ev) => {
+            if (ev.success) {
+                user_1_uuid = ev.uuid;
+                return true;
+            } else {
+                assert(false, ev.eventMsg);
+            }
+                
+        });   
     });
+
+    it('Test post missing animal information', async () => {
+        let transReceipt = await adoptionCentreInstance.postAnimalInfo.sendTransaction(1, 1, 100, "image", "Missing cat tudou", "He is so cute!", user_1_uuid, { from: user_1_address });
+        truffleAssert.eventEmitted(transReceipt, 'OperationEvents', (ev) => {
+            if (ev.success) {
+                return true;
+            } else {
+                assert(false, ev.eventMsg);
+            }   
+        });
+    });
+
+    it('Test post missing animal information', async () => {
+        let callsReceipt = await adoptionCentreInstance.getAnimalNearBy.call(1, 1, 1, 1, 1, user_1_uuid, { from: user_1_address });
+        if (!callsReceipt[2] || callsReceipt[1] != 1) {
+            assert(false, "Return animal information with error!");
+        }
+
+    });
+
+    it('Test user logout', async () => {
+        let transReceipt = await adoptionCentreInstance.logout.sendTransaction(user_1_uuid, { from: user_1_address });
+        truffleAssert.eventEmitted(transReceipt, 'OperationEvents', (ev) => {
+            if (ev.success) {
+                return true;
+            } else {
+                assert(false, ev.eventMsg);
+            }   
+        });
+
+    });    
 
 });
 
