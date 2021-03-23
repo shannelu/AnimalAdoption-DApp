@@ -1,5 +1,6 @@
 # Solidity
 build/
+abis/
 
 # Logs
 logs
