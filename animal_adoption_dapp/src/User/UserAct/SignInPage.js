@@ -1,5 +1,9 @@
 import React from 'react';
-import {signIn} from '../../user_middleware';
+import {signIn} from '../user_middleware';
+import {Form, Input, Checkbox, Button, message} from 'antd';
+import {UserOutlined, LockOutlined} from '@ant-design/icons';
+import './SignIn.css'
+import { Redirect } from 'react-router';
 
 class SignInPage extends React.Component{
     constructor(){
@@ -10,25 +14,61 @@ class SignInPage extends React.Component{
         }
     }
 
-    handleClick(){
+    logIn(){
         var input_usernmame = document.getElementById("username").value;
         var input_password = document.getElementById("password").value;
-        var info = signIn(input_usernmame,input_password);
-        this.setState({
-            signedin : info.success,
-            signedin_msg : info.msg
-        })
+        var success = signIn(input_usernmame,input_password);
+        if(success){
+            this.setState({
+                signedin : success
+            })
+        }
+        else{
+            message.info('Your password does not match!');
+        }
     }
 
     render(){
+        console.log(this.state.signedin);
         return(
-            <form>
-                Username: <br/>
-                <input type="text" id = "username"/><br/>
-                Password: <br/>
-                <input type="text" id = "password"/><br/>
-                <button type = "button" onClick = {()=>this.handleClick()}>Sign In</button>
-            </form>
+            <Form
+                name="normal_login"
+                className="login-form"
+                initialValues={{ remember: true }}
+                onFinish = {()=>this.logIn()}
+            >
+                {this.state.signedin ? <Redirect to="/UserInfo"/> : ""}
+                <h1>Log in</h1>
+                <Form.Item
+                    name="username"
+                    rules={[{ required: true, message: 'Please input your Username!' }]}
+                >
+                    <Input id = "username" prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your Password!' }]}
+                >
+                    <Input
+                    id = 'password'
+                    prefix={<LockOutlined className="site-form-item-icon" />}
+                    type="password"
+                    placeholder="Password"
+                    />
+                </Form.Item>
+                <Form.Item>
+                    <a className="login-form-forgot" href="">
+                    Forgot password?
+                    </a>
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType = 'submit'  className="login-form-button">
+                    Log in
+                    </Button><br/>
+                    <p></p>
+                    Or <a href="/Signup">Sign up now!</a>
+                </Form.Item>
+            </Form>
         )
     }
 }

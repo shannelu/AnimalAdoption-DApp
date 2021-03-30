@@ -1,0 +1,39 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+.container{
+	width: 2000px;
+	height: 340px;
+}
+.tab_title_wrap{
+	width: 2000px;
+	height: 100px;
+}
+.tab_title{
+	width: 1000px;
+	height: 50px;
+	text-align: center;
+	line-height: 40px;
+	color: rgb(5, 5, 5);
+	background-color: #f8f8f8;
+	display: inline-block;
+}
+.active{
+	color: rgb(253, 251, 251);
+	background-color: #050505;
+}
+.tab_item_wrap{
+	width: 2000px;
+	height: 300px;
+}
+.tab_item{
+	width: 2000px;
+	height: 300px;
+	color: rgb(3, 3, 3);
+	display: none;
+    text-align: center;
+}
+.show{
+	display: block;
+}

@@ -8,8 +8,8 @@ class UserInfoPage extends React.Component{
         return(
             <div className = "UserInfo">
                 <TabsControl>
-                    <UserProfilePage name = "profile" uuid = "100"></UserProfilePage>
-                    <UserTransPage name = "trans" uuid = "100"> </UserTransPage>
+                    <UserProfilePage name = "My Profile" uuid = "100"></UserProfilePage>
+                    <UserTransPage name = "My Transactions" uuid = "100"> </UserTransPage>
                 </TabsControl>
             </div>
         )

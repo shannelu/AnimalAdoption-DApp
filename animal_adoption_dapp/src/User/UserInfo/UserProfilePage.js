@@ -8,7 +8,8 @@ class UserProfilePage extends React.Component{
         this.state = {
             settingUname : false,
             settingPwd : false,
-            setPwdSuccess : 0
+            setPwdSuccess : 0,
+            pwd_msg : ""
         }
     }
 
@@ -56,6 +57,19 @@ class UserProfilePage extends React.Component{
         }
     }
 
+    cancelChangePwd(){
+        this.setState({
+            settingPwd : false,
+            setPwdSuccess : 0
+        })
+    }
+
+    cancelChangeUname(){
+        this.setState({
+            settingUname : false
+        })
+    }
+
     getTotalToken(){
         return getMyTotalToken(this.props.uuid);
     }
@@ -63,20 +77,27 @@ class UserProfilePage extends React.Component{
     render(){
         return(
             <form>
-                <h1>My Profile</h1>
                 <h2>Username:</h2>
                 {this.state.settingUname ? <input type="text" id = "new_username"/> : <b>{this.getUsername()}</b> }<br/>
-                <button type = "button" onClick = {this.state.settingUname ? ()=>this.updateUsername() : ()=>this.changeUsername()}>{this.state.settingUname ? "update username" : "change username"}</button><br/>
+                <button type = "button" onClick = {this.state.settingUname ? ()=>this.updateUsername() : ()=>this.changeUsername()}>{this.state.settingUname ? "update username" : "change username"}</button>
+                {this.state.settingUname ? 
+                    <button type = "button" onClick = {() => this.cancelChangeUname()}>cancel</button>
+                : ""}
+                <br/> 
                 {this.state.settingPwd ? 
                     <div>
                         <h2>Old Password:</h2>
-                        <input type="text" id = "old_pwd"/><br/>
+                        <input type="password" id = "old_pwd"/><br/>
                         <h2>New Password:</h2>
-                        <input type="text" id = "new_pwd"/>
+                        <input type="password" id = "new_pwd"/>
                     </div>
                 : "" }
                 <button type = "button" onClick = {this.state.settingPwd ? ()=>this.updatePwd() : ()=>this.changePwd()}>{this.state.settingPwd ? "update password" : "change password"}</button>
-                {this.state.setPwdSuccess == 0  ? "" : <b>{this.state.pwd_msg}</b>}<br/>
+                {this.state.settingPwd ? 
+                    <button type = "button" onClick = {() => this.cancelChangePwd()}>cancel</button>
+                : ""}
+                <br/>
+                {this.state.setPwdSuccess == 0 ? "" : <b>{this.state.pwd_msg}</b>}<br/>
                 <h2>Tokens:</h2>
                 <b>{this.getTotalToken()}</b>
             </form>

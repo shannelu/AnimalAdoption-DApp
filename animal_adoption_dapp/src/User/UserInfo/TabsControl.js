@@ -1,4 +1,5 @@
 import React from 'react';
+import "./tab.css"
 
 class TabsControl extends React.Component{
     constructor(){
