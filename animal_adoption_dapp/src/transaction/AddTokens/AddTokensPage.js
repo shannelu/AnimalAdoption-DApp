@@ -60,11 +60,12 @@ class AddTokensPage extends React.Component{
                 <b>{this.getGasFee()}</b>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType = 'submit'  className="login-form-button">
+                    <Button type="primary" htmlType = 'submit' className="login-form-button">
                     Confirm and Pay
                     </Button><br/>
                     <p></p>
-                    <Button type="primary" htmlType = 'submit'  className="login-form-button">
+                    {/* <Button type="primary" htmlType = 'submit' className="login-form-button" href="/UserInfo"> */}
+                    <Button type="primary" htmlType = 'submit' className="login-form-button" href="">
                     Return to Last Page
                     </Button><br/>
                 </Form.Item>

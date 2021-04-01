@@ -12,7 +12,7 @@ export function getMyTotalToken(uuid){
     return total_token;
 }
 
-export function getMyGasFee(){
+export function getMyGasFee(uuid){
     return gasfee;
 }
 
@@ -41,7 +41,7 @@ export function addTokens(uuid, from, to, amount){
     if(amount <= total_ether){
         success = true;
         total_ether -= amount / 10**18;  // 'to' account total ether will increase correspondingly (notice: gas fee deduction)
-        total_token += amount;
+        total_token = total_token + amount - getMyGasFee(uuid);
     }
     else{
         success = false;
