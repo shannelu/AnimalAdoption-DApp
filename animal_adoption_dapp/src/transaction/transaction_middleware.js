@@ -19,6 +19,10 @@ export function getAllAnimalInfo(animal_id){
     ]
 }
 
+export function addTokens(uuid, from, to){
+    return {success: true, trans_hash: "test_trans_hash"};
+}
+
 export function getAllConfirmOrder(uuid, order_number){
     return [
         {
