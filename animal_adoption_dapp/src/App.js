@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router,Route} from 'react-router-dom';
 import './App.css';
 import AnimalInfoPage from './transaction/AnimalInfo/AnimalInfoPage';
-import UserInfoPage from './User/UserInfo/UserInfoPage';
+// import UserInfoPage from './User/UserInfo/UserInfoPage';
 // import SignInPage from './User/UserAct/SignInPage';
 // import SignUpPage from './User/UserAct/SignUpPage';
 import AddTokensPage from './transaction/AddTokens/AddTokensPage';
-// import OrderConfirmPage from './transaction/OrderConfirm/OrderConfirmPage';
+import OrderConfirmPage from './transaction/OrderConfirm/OrderConfirmPage';
 
 class App extends React.Component{
   render(){
@@ -18,7 +18,7 @@ class App extends React.Component{
           <Route path = '/Signin' component = {SignInPage}/>
           <Route path = '/UserInfo' component = {UserInfoPage}/> */}
           <Route path = '/AddTokens' component = {AddTokensPage}/>
-          {/* <Route path = '/OrderConfirm' component = {OrderConfirmPage}/> */}
+          <Route path = '/OrderConfirm' component = {OrderConfirmPage}/>
         </div>
       </Router>
     )

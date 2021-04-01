@@ -36,7 +36,7 @@ class AddTokensPage extends React.Component{
     render(){
         return(
             <Form
-            name="addToknes"
+            name="addTokens"
             className="AddTokensForm"
             layout = "vertical"
             initialValues={{ remember: true }}
@@ -45,8 +45,8 @@ class AddTokensPage extends React.Component{
                 <h2>Add Tokens</h2>
                 {/* <h2>Confirm your personal information</h2>     */}
                 <Form.Item id = "username" label="Username">
-                </Form.Item>
                 <b>{this.getUsername()}</b>
+                </Form.Item>
                 <Form.Item id = "balance" label="Current Balance">
                 <b>{this.getTotalToken()}</b>
                 </Form.Item>

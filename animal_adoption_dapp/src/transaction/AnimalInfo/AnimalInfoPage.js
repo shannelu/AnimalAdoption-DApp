@@ -11,13 +11,14 @@ class AnimalInfoPage extends React.Component{
     }
 
     getMyAnimalInfo(){
+        // console.log(getAllAnimalInfo(this.props.animal_id));
         return getAllAnimalInfo(this.props.animal_id);
     }
 
     render(){
         var animal_info = this.getMyAnimalInfo();
         var animal_info_html = [];
-        animal_info.forEach(
+        animal_info.forEach(   // Incorrect for loop here. Need to add animal_id match condtion in midldeware.
             animal_info => {
                 animal_info_html.push(
                     <tr>

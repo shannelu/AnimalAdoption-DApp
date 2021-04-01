@@ -49,17 +49,17 @@ export function addTokens(uuid, from, to, amount){
     return {success: success, trans_hash: "test_trans_hash"};
 }
 
-export function getAllConfirmOrder(uuid, animal_id){   // order_number?
-    var success;
-    var animal_info = getAllAnimalInfo(animal_id);
-    if(animal_info.price <= total_token){
-        success = true;
-        total_token -= animal_info.price;  // 'to' account total ether will increase correspondingly (notice: gas fee deduction)
-        animal_info.sold = true;
-        // animal_info.order_num = "111"
-    }
-    else{
-        success = false;
-    }
-    return {success: success};
-}
+// export function getAllConfirmOrder(uuid, animal_id){   // order_number?
+//     var success;
+//     // var animal_info = getAllAnimalInfo(animal_id);
+//     // if(animal_info.price <= total_token){
+//     //     success = true;
+//     //     total_token -= animal_info.price;  // 'to' account total ether will increase correspondingly (notice: gas fee deduction)
+//     //     animal_info.sold = true;
+//     //     // animal_info.order_num = "111"
+//     // }
+//     // else{
+//     //     success = false;
+//     // }
+//     return {success: success};
+// }
