@@ -21,14 +21,32 @@ class AnimalInfoPage extends React.Component{
             animal_info => {
                 animal_info_html.push(
                     <tr>
-                        <td>{animal_info.animal_id}</td>
-                        <td>{animal_info.x}</td>
-                        <td>{animal_info.y}</td>
-                        <td>{animal_info.contactUserName}</td>
-                        <td>{animal_info.price}</td>
-                        {/* <td>{animal_info.imageBase64}</td> */}
-                        {/* <td>{animal_info.title}</td> */}
-                        <td>{animal_info.description}</td>                        
+                        <tr>
+                            <th>Animal ID</th>
+                            <td>{animal_info.animal_id}</td>
+                        </tr>
+                        <tr>
+                            <th>X Coordinate</th>
+                            <td>{animal_info.x}</td>
+                        </tr>
+                        <tr>
+                            <th>Y Coordinate</th>
+                            <td>{animal_info.y}</td>
+                        </tr>
+                        <tr>
+                            <th>Reporter</th>
+                            <td>{animal_info.contactUserName}</td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td>{animal_info.price}</td>
+                        </tr>
+                        <tr>
+                            {/* <th>image</th> */}
+                            {/* <th>Title</th> */}
+                            <th>Description</th>
+                            <td>{animal_info.description}</td>   
+                        </tr>                    
                     </tr>
                 )
             }
@@ -36,23 +54,10 @@ class AnimalInfoPage extends React.Component{
         return(
             <div>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Animal ID</th>
-                            <th>X Coordinates</th>
-                            <th>Y Coordinates</th>
-                            <th>Reporter</th>
-                            <th>Price</th>
-                            {/* <th>image</th> */}
-                            {/* <th>Title</th> */}
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {animal_info_html}
-                    </tbody>
-                    
+                    {animal_info_html}
                 </table>
+                <p><button onclick="window.location.href='/OrderConfirm'">I want to adopt him/her</button></p>
+                <p><button onclick="window.location.href='/AnimalInfo'">Find more animals</button></p>
             </div>
         )
     }
