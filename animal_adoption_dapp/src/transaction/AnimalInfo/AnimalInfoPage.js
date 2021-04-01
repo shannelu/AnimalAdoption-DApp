@@ -55,9 +55,9 @@ class AnimalInfoPage extends React.Component{
             <div>
                 <table>
                     {animal_info_html}
+                    <p><button onclick="window.location.href='/OrderConfirm'">I want to adopt him/her</button></p>
+                    <p><button onclick="window.location.href='/AnimalInfo'">Find more animals</button></p>
                 </table>
-                <p><button onclick="window.location.href='/OrderConfirm'">I want to adopt him/her</button></p>
-                <p><button onclick="window.location.href='/AnimalInfo'">Find more animals</button></p>
             </div>
         )
     }

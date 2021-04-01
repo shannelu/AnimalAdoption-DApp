@@ -1,5 +1,6 @@
 import React from 'react';
-import {addTokens} from '../transaction_middleware';
+import {addTokens, getMyUsername, getMyTotalToken, getMyGasFee} from '../transaction_middleware';
+import {Button, Form, Input, message} from 'antd';
 
 class AddTokensPage extends React.Component{
     constructor(props){
@@ -10,45 +11,64 @@ class AddTokensPage extends React.Component{
     }
 
     addMyTokens(){
-        // var username = document.getElementById("old_pwd").value;
-        return addTokens(this.props.uuid, username, );
+        var owner = "DApp_Offical" // Initialize the owner account name. Plz change later!!!
+        var input_amount = document.getElementById("tokens_amount").value;
+        var success = addTokens(this.props.uuid, this.props.username, owner, input_amount);
+        if(success){
+            message.info("Add Tokens Successfully!" );
+        }
+        else{
+            message.info("Add Tokens Fails! You don't have enough Ethers." );
+        }
     }
 
+    getUsername(){
+        return getMyUsername(this.props.uuid);
+    }
+
+    getTotalToken(){
+        return getMyTotalToken(this.props.uuid);
+    }
+
+    getGasFee(){
+        return getMyGasFee(this.props.uuid);
+    }
     render(){
-        var add_token = this.addMyTokens();
-        var add_token_html = [];
-        trans_records.forEach(
-            trans_record => {
-                trans_records_html.push(
-                    <tr>
-                        <td>{trans_record.from}</td>
-                        <td>{trans_record.to}</td>
-                        <td>{trans_record.hash}</td>
-                        <td>{trans_record.tokens}</td>
-                        <td>{trans_record.gas}</td>
-                    </tr>
-                )
-            }
-        )
         return(
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Transaction Hash</th>
-                            <th>Tokens</th>
-                            <th>Gas</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {trans_records_html}
-                    </tbody>
-                    
-                </table>
-            </div>
-            
+            <Form
+            name="addToknes"
+            className="AddTokensForm"
+            layout = "vertical"
+            initialValues={{ remember: true }}
+            onFinish = {()=>this.addMyTokens()}
+            >
+                <h2>Add Tokens</h2>
+                {/* <h2>Confirm your personal information</h2>     */}
+                <Form.Item id = "username" label="Username">
+                </Form.Item>
+                <b>{this.getUsername()}</b>
+                <Form.Item id = "balance" label="Current Balance">
+                <b>{this.getTotalToken()}</b>
+                </Form.Item>
+                <Form.Item id = "addtoken" label="Add Token Amount" rules={[{ required: true, message: 'Please input the amount of token you want to add!' }]} 
+                >
+                    <Input id = "tokens_amount" 
+                        placeholder="Input integer amount of token." 
+                    />
+                </Form.Item>
+                <Form.Item id = "gasfee" label="Gas Fee (Tokens)">
+                <b>{this.getGasFee()}</b>
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType = 'submit'  className="login-form-button">
+                    Confirm and Pay
+                    </Button><br/>
+                    <p></p>
+                    <Button type="primary" htmlType = 'submit'  className="login-form-button">
+                    Return to Last Page
+                    </Button><br/>
+                </Form.Item>
+            </Form>   
         )
     }
 }
