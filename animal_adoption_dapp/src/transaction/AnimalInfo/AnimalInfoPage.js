@@ -1,13 +1,12 @@
 import React from 'react';
 import {getAllAnimalInfo} from '../transaction_middleware';
-import "./transTable.css"
 
 
 class AnimalInfoPage extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-            animal_num = 0
+            animal_num : 0
         }
     }
 
@@ -18,7 +17,7 @@ class AnimalInfoPage extends React.Component{
     render(){
         var animal_info = this.getMyAnimalInfo();
         var animal_info_html = [];
-        trans_records.forEach(
+        animal_info.forEach(
             animal_info => {
                 animal_info_html.push(
                     <tr>
@@ -36,7 +35,7 @@ class AnimalInfoPage extends React.Component{
         )
         return(
             <div>
-                <table id = "hor-minimalist-b">
+                <table>
                     <thead>
                         <tr>
                             <th>Animal ID</th>
