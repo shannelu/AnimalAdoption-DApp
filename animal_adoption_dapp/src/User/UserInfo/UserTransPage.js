@@ -1,6 +1,20 @@
 import React from 'react';
 import {getAllMyTransRecords} from '../user_middleware'
+import {PageHeader, Table, Badge} from 'antd'
 import "./transTable.css"
+
+const columns = [
+    {title : "Date", dataIndex : "date"},
+    {title : "Transaction number", dataIndex : "t_num"},
+    {title : "From", dataIndex : "from"},
+    {title : "To", dataIndex : "to"},
+    {title : "Token", dataIndex : "tokens"},
+    {title : "Status", dataIndex : "status", 
+        render : (stat) => (
+            <Badge status = {stat} text = {stat}/>
+        )
+    }
+]
 
 class UserTransPage extends React.Component{
     constructor(props){
@@ -15,40 +29,15 @@ class UserTransPage extends React.Component{
     }
 
     render(){
-        var trans_records = this.getMyTransRecords();
-        var trans_records_html = [];
-        trans_records.forEach(
-            trans_record => {
-                trans_records_html.push(
-                    <tr>
-                        <td>{trans_record.from}</td>
-                        <td>{trans_record.to}</td>
-                        <td>{trans_record.hash}</td>
-                        <td>{trans_record.tokens}</td>
-                        <td>{trans_record.gas}</td>
-                    </tr>
-                )
-            }
-        )
+        var trans_records = this.getMyTransRecords()
         return(
             <div>
-                <table id = "hor-minimalist-b">
-                    <thead>
-                        <tr>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Transaction Hash</th>
-                            <th>Tokens</th>
-                            <th>Gas</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {trans_records_html}
-                    </tbody>
-                    
-                </table>
+                <PageHeader title = "My transactions" />
+                <Table
+                    dataSource = {trans_records}
+                    columns = {columns}
+                />
             </div>
-            
         )
     }
 }

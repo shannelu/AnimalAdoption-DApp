@@ -1,0 +1,13 @@
+.ant-form-horizontal{
+    padding-left: 0;
+    text-align: left;
+    offset: 0;
+}
+
+.ant-modal{
+    width: 700;
+}
+
+.ant-form-item{
+    width: 400;
+}
