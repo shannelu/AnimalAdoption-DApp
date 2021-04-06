@@ -81,6 +81,12 @@ class Agent {
         return callsReturn;
     }
 
+    async adoptAnimal(sellerAddr, buyerAddr) {
+        const gasAmount = await this.deployedAdoptionCentre.methods.adoptAnimal(sellerAddr, 0, this.uuid).estimateGas({from: buyerAddr});
+        let transReceipt = await this.deployedAdoptionCentre.methods.adoptAnimal(sellerAddr, 0, this.uuid).send({from: buyerAddr, gas: gasAmount});
+        console.log(transReceipt);
+        return [transReceipt.success, transReceipt.eventMsg];
+    }
 
 
 }
