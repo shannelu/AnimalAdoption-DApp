@@ -195,9 +195,6 @@ contract('AdoptionCentre', (accounts) => {
     });
 
     it('User2 adopt user1 missing animal', async () => {
-        // console.log('Hello2');
-        // t = await adoptionCentreInstance.getBalanceof.call(user_2_address);
-        // console.log(t.toString());
         let transReceipt = await adoptionCentreInstance.adoptAnimal(user_1_address, 0, user_2_uuid, { from: user_2_address });
         truffleAssert.eventEmitted(transReceipt, 'OperationEvents', (ev) => {
             if (ev.success) {
@@ -212,6 +209,12 @@ contract('AdoptionCentre', (accounts) => {
         }); 
         let callsReceipt = await adoptionCentreInstance.balanceOf(user_2_address);
         assert.equal(callsReceipt.toString(), '90');
+    });
+
+    it('Test get transaction records', async () => {
+        let callsReceipt = await adoptionCentreInstance.getTransRecords.call(user_1_uuid, { from: user_1_address });
+        console.log(callsReceipt);
+
     });
 
     it('Test user1 logout', async () => {

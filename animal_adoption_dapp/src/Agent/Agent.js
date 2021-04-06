@@ -25,6 +25,21 @@ class Agent {
         };
     }
 
+    // Get user transaction records
+    async getTransRecords(accountAddress) {
+        let callsReceipt = await this.deployedAdoptionCentre.methods.getTransRecords(this.uuid).call({from: accountAddress});
+        console.log(callsReceipt);
+    }
+
+    // Reset password
+    async resetPassword(old_password, new_password, accountAddress) {
+        const gasAmount = await this.deployedAdoptionCentre.methods.resetPassword(old_password, new_password, this.uuid).estimateGas({from: accountAddress});
+        console.log(gasAmount);
+        let transReceipt = await this.deployedAdoptionCentre.methods.resetPassword(old_password, new_password, this.uuid).send({from: accountAddress, gas: gasAmount});
+        let transReturn = transReceipt.events.OperationEvents.returnValues;
+        return [transReturn.success, transReturn.eventMsg];         
+    }
+
     // User registeration
     async registeration(username, password, accountAddress) {
         await this.deployedAdoptionCentre.methods.approve(accountAddress, this.freeTokens).send({from: this.contractAddr});

@@ -47,10 +47,12 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         uint256 animalIndex;
     }
 
-    // username to user information
+    // user address to user information
     mapping (address => UserInfo) users;
-    // uuid to username
+    // user address to username
     mapping (address => bytes32) activeUsers;
+    // user address to user related transaction information
+    mapping (address => TransactionInfo[]) transRecords;
 
     // all animal information
     AnimalInfo[] animalInfos;
@@ -62,6 +64,17 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
     event OperationEvents(string eventType, string eventMsg, bool success);
     event AcquireUserInfo(string userName, address addr);
     event LoginEvent(bytes32 uuid, string eventMsg, bool success);
+    event TransactionRecords(TransactionInfo[] records, string eventMsg, bool success);
+
+    // Get user transaction records
+    function getTransRecords(bytes32 uuid) public returns(TransactionInfo[] memory, string memory, bool, uint256) {
+        if (!checkUUID(msg.sender, uuid) && transRecords[msg.sender].length == 1) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            TransactionInfo[] memory tmp;
+            return (tmp, "Get transactions failed!", false, 0);
+        }
+        return (transRecords[msg.sender], "Get transactions!", true, transRecords[msg.sender].length);
+    }
 
     // Reset password
     function resetPassword(string memory _old_password, string memory _new_password, bytes32 uuid) public returns(bool) {
@@ -124,7 +137,8 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
             trans.from = msg.sender;
             trans.to = _seller;
             trans.animalIndex = _index;
-            transactionInfos.push(trans);
+            transRecords[msg.sender].push(trans);
+            transRecords[_seller].push(trans);
             emit OperationEvents("TRANSACTION", "Transaction success!", true);
             return true;
         } else {
