@@ -129,17 +129,6 @@ class App extends React.Component{
 
   render(){
     return (
-<<<<<<< HEAD
-      <div id='root'>
-        <button type = "button" style = {this.state.like ? {color : "red"} : {color : "black"}}
-          onClick = {()=>this.handleClick()}
-        >
-          {
-            this.state.like ? 'liked!' : 'like'
-          }
-        </button>
-        <h1>{getMyUsername(100)}</h1>
-=======
       <div>
       <button type = "button" style = {this.state.initialize ? {color : "red"} : {color : "black"}}
         onClick = {async ()=>this.initializeAgent()}
@@ -183,9 +172,6 @@ class App extends React.Component{
           this.state.get ? 'got!' : 'get'
         }
       </button>
-<<<<<<< HEAD
->>>>>>> bevis
-=======
       <button type = "button" style = {this.state.adopt ? {color : "red"} : {color : "black"}}
         onClick = {async ()=>this.handleAdoption()}
       >
@@ -207,7 +193,6 @@ class App extends React.Component{
           this.state.getTransRecords ? 'gotTransRecords!' : 'getTransRecords'
         }
       </button>
->>>>>>> bevis
       </div>
     )
   }
