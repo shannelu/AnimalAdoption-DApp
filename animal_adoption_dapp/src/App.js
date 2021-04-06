@@ -1,158 +1,102 @@
-import React, {Component} from 'react';
-import './App.css';
-<<<<<<< HEAD
-import {signIn, signOut, getMyUsername, getMyTotalToken, setMyPassword, setMyUsername} from './user_middleware';
-=======
-import Web3 from 'web3';
-import Agent from './Agent/Agent.js';
->>>>>>> bevis
+import React, { Component } from 'react';
+import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
+// import CurrentLocation from './Map/Map';
 
-class App extends React.Component{
-  constructor(){
-    super();
-    
-    this.state = {
-      register : false,
-      initialize : false,
-      login : false,
-      logout : false,
-      post : false,
-      get : false
+const mapStyles = {
+  width: '100%',
+  height: '100%'
+};
+
+
+export class MapContainer extends Component {
+  state = {
+    showingInfoWindow: false,
+    activeMarker: {},
+    selectedPlace: {}
+  };
+
+  onMarkerClick = (props, marker, e) =>
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true
+    });
+
+  onClose = props => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
+      });
     }
-    
-  }
+  };
 
-  async initializeAgent() {
-    const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-    this.accounts = await web3.eth.getAccounts();
-    this.contractAddr = this.accounts[0];
-    this.sellerAddr = this.accounts[1];
-    this.buyerAddr = this.accounts[2];
-    this.myAgent = new Agent();
-    this.myAgent.initialize(this.contractAddr);
-    this.setState(
+  render() {
+    let markers = [ // Just an example this should probably be in your state or props. 
       {
-        initialize : !this.state.initialize
-      }
-    );
-  }
-
-  async handleRegisteration() {
-    let result = await this.myAgent.registeration('bevis123', '0402', this.sellerAddr);
-    if (result[0]) {
-      this.setState(
+        name: "marker1",
+        position: { lat: 49.246292, lng: -123.116226 },
+        url:'http://www.google.com/'
+      },
       {
-        register : !this.state.register
-      }
-      );
-    }
-    console.log(result[1]);
-  }
-
-  async handleLogin() {
-    let result = await this.myAgent.login('bevis123', '0402', this.sellerAddr);
-    if (result[0]) {
-      this.setState(
+        name: "marker2",
+        position: { lat: 49.166592, lng: -123.133568 },
+        url:'https://www.youtube.com/'
+      },
       {
-        logout : false,
-        login : !this.state.login
+        name: "marker3",
+        position: { lat: 49.267132, lng: -122.968941 },
+        url:'https://www.ubc.ca/'
       }
-      );
-      console.log(result[2]);
-    }
-    console.log(result[1]);
-  }
+    ];
 
-  async handleLogout(){
-    let result = await this.myAgent.logout(this.sellerAddr);
-    if (result[0]) {
-      this.setState(
-      {
-        logout : !this.state.logout,
-        login : false
-      }
-      );
-    }
-    console.log(result[1]);
-  }
-
-  async handlePost() {
-    let result = await this.myAgent.postAnimal(0, 0, 10, 'imageBase64', 'Maomao', 'so cute', this.sellerAddr);
-    if (result[0]) {
-      this.setState(
-      {
-        post : !this.state.post
-      }
-      );
-    }
-    console.log(result[1]);
-  }
-
-  async handleGet() {
-    let result = await this.myAgent.getAnimalNearBy(this.sellerAddr);
-    console.log(result);
-  }
-
-  render(){
     return (
-<<<<<<< HEAD
-      <div id='root'>
-        <button type = "button" style = {this.state.like ? {color : "red"} : {color : "black"}}
-          onClick = {()=>this.handleClick()}
-        >
+      // <CurrentLocation
+      //   centerAroundCurrentLocation
+      //   google={this.props.google}
+      // ></CurrentLocation>
+      <Map
+        google={this.props.google}
+        zoom={12}
+        style={mapStyles}
+        initialCenter={
           {
-            this.state.like ? 'liked!' : 'like'
+            lat: 49.246292,
+            lng: -123.116226
           }
-        </button>
-        <h1>{getMyUsername(100)}</h1>
-=======
-      <div>
-      <button type = "button" style = {this.state.initialize ? {color : "red"} : {color : "black"}}
-        onClick = {async ()=>this.initializeAgent()}
-      >
-        {
-          this.state.initialize ? 'initialized!' : 'initialize'
         }
-      </button>
-      <button type = "button" style = {this.state.register ? {color : "red"} : {color : "black"}}
-        onClick = {async ()=>this.handleRegisteration()}
       >
-        {
-          this.state.register ? 'registered!' : 'register'
-        }
-      </button>
-      <button type = "button" style = {this.state.login ? {color : "red"} : {color : "black"}}
-        onClick = {async ()=>this.handleLogin()}
-      >
-        {
-          this.state.login ? 'login success!' : 'login'
-        }
-      </button>
-      <button type = "button" style = {this.state.logout ? {color : "red"} : {color : "black"}}
-        onClick = {async ()=>this.handleLogout()}
-      >
-        {
-          this.state.logout ? 'logout success!' : 'logout'
-        }
-      </button>
-      <button type = "button" style = {this.state.post ? {color : "red"} : {color : "black"}}
-        onClick = {async ()=>this.handlePost()}
-      >
-        {
-          this.state.get ? 'posted!' : 'post'
-        }
-      </button>
-      <button type = "button" style = {this.state.get ? {color : "red"} : {color : "black"}}
-        onClick = {async ()=>this.handleGet()}
-      >
-        {
-          this.state.get ? 'got!' : 'get'
-        }
-      </button>
->>>>>>> bevis
-      </div>
-    )
+
+      {markers.map((marker, index) => (
+        <Marker
+          key={index} // Need to be unique
+          onClick={this.onMarkerClick}
+          name={marker.name}
+          position={marker.position}
+          url={marker.url}
+        />
+      ))}
+        <InfoWindow
+          marker={this.state.activeMarker}
+          visible={this.state.showingInfoWindow}
+          onClose={this.onClose}
+        >
+        <div>
+          <h4><a href={this.state.selectedPlace.url}>{this.state.selectedPlace.name}</a></h4>
+        </div>
+    </InfoWindow>
+
+      </Map>
+      // </CurrentLocation>
+    );
   }
 }
 
-export default App;
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyBgao-aq8zyAUnJUCg335-tYIDAI5AJeAc'
+})(MapContainer)
+
+
+
+
+
