@@ -47,10 +47,12 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         uint256 animalIndex;
     }
 
-    // username to user information
+    // user address to user information
     mapping (address => UserInfo) users;
-    // uuid to username
+    // user address to username
     mapping (address => bytes32) activeUsers;
+    // user address to user related transaction information
+    mapping (address => TransactionInfo[]) transRecords;
 
     // all animal information
     AnimalInfo[] animalInfos;
@@ -58,10 +60,39 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
     TransactionInfo[] transactionInfos;
 
     // Events
-    // eventType = "ANIMAL_INFO_OPS", "USER_ACTIVE", "TRANSACTION", "REGISTRATION", "LOGOUT"
+    // eventType = "ANIMAL_INFO_OPS", "USER_ACTIVE", "TRANSACTION", "REGISTRATION", "LOGOUT", "PASSWORDRESET"
     event OperationEvents(string eventType, string eventMsg, bool success);
     event AcquireUserInfo(string userName, address addr);
     event LoginEvent(bytes32 uuid, string eventMsg, bool success);
+    event TransactionRecords(TransactionInfo[] records, string eventMsg, bool success);
+
+    // Get user transaction records
+    function getTransRecords(bytes32 uuid) public returns(TransactionInfo[] memory, string memory, bool, uint256) {
+        if (!checkUUID(msg.sender, uuid) && transRecords[msg.sender].length == 1) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            TransactionInfo[] memory tmp;
+            return (tmp, "Get transactions failed!", false, 0);
+        }
+        return (transRecords[msg.sender], "Get transactions!", true, transRecords[msg.sender].length);
+    }
+
+    // Reset password
+    function resetPassword(string memory _old_password, string memory _new_password, bytes32 uuid) public returns(bool) {
+        if (!checkUUID(msg.sender, uuid)) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            return false;
+        }
+        bytes32 new_pass_hash = hash(_new_password);
+        bytes32 old_pass_hash = hash(_old_password);
+        UserInfo storage user = users[msg.sender];
+        if (old_pass_hash != user.passHash) {
+            emit OperationEvents("PASSWORDRESET", "Old password does not match!", false);
+            return false;
+        }
+        user.passHash = new_pass_hash;
+        emit OperationEvents("PASSWORDRESET", "Password reset success!", true);
+        return true;
+    }
 
     // User operation funcs
     function logout(bytes32 uuid) public {
@@ -82,7 +113,7 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         return (animalInfos, animalInfos.length, true);
     }
 
-    function transferFrom(address _to, uint256 _index, bytes32 uuid) public returns(bool) {
+    function adoptAnimal(address _seller, uint256 _index, bytes32 uuid) public returns(bool) {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             return false;
@@ -98,13 +129,16 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
             return false;
         }
 
-        if (transferFrom(msg.sender, _to, animal.price)){
+        approve(msg.sender, animal.price);
+
+        if (transferFrom(msg.sender, _seller, animal.price)){
             animal.status = "FOUND";
             TransactionInfo memory trans;
             trans.from = msg.sender;
-            trans.to = _to;
+            trans.to = _seller;
             trans.animalIndex = _index;
-            transactionInfos.push(trans);
+            transRecords[msg.sender].push(trans);
+            transRecords[_seller].push(trans);
             emit OperationEvents("TRANSACTION", "Transaction success!", true);
             return true;
         } else {
@@ -146,8 +180,9 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         return (true, users[msg.sender].userName, msg.sender);
     }
 
-    function issueFreeTokens(uint256 _tokens) public {
-        approve(msg.sender, _tokens);
+    function issueFreeTokens(uint256 _tokens, address _to) public {
+        approve(_to, _tokens);
+        transfer(_to, _tokens);
     }
 
     function register(string memory _userName, string memory _password, uint256 _tokens) public payable returns(bool) {

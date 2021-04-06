@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
-<<<<<<< HEAD
-import {signIn, signOut, getMyUsername, getMyTotalToken, setMyPassword, setMyUsername} from './user_middleware';
-=======
 import Web3 from 'web3';
 import Agent from './Agent/Agent.js';
->>>>>>> bevis
 
 class App extends React.Component{
   constructor(){
@@ -17,7 +13,10 @@ class App extends React.Component{
       login : false,
       logout : false,
       post : false,
-      get : false
+      get : false,
+      adopt : false,
+      resetPass : false,
+      getTransRecords : false
     }
     
   }
@@ -35,6 +34,41 @@ class App extends React.Component{
         initialize : !this.state.initialize
       }
     );
+  }
+
+  async handleAdoption() {
+    let result = await this.myAgent.adoptAnimal(this.sellerAddr, this.buyerAddr);
+    if (result[0]) {
+      this.setState(
+      {
+        adopt : !this.state.adopt
+      }
+      );
+    }
+    console.log(result[1]);
+  }
+
+  async handleGetTransRecords() {
+    let result = await this.myAgent.getTransRecords(this.sellerAddr);
+    if (result[0]) {
+      this.setState(
+      {
+        resetPass : !this.state.resetPass
+      }
+      );
+    }
+  }
+
+  async handleResetPassword() {
+    let result = await this.myAgent.resetPassword("0402", "0330", this.sellerAddr);
+    if (result[0]) {
+      this.setState(
+      {
+        resetPass : !this.state.resetPass
+      }
+      );
+    }
+    console.log(result[1]);
   }
 
   async handleRegisteration() {
@@ -147,6 +181,30 @@ class App extends React.Component{
       >
         {
           this.state.get ? 'got!' : 'get'
+        }
+      </button>
+<<<<<<< HEAD
+>>>>>>> bevis
+=======
+      <button type = "button" style = {this.state.adopt ? {color : "red"} : {color : "black"}}
+        onClick = {async ()=>this.handleAdoption()}
+      >
+        {
+          this.state.adopt ? 'adopted!' : 'adopt'
+        }
+      </button>
+      <button type = "button" style = {this.state.resetPass ? {color : "red"} : {color : "black"}}
+        onClick = {async ()=>this.handleResetPassword()}
+      >
+        {
+          this.state.resetPass ? 'reseted!' : 'reset'
+        }
+      </button>
+      <button type = "button" style = {this.state.getTransRecords ? {color : "red"} : {color : "black"}}
+        onClick = {async ()=>this.handleGetTransRecords()}
+      >
+        {
+          this.state.getTransRecords ? 'gotTransRecords!' : 'getTransRecords'
         }
       </button>
 >>>>>>> bevis
