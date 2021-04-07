@@ -37,7 +37,7 @@ class SignInPage extends React.Component{
                 initialValues={{ remember: true }}
                 onFinish = {()=>this.logIn()}
             >
-                {this.state.signedin ? <Redirect to="/UserInfo"/> : ""}
+                {this.state.signedin ? <Redirect to="/main"/> : ""}
                 <h1>Log in</h1>
                 <Form.Item
                     name="username"
@@ -66,7 +66,7 @@ class SignInPage extends React.Component{
                     Log in
                     </Button><br/>
                     <p></p>
-                    Or <a href="/Signup">Sign up now!</a>
+                    Or <a href="/signup">Sign up now!</a>
                 </Form.Item>
             </Form>
         )

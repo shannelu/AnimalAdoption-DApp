@@ -51,12 +51,13 @@ export function getAllMyTransRecords(uuid){
             to: 'Oliver',
             tokens : 1,
             status : "processing",
+            hash: "0x1",
             gas: 1
         },
         {
             date: "3.30",
             t_num : 2,
-            from: "Julia",
+            from: "Julia ",
             to: 'Oliver',
             hash: "0x2",
             tokens: 2,
@@ -67,7 +68,27 @@ export function getAllMyTransRecords(uuid){
             date: "3.30",
             t_num : 3,
             from: "Oliver",
-            to: 'Bevis',
+            to: 'Bevis ',
+            hash: "0x3",
+            tokens: 3,
+            status : "success",
+            gas: 3
+        },
+        {
+            date: "3.30",
+            t_num : 3,
+            from: "Oliver",
+            to: 'Bevis ',
+            hash: "0x3",
+            tokens: 3,
+            status : "success",
+            gas: 3
+        },
+        {
+            date: "3.30",
+            t_num : 3,
+            from: "Oliver",
+            to: 'Bevis ',
             hash: "0x3",
             tokens: 3,
             status : "success",

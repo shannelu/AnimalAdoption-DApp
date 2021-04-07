@@ -21,6 +21,14 @@ class UserProfilePage extends React.Component{
         return getMyUsername(this.props.uuid);
     }
 
+    getPostsNum(){
+        return 1;
+    }
+
+    getAdoptedNum(){
+        return 10;
+    }
+
     changeUsername(){
         this.setState({
             settingUname : true
@@ -133,14 +141,13 @@ class UserProfilePage extends React.Component{
                       ]}
                 >
                     <Row>
-                        <Statistic title="Plan" value="Pending" />
+                        <Statistic title="Posts" value={this.getPostsNum()} />
                         <Statistic
-                        title="Price"
-                        prefix="$"
-                        value={568.08}
-                        style={{
-                            margin: '0 32px',
-                        }}
+                            title="Adopted"
+                            value={this.getAdoptedNum()}
+                            style={{
+                                margin: '0 32px',
+                            }}
                         />
                         <Statistic title="Tokens" value= {this.getTotalToken()} />
                     </Row>

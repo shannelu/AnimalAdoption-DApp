@@ -1,8 +1,11 @@
 import React from 'react';
-import {Form, DatePicker, Select, Cascader, Input, Space, Button} from 'antd';
+import {Form, DatePicker, Select, Cascader, Input, Space, Button, message, Upload} from 'antd';
 import moment from 'moment';
 import {post} from "../user_middleware"
+import {UploadOutlined} from '@ant-design/icons'
 const {Option} = Select;
+
+var imgUrlBase64 = [];
 
 const layout = {
     labelCol: { span: 5},
@@ -73,6 +76,33 @@ const options = [
     }
 ]
 
+const imgChange = e => {
+    var fileList = e.target.files;
+    var file_num = fileList.length;
+    var AllowImgFileSize = 2100000;
+    for(let i = 0; i < fileList.length;i++){
+        let reader = new FileReader();
+        reader.readAsDataURL(fileList[i]);
+        reader.onload = function(e){
+            if (AllowImgFileSize != 0 && AllowImgFileSize < reader.result.length) {
+                message.error("file size exceeds 2MB!");
+                return;
+            }else{
+                console.log(reader.result)
+                imgUrlBase64.push(reader.result);
+            }
+            return;
+        }
+    }
+    message.success(`${file_num} file${file_num > 1 ? "s" : ""} ha${file_num > 1 ? "ve" : "s"} been successfully uploaded`);
+    console.log(imgUrlBase64);
+}
+
+const upload = ()=>{
+    //message.success("clicked");
+    document.getElementById("myimg").click();
+}
+
 class PostInfoPage extends React.Component{
     constructor(props){
         super(props);
@@ -85,13 +115,16 @@ class PostInfoPage extends React.Component{
     }
 
     post(){
+        console.log(imgUrlBase64)
         var date = document.getElementById("date").value;
         var type = document.getElementById("type").value;
         var city = document.getElementById("city").value;
         var street = document.getElementById("street").value;
         var description = document.getElementById("description").value;
-        post(date,type,city,street,null,description);
+        post(date,type,city,street,imgUrlBase64,description);
     }
+
+    
 
     render(){
         return(
@@ -121,7 +154,13 @@ class PostInfoPage extends React.Component{
                         <Input id = "street" placeholder = "Street name" style = {{width:152}}></Input>
                     </Space>
                 </Form.Item>
-                <Form.Item label = "Description" rules={[{ required: true, message: 'This is a required field!' }]} >
+                <Form.Item hidden = {true}>
+                    <Input type = "file" id = "myimg" multiple = 'multiple' onChange = {imgChange} style = {{visibility:'hidden'}}></Input>
+                </Form.Item>
+                <Form.Item>
+                    <Button icon = {<UploadOutlined/>} id = "test" onClick = {upload}>Upload some pictures about it!</Button>
+                </Form.Item>
+                <Form.Item layout = 'horizontal' label = "Description" rules={[{ required: true, message: 'This is a required field!' }]} >
                     <Input.TextArea id = "description" 
                                     placeholder = "Tell us more about this little thing~" 
                                     allowClear
