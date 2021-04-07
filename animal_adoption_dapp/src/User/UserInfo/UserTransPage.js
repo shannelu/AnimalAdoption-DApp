@@ -46,7 +46,7 @@ class UserTransPage extends React.Component{
                     columns = {columns}
                     pagination = {
                         {
-                            position : ['bottomLeft'], 
+                            position : ['bottomCenter'], 
                             total : trans_records.length,
                             pageSize : 3,
                             responsive : false,

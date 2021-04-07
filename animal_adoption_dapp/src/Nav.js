@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Menu, Button} from 'antd';
+import {Layout, Menu, Button, Space, Divider, Col} from 'antd';
 import {} from '@ant-design/icons';
 import './Nav.css'
 
@@ -11,18 +11,18 @@ class Nav extends React.Component{
     }
 
     check_title_index( index ){
-        return index === this.state.currentIndex ? "tab_title active" : "tab_title"
+        return index === this.state.currentIndex ? "nav_title active" : "nav_title"
     }
 
     check_item_index( index ){
-        return index === this.state.currentIndex ? "tab_item show" : "tab_item"
+        return index === this.state.currentIndex ? "nav_item show" : "nav_item"
     }
 
     render(){
         return(
             <Layout>
                 <Layout.Header className="header">
-                    <Menu classname = "tab_title_wrap" theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                    <Menu classname = "nav_title_wrap" theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                         { 
                             React.Children.map( this.props.children , ( element,index ) => {
                                 return(
@@ -32,12 +32,14 @@ class Nav extends React.Component{
                                 )
                             }) 
                         }
-                        <a href="/signin">Sign in</a>
-                        <a href="/signup">Sign up</a>
+                        <Space size={20} split = {<Divider type = 'vertical' style = {{color:'white'}}/>}>
+                            <a href="/signin">Sign in</a>
+                            <a href="/signup">Sign up</a>
+                        </Space>
                     </Menu>
                     
                 </Layout.Header>
-                <Layout.Content className = "tab_item_wrap">
+                <Layout.Content className = "nav_item_wrap">
                     {
                         React.Children.map(this.props.children,( element,index )=>{
                             return(

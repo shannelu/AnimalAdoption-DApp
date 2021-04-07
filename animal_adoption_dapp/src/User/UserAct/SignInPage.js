@@ -1,6 +1,6 @@
 import React from 'react';
 import {signIn} from '../user_middleware';
-import {Form, Input, Checkbox, Button, message} from 'antd';
+import {Form, Input, Checkbox, Button, message, Space} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import './SignIn.css'
 import { Redirect } from 'react-router';
