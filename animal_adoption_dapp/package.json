@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
     "@react-google-maps/api": "^2.1.1",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
@@ -14,14 +13,8 @@
     "chai-as-promised": "^7.1.1",
     "google-maps-react": "^2.0.6",
     "openzeppelin-solidity": "^3.4.1",
-=======
     "@ant-design/icons": "^4.6.2",
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
-    "@testing-library/user-event": "^12.8.3",
-    "antd": "^4.15.0",
     "moment": "^2.29.1",
->>>>>>> runzw
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
