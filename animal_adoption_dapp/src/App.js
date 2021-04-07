@@ -1,35 +1,34 @@
 import React, {Component} from 'react';
+import {BrowserRouter as Router,Route, Switch} from 'react-router-dom'
 import './App.css';
-import {signIn, signOut, getMyUsername, getMyTotalToken, setMyPassword, setMyUsername} from './user_middleware';
+
+import SignInPage from './User/UserAct/SignInPage';
+import SignUpPage from './User/UserAct/SignUpPage';
+import PostInfoPage from './User/UserAct/PostInfoPage'
+import Main from './Main';
+import UserInfoPage from './User/UserInfo/UserInfoPage';
 
 class App extends React.Component{
-  constructor(){
-    super();
-    this.state = {
-      like : false
-    }
-  }
-
-  handleClick(){
-    this.setState(
-      {
-        like : !this.state.like
-      }
-    )
-  }
-
   render(){
     return (
-      <div id='root'>
-        <button type = "button" style = {this.state.like ? {color : "red"} : {color : "black"}}
-          onClick = {()=>this.handleClick()}
-        >
-          {
-            this.state.like ? 'liked!' : 'like'
-          }
-        </button>
-        <h1>{getMyUsername(100)}</h1>
-      </div>
+      <Router>
+        <div>
+          <Switch>
+            <Route path="/main">
+              <Main />
+            </Route>
+            <Route path="/signin">
+              <SignInPage />
+            </Route>
+            <Route path="/signup">
+              <SignUpPage />
+            </Route>
+            <Route path="/post">
+              <PostInfoPage />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     )
   }
 }

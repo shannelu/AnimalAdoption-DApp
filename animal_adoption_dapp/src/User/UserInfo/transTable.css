@@ -1,0 +1,12 @@
+/* ------------------
+ styling for the tables 
+   ------------------   */
+   body
+   {
+       line-height: 2.0em;
+   }
+
+   table
+   {
+       margin:auto;
+   }
