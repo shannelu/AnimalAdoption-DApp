@@ -7,14 +7,14 @@ class Agent {
     constructor() {
         this.uuid = null;
         this.freeTokens = 100;
-        this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
     }
 
-    async initialize(contractAddress) {
-        this.contractAddr = contractAddress;
-        this.networkId = await this.web3.eth.net.getId();
+    async initialize() {
+        this.networkId = await window.web3.eth.net.getId();
         this.networkData = AdoptionCentre.networks[this.networkId];
-        this.deployedAdoptionCentre = new this.web3.eth.Contract(AdoptionCentre.abi, this.networkData.address);
+        this.contractAddr = this.networkData.address;
+        this.deployedAdoptionCentre = new window.web3.eth.Contract(AdoptionCentre.abi, this.networkData.address);
+        console.log(this.deployedAdoptionCentre);
         this.isDeployed = function() {
             if (this.networkData) {
                 return true;
@@ -42,9 +42,14 @@ class Agent {
 
     // User registeration
     async registeration(username, password, accountAddress) {
-        await this.deployedAdoptionCentre.methods.approve(accountAddress, this.freeTokens).send({from: this.contractAddr});
+        console.log("account address");
+        console.log(accountAddress);
+        console.log("contract address");
+        console.log(this.contractAddr);
+        await this.deployedAdoptionCentre.methods.approve(accountAddress, this.freeTokens).send({from: "0x459C38A1004632d16d70Df9A45244695068bc640"});
         //await this.deployedAdoptionCentre.methods.allowance(this.contractAddr, accountAddress).send({from: this.contractAddr});
         const gasAmount = await this.deployedAdoptionCentre.methods.register(username, password, this.freeTokens).estimateGas({from: accountAddress});
+        console.log("gasAmount");
         console.log(gasAmount);
         let transReceipt = await this.deployedAdoptionCentre.methods.register(username, password, this.freeTokens).send({from: accountAddress, gas: gasAmount});
         let transReturn = transReceipt.events.OperationEvents.returnValues;
@@ -77,7 +82,7 @@ class Agent {
     }
 
     async getBalanceOf(accountAddress) {
-        let balance = await this.web3.eth.getBalance(accountAddress);
+        let balance = await window.web3.eth.getBalance(accountAddress);
         return balance;
     }
 

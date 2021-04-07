@@ -180,7 +180,7 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         return (true, users[msg.sender].userName, msg.sender);
     }
 
-    function issueFreeTokens(uint256 _tokens, address _to) public {
+    function issueTokens(uint256 _tokens, address _to) public {
         approve(_to, _tokens);
         transfer(_to, _tokens);
     }

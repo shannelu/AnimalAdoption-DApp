@@ -8,6 +8,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
     "@truffle/hdwallet-provider": "^1.2.3",
+    "antd": "^4.15.0",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "openzeppelin-solidity": "^3.4.1",

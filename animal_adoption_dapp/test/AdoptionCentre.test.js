@@ -64,7 +64,7 @@ contract('AdoptionCentre', (accounts) => {
     });
 
     it('Issue free tokens to user1', async () => {
-        let transReceipt = await adoptionCentreInstance.issueFreeTokens.sendTransaction(100, user_1_address, { from: deployerAddress });
+        let transReceipt = await adoptionCentreInstance.issueTokens.sendTransaction(100, user_1_address, { from: deployerAddress });
         truffleAssert.eventEmitted(transReceipt, 'Approval', (ev) => {
             return ev.value == 100 && ev.spender == user_1_address;
         });
@@ -168,7 +168,7 @@ contract('AdoptionCentre', (accounts) => {
                 assert(false, ev.eventMsg);
             }
         });
-        let transReceipt_2 = await adoptionCentreInstance.issueFreeTokens.sendTransaction(100, user_2_address, { from: deployerAddress });
+        let transReceipt_2 = await adoptionCentreInstance.issueTokens.sendTransaction(100, user_2_address, { from: deployerAddress });
         truffleAssert.eventEmitted(transReceipt_2, 'Approval', (ev) => {
             return ev.value == 100 && ev.spender == user_2_address;
         });
