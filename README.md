@@ -3,6 +3,7 @@ Code & documentation for the EECE 571G term project: Animal Adoption DApp
 
 Authored by Li Ju, Runze Wang, Shanny Lu, Shijun Shen
 
+<<<<<<< HEAD
 ## How to power up backend
 
 ### Start up Ganache-cli or GUI
@@ -30,3 +31,11 @@ myAgent.initialize(contractAddress);
 ### How to use Agent's functions
 
 Sample code is in the App.js file.
+=======
+
+### TODO:
+1. Page Transition (Done);
+2. Solve the Array related bugs;
+3. CSS
+4. ...
+>>>>>>> shanny
