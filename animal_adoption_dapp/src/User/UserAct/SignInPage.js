@@ -1,22 +1,13 @@
 import React from 'react';
 import {signIn} from '../user_middleware';
-<<<<<<< HEAD
-import {Form, Input, Checkbox, Button, message} from 'antd';
-=======
 import {Form, Input, Checkbox, Button, message, Space} from 'antd';
->>>>>>> julia
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import './SignIn.css'
 import { Redirect } from 'react-router';
 
 class SignInPage extends React.Component{
-<<<<<<< HEAD
-    constructor(){
-        super();
-=======
     constructor(props){
         super(props);
->>>>>>> julia
         this.state = {
             signedin : false,
             signedin_msg : "not signed in"
@@ -46,11 +37,7 @@ class SignInPage extends React.Component{
                 initialValues={{ remember: true }}
                 onFinish = {()=>this.logIn()}
             >
-<<<<<<< HEAD
-                {this.state.signedin ? <Redirect to="/UserInfo"/> : ""}
-=======
                 {this.state.signedin ? <Redirect to="/main"/> : ""}
->>>>>>> julia
                 <h1>Log in</h1>
                 <Form.Item
                     name="username"
@@ -79,11 +66,7 @@ class SignInPage extends React.Component{
                     Log in
                     </Button><br/>
                     <p></p>
-<<<<<<< HEAD
-                    Or <a href="/Signup">Sign up now!</a>
-=======
                     Or <a href="/signup">Sign up now!</a>
->>>>>>> julia
                 </Form.Item>
             </Form>
         )

@@ -1,6 +1,7 @@
 import React from 'react';
 import {addTokens, getMyUsername, getMyTotalToken, getMyGasFee} from '../transaction_middleware';
 import {Button, Form, Input, message} from 'antd';
+import { Content } from 'antd/lib/layout/layout';
 
 class AddTokensPage extends React.Component{
     constructor(props){
@@ -38,37 +39,42 @@ class AddTokensPage extends React.Component{
             <Form
             name="addTokens"
             className="AddTokensForm"
-            layout = "vertical"
+            // layout = "vertical"
             initialValues={{ remember: true }}
             onFinish = {()=>this.addMyTokens()}
             >
-                <h2>Add Tokens</h2>
+                <layout>
+                    <header>
+                        <h1>Add Tokens</h1>
+                    </header>
+                    <Content>
+                        <Form.Item id = "username" label="Username">
+                        <b>{this.getUsername()}</b>
+                        </Form.Item>
+                        <Form.Item id = "balance" label="Current Balance">
+                        <b>{this.getTotalToken()}</b>
+                        </Form.Item>
+                        <Form.Item id = "addtoken" label="Add Token Amount" rules={[{ required: true, message: 'Please input the amount of token you want to add!' }]} >
+                            <Input id = "tokens_amount" 
+                                placeholder="Input integer amount of token." 
+                            />
+                        </Form.Item>
+                        <Form.Item id = "gasfee" label="Gas Fee (Tokens)">
+                        <b>{this.getGasFee()}</b>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType = 'submit' className="login-form-button">
+                            Confirm and Pay
+                            </Button><br/>
+                            <p></p>
+                            {/* <Button type="primary" htmlType = 'submit' className="login-form-button" href="/UserInfo"> */}
+                            <Button type="primary" htmlType = 'submit' className="login-form-button" href="">
+                            Return to Last Page
+                            </Button><br/>
+                        </Form.Item>
+                    </Content>
+                </layout>
                 {/* <h2>Confirm your personal information</h2>     */}
-                <Form.Item id = "username" label="Username">
-                <b>{this.getUsername()}</b>
-                </Form.Item>
-                <Form.Item id = "balance" label="Current Balance">
-                <b>{this.getTotalToken()}</b>
-                </Form.Item>
-                <Form.Item id = "addtoken" label="Add Token Amount" rules={[{ required: true, message: 'Please input the amount of token you want to add!' }]} 
-                >
-                    <Input id = "tokens_amount" 
-                        placeholder="Input integer amount of token." 
-                    />
-                </Form.Item>
-                <Form.Item id = "gasfee" label="Gas Fee (Tokens)">
-                <b>{this.getGasFee()}</b>
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType = 'submit' className="login-form-button">
-                    Confirm and Pay
-                    </Button><br/>
-                    <p></p>
-                    {/* <Button type="primary" htmlType = 'submit' className="login-form-button" href="/UserInfo"> */}
-                    <Button type="primary" htmlType = 'submit' className="login-form-button" href="">
-                    Return to Last Page
-                    </Button><br/>
-                </Form.Item>
             </Form>   
         )
     }

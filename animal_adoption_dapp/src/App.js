@@ -7,10 +7,10 @@ import PostInfoPage from './User/UserAct/PostInfoPage'
 import Main from './Main';
 import MapContainer from './Map/MapContainer';
 import UserInfoPage from './User/UserInfo/UserInfoPage'
-import Nav from './Nav';
 import AnimalInfoPage from './transaction/AnimalInfo/AnimalInfoPage';
 import AddTokensPage from './transaction/AddTokens/AddTokensPage';
 import OrderConfirmPage from './transaction/OrderConfirm/OrderConfirmPage';
+import Nav from './Nav';
 
 class App extends React.Component{
   render(){
