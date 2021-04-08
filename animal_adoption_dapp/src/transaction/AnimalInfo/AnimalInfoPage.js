@@ -11,6 +11,7 @@ import { Content, Header } from 'antd/lib/layout/layout';
 class AnimalInfoPage extends React.Component{
     constructor(props){
         super(props);
+        console.log(this.props)
         this.state = {
             animal_num : 0
         }
@@ -29,8 +30,9 @@ class AnimalInfoPage extends React.Component{
                     animal_info_html.push(
                         <tr>
                             <tr>
-                                <th>Animal ID</th>
-                                <td>{animal_info.animal_id}</td>
+                                <th>Animal ID:</th>
+                                {/* <td>{animal_info.animal_id}</td> */}
+                                <td>{this.props.match.params[0]}</td>
                             </tr>
                             <tr>
                                 <th>X Coordinate</th>

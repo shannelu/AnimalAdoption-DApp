@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router,Route, Switch} from 'react-router-dom'
+import {BrowserRouter,Route, Switch, Link} from 'react-router-dom'
 import './App.css';
 import SignInPage from './User/UserAct/SignInPage';
 import SignUpPage from './User/UserAct/SignUpPage';
 import PostInfoPage from './User/UserAct/PostInfoPage'
-import Main from './Main';
 import MapContainer from './Map/MapContainer';
 import UserInfoPage from './User/UserInfo/UserInfoPage'
 import AnimalInfoPage from './transaction/AnimalInfo/AnimalInfoPage';
@@ -15,8 +14,7 @@ import Nav from './Nav';
 class App extends React.Component{
   render(){
     return (
-      <Router>
-        <div>
+      <BrowserRouter>
           <Switch>
             <Route path="/main">
               <Nav>
@@ -37,15 +35,13 @@ class App extends React.Component{
             <Route path="/post">
               <PostInfoPage />
             </Route>
-            <Route path="/animalinfo">
-              <AnimalInfoPage />
+            <Route path="/animalinfo/*" component = {AnimalInfoPage}>
             </Route>
             <Route path="/orderconfirm">
               <OrderConfirmPage />
             </Route>
           </Switch>
-        </div>
-      </Router>
+      </BrowserRouter>
     )
   }
 }
