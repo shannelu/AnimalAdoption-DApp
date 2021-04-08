@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Menu, Button, Space, Divider, Col} from 'antd';
+import {Layout, Menu, Button, Space, Divider, Col, PageHeader} from 'antd';
 import {} from '@ant-design/icons';
 import './Nav.css'
 
@@ -7,6 +7,7 @@ class Nav extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            currentIndex : 0
         }
     }
 
@@ -21,7 +22,7 @@ class Nav extends React.Component{
     render(){
         return(
             <Layout>
-                <Layout.Header className="header">
+                <Layout.Header className="header" extra>
                     <Menu classname = "nav_title_wrap" theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                         { 
                             React.Children.map( this.props.children , ( element,index ) => {
@@ -32,12 +33,8 @@ class Nav extends React.Component{
                                 )
                             }) 
                         }
-                        <Space size={20} split = {<Divider type = 'vertical' style = {{color:'white'}}/>}>
-                            <a href="/signin">Sign in</a>
-                            <a href="/signup">Sign up</a>
-                        </Space>
                     </Menu>
-                    
+                
                 </Layout.Header>
                 <Layout.Content className = "nav_item_wrap">
                     {

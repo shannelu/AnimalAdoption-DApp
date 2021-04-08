@@ -1,7 +1,7 @@
 // import React, { Component } from 'react';
 // import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
-// import {getAllAnimalsInfo} from './Map/map_middleware'
-// import CurrentLocation from './Map/Map';
+// import {getAllAnimalsInfo} from './map_middleware'
+
 
 // const mapStyles = {
 //   width: '100%',
@@ -92,15 +92,20 @@
 
 import React, { Component } from 'react';
 import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
-import {getAllAnimalsInfo} from './Map/map_middleware'
-import CurrentLocation from './Map/Map';
+import {getAllAnimalsInfo} from './map_middleware'
+import CurrentLocation from './Map';
 
 export class MapContainer extends Component {
-  state = {
-    showingInfoWindow: false,
-    activeMarker: {},
-    selectedPlace: {}
-  };
+  constructor(props){
+      super(props);
+      console.log(this.props)
+      this.state = {
+        showingInfoWindow: false,
+        activeMarker: {},
+        selectedPlace: {}
+      };
+  }
+  
 
   onMarkerClick = (props, marker, e) =>
     this.setState({
@@ -120,12 +125,13 @@ export class MapContainer extends Component {
 
   render() {
     let markers = getAllAnimalsInfo();
+
     return (
       <CurrentLocation
         centerAroundCurrentLocation
         google={this.props.google}
       >
-        <Marker onClick={this.onMarkerClick} name={'Current Location'} />
+        <Marker onClick={this.onMarkerClick} name={'Current Location'}/>
         <InfoWindow
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}

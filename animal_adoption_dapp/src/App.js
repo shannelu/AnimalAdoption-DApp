@@ -5,7 +5,9 @@ import SignInPage from './User/UserAct/SignInPage';
 import SignUpPage from './User/UserAct/SignUpPage';
 import PostInfoPage from './User/UserAct/PostInfoPage'
 import Main from './Main';
-import UserInfoPage from './User/UserInfo/UserInfoPage';
+import MapContainer from './Map/MapContainer';
+import UserInfoPage from './User/UserInfo/UserInfoPage'
+import Nav from './Nav';
 
 class App extends React.Component{
   render(){
@@ -14,7 +16,14 @@ class App extends React.Component{
         <div>
           <Switch>
             <Route path="/main">
-              <Main />
+              <Nav>
+                  <MapContainer name = "Animal Map"/>
+                  <SignInPage name = "Shop"/>
+                  <UserInfoPage name = "User"/>  
+              </Nav>
+            </Route>
+            <Route path="/map">
+              <MapContainer/>
             </Route>
             <Route path="/signin">
               <SignInPage />
@@ -32,6 +41,7 @@ class App extends React.Component{
   }
 }
 
+export default App
 
 
 
