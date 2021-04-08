@@ -2,7 +2,7 @@ var animalInfoList = [
     {
         name: "marker1",
         position: { lat: 49.246292, lng: -123.116226 },
-        url:'http://www.google.com/'
+        url:'./animalinfo'
       },
       {
         name: "marker2",
@@ -15,7 +15,6 @@ var animalInfoList = [
         url:'https://www.ubc.ca/'
       }
 ]
-
 export function getAllAnimalsInfo(){
     return animalInfoList;
 }

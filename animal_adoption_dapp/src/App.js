@@ -21,7 +21,7 @@ class App extends React.Component{
             <Route path="/main">
               <Nav>
                   <MapContainer name = "Animal Map"/>
-                  <SignInPage name = "Shop"/>
+                  <AddTokensPage name = "Shop"/>
                   <UserInfoPage name = "User"/>  
               </Nav>
             </Route>
@@ -36,6 +36,12 @@ class App extends React.Component{
             </Route>
             <Route path="/post">
               <PostInfoPage />
+            </Route>
+            <Route path="/animalinfo">
+              <AnimalInfoPage />
+            </Route>
+            <Route path="/orderconfirm">
+              <OrderConfirmPage />
             </Route>
           </Switch>
         </div>
