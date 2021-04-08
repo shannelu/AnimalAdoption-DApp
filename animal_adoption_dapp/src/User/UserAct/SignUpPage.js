@@ -64,9 +64,13 @@ class SignUpPage extends React.Component{
         if(flag == 0){
             this.checkPwdFormat();
         }   
+<<<<<<< HEAD
 
         this.checkPwdConfirmed();
 
+=======
+        this.checkPwdConfirmed();
+>>>>>>> julia
     }
 
     checkAgreement(){

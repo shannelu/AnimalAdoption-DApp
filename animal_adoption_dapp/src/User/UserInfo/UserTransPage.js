@@ -1,12 +1,30 @@
 import React from 'react';
 import {getAllMyTransRecords} from '../user_middleware'
+import {PageHeader, Table, Badge, Pagination} from 'antd'
 import "./transTable.css"
+
+const columns = [
+    {title : "Date", dataIndex : "date", width: 150},
+    {title : "Transaction number", dataIndex : "t_num",  width: 150},
+    {title : "From", dataIndex : "from",  width: 150},
+    {title : "To", dataIndex : "to",  width: 150},
+    {title : "Token", dataIndex : "tokens",  width: 150},
+    {title : "Status", dataIndex : "status", 
+        render : (stat) => (
+            <Badge status = {stat} text = {stat == "success" ? "success" : "pending"}/>
+        ),
+        width: 150
+    }
+]
+
+var trans_records = [];
 
 class UserTransPage extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            trans_num : 0
+            trans_num : 0,
+            current : 1
         }
     }
 
@@ -14,41 +32,29 @@ class UserTransPage extends React.Component{
         return getAllMyTransRecords(this.props.uuid);
     }
 
+    changePage = (page,pageSize) => {
+        console.log(page);
+    }
+
     render(){
-        var trans_records = this.getMyTransRecords();
-        var trans_records_html = [];
-        trans_records.forEach(
-            trans_record => {
-                trans_records_html.push(
-                    <tr>
-                        <td>{trans_record.from}</td>
-                        <td>{trans_record.to}</td>
-                        <td>{trans_record.hash}</td>
-                        <td>{trans_record.tokens}</td>
-                        <td>{trans_record.gas}</td>
-                    </tr>
-                )
-            }
-        )
+        trans_records = this.getMyTransRecords()
         return(
             <div>
-                <table id = "hor-minimalist-b">
-                    <thead>
-                        <tr>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Transaction Hash</th>
-                            <th>Tokens</th>
-                            <th>Gas</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {trans_records_html}
-                    </tbody>
-                    
-                </table>
+                <PageHeader title = "My transactions" />
+                <Table
+                    dataSource = {trans_records}
+                    columns = {columns}
+                    pagination = {
+                        {
+                            position : ['bottomCenter'], 
+                            total : trans_records.length,
+                            pageSize : 3,
+                            responsive : false,
+                            showTotal : total => `Total ${total} items`
+                        }
+                    }
+                />
             </div>
-            
         )
     }
 }

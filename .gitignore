@@ -1,3 +1,7 @@
+# Solidity
+build/
+abis/
+
 # Logs
 logs
 *.log

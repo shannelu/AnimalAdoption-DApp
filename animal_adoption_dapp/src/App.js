@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router,Route} from 'react-router-dom';
+import {BrowserRouter as Router,Route, Switch} from 'react-router-dom'
 import './App.css';
-import AnimalInfoPage from './transaction/AnimalInfo/AnimalInfoPage';
-import UserInfoPage from './User/UserInfo/UserInfoPage';
 import SignInPage from './User/UserAct/SignInPage';
 import SignUpPage from './User/UserAct/SignUpPage';
+import PostInfoPage from './User/UserAct/PostInfoPage'
+import Main from './Main';
+import MapContainer from './Map/MapContainer';
+import UserInfoPage from './User/UserInfo/UserInfoPage'
+import Nav from './Nav';
+import AnimalInfoPage from './transaction/AnimalInfo/AnimalInfoPage';
 import AddTokensPage from './transaction/AddTokens/AddTokensPage';
 import OrderConfirmPage from './transaction/OrderConfirm/OrderConfirmPage';
 
@@ -12,17 +16,41 @@ class App extends React.Component{
   render(){
     return (
       <Router>
-        <div id='root'>
-          <Route path = '/AnimalInfo' component = {AnimalInfoPage}/>
-          <Route path = '/Signup' component = {SignUpPage}/>
-          <Route path = '/Signin' component = {SignInPage}/>
-          <Route path = '/UserInfo' component = {UserInfoPage}/>
-          <Route path = '/AddTokens' component = {AddTokensPage}/>
-          <Route path = '/OrderConfirm' component = {OrderConfirmPage}/>
+        <div>
+          <Switch>
+            <Route path="/main">
+              <Nav>
+                  <MapContainer name = "Animal Map"/>
+                  <AddTokensPage name = "Shop"/>
+                  <UserInfoPage name = "User"/>  
+              </Nav>
+            </Route>
+            <Route path="/map">
+              <MapContainer/>
+            </Route>
+            <Route path="/signin">
+              <SignInPage />
+            </Route>
+            <Route path="/signup">
+              <SignUpPage />
+            </Route>
+            <Route path="/post">
+              <PostInfoPage />
+            </Route>
+            <Route path="/animalinfo">
+              <AnimalInfoPage />
+            </Route>
+            <Route path="/orderconfirm">
+              <OrderConfirmPage />
+            </Route>
+          </Switch>
         </div>
       </Router>
     )
   }
 }
 
-export default App;
+export default App
+
+
+

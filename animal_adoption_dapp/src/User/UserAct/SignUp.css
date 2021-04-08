@@ -1,14 +1,23 @@
 .ant-form{
     text-align: center;
+<<<<<<< HEAD
     padding-left: 500px;
     width: 1000px;
+=======
+    padding-left: 600px;
+    width: 1400px;
+>>>>>>> julia
 }
 
 h1{
     text-align: center;
+<<<<<<< HEAD
 }
 
 #myForm{
     border: 2px solid red;
     border-radius: 8px;
   }
+=======
+}
+>>>>>>> julia

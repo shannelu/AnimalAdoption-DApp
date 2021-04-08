@@ -45,24 +45,53 @@ export function getMyTotalToken(uuid){
 export function getAllMyTransRecords(uuid){
     return [
         {
+            date: "3.30",
+            t_num : 1,
             from: "Shanny",
             to: 'Oliver',
+            tokens : 1,
+            status : "processing",
             hash: "0x1",
-            tokens: 1,
             gas: 1
         },
         {
-            from: "Julia",
+            date: "3.30",
+            t_num : 2,
+            from: "Julia ",
             to: 'Oliver',
             hash: "0x2",
             tokens: 2,
+            status : "success",
             gas: 2
         },
         {
+            date: "3.30",
+            t_num : 3,
             from: "Oliver",
-            to: 'Bevis',
+            to: 'Bevis ',
             hash: "0x3",
             tokens: 3,
+            status : "success",
+            gas: 3
+        },
+        {
+            date: "3.30",
+            t_num : 3,
+            from: "Oliver",
+            to: 'Bevis ',
+            hash: "0x3",
+            tokens: 3,
+            status : "success",
+            gas: 3
+        },
+        {
+            date: "3.30",
+            t_num : 3,
+            from: "Oliver",
+            to: 'Bevis ',
+            hash: "0x3",
+            tokens: 3,
+            status : "success",
             gas: 3
         }
     ]
@@ -70,4 +99,8 @@ export function getAllMyTransRecords(uuid){
 
 export function signOut(uuid){
     return true;
+}
+
+export function post(date, type, city, street, pic, description){
+    console.log(date, type, city, street, pic, description);
 }
