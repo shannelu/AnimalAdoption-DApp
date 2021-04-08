@@ -94,25 +94,32 @@ import React, { Component } from 'react';
 import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 import {getAllAnimalsInfo} from './map_middleware'
 import CurrentLocation from './Map';
+import { Redirect, Link} from 'react-router-dom';
+import {Button, Form, Switch} from 'antd';
+
+const animals = getAllAnimalsInfo();
 
 export class MapContainer extends Component {
   constructor(props){
       super(props);
-      console.log(this.props)
       this.state = {
         showingInfoWindow: false,
-        activeMarker: {},
-        selectedPlace: {}
+        activeMarker: null,
+        selectedPlace: {},
+        readyJump: false
       };
   }
   
 
-  onMarkerClick = (props, marker, e) =>
+  onMarkerClick = (props, marker, e) =>{
+    console.log(this.state.activeMarker)
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
     });
+  }
+    
 
   onClose = props => {
     if (this.state.showingInfoWindow) {
@@ -123,44 +130,53 @@ export class MapContainer extends Component {
     }
   };
 
+  jumpClick(){
+    this.setState({
+      readyJump: true
+    })
+  }
+
+  
+
   render() {
-    let markers = getAllAnimalsInfo();
-
     return (
-      <CurrentLocation
-        centerAroundCurrentLocation
-        google={this.props.google}
-      >
-        <Marker onClick={this.onMarkerClick} name={'Current Location'}/>
-        <InfoWindow
-          marker={this.state.activeMarker}
-          visible={this.state.showingInfoWindow}
-          onClose={this.onClose}
-        >
-          <div>
-            <h4>{this.state.selectedPlace.name}</h4>
-          </div>
-        </InfoWindow>
-        {markers.map((marker, index) => (
-          <Marker
-            key={index} // Need to be unique
-            onClick={this.onMarkerClick}
-            name={marker.name}
-            position={marker.position}
-            url={marker.url}
-          />
-        ))}
-          <InfoWindow
-            marker={this.state.activeMarker}
-            visible={this.state.showingInfoWindow}
-            onClose={this.onClose}
-          >
-            <div>
-              <h4><a href={this.state.selectedPlace.url}>{this.state.selectedPlace.name}</a></h4>
-            </div>
-          </InfoWindow>
+      <div>
 
-      </CurrentLocation>
+        <CurrentLocation
+          centerAroundCurrentLocation
+          google={this.props.google}
+        >
+
+          <Marker onClick={this.onMarkerClick} name="I am here" id="hello7"/>
+          {animals.map((animal, index) => (
+            <Marker
+              key={index} // Need to be unique
+              onClick={this.onMarkerClick}
+              name={animal.name}
+              position={animal.position}
+              // url={animal.url}
+              id = {`animal_marker_${index}`}
+            >
+            </Marker>
+          ))}
+
+          
+
+          <InfoWindow
+              marker={this.state.activeMarker}
+              visible={this.state.showingInfoWindow}
+              onClose={this.onClose}
+            >
+            {
+              this.state.activeMarker != null ?  
+              <a href={'/animalinfo/'+this.state.activeMarker.id}>jump</a> : ""
+            }
+              
+          </InfoWindow>
+          
+
+        </CurrentLocation>
+      </div>
     );
 }
 }

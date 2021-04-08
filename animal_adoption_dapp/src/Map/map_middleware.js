@@ -1,15 +1,18 @@
 var animalInfoList = [
     {
+        index:0,
         name: "marker1",
         position: { lat: 49.246292, lng: -123.116226 },
         url:'./animalinfo'
       },
       {
+        index:1,
         name: "marker2",
         position: { lat: 49.166592, lng: -123.133568 },
         url:'https://www.youtube.com/'
       },
       {
+        index:2,
         name: "marker3",
         position: { lat: 49.267132, lng: -122.968941 },
         url:'https://www.ubc.ca/'

@@ -3,7 +3,7 @@ import {signIn} from '../user_middleware';
 import {Form, Input, Checkbox, Button, message, Space} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import './SignIn.css'
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 class SignInPage extends React.Component{
     constructor(props){
@@ -29,7 +29,6 @@ class SignInPage extends React.Component{
     }
 
     render(){
-        console.log(this.state.signedin);
         return(
             <Form
                 name="normal_login"
