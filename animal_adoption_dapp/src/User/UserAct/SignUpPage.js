@@ -2,7 +2,9 @@ import React from 'react';
 import {signUp, isUniqueName, signIn} from '../user_middleware';
 import {Button,Form,Input, Tooltip, Checkbox,Modal} from 'antd';
 import {UserAddOutlined, CloseCircleOutlined, CheckCircleOutlined, createFromIconfontCN, LockOutlined} from '@ant-design/icons'
-import './SignUp.css'
+import './SignUp.css';
+import Agent from '../../Agent/Agent';
+import Web3 from 'web3';
 
 const PwdIcon = createFromIconfontCN({
     scriptUrl : '//at.alicdn.com/t/font_2453190_5yorc0vwlz5.js'
@@ -11,6 +13,9 @@ const PwdIcon = createFromIconfontCN({
 class SignUpPage extends React.Component{
     constructor(){
         super();
+        
+        
+
         this.state = {
             unique_name : 0, //-1 for duplicate name, 0 for not yet set name, 1 for unique name
             pwd_format : 0, //-1 for wrong format, 0 for not yet set pwd, 1 for corrent format
@@ -73,16 +78,32 @@ class SignUpPage extends React.Component{
         })
     }
 
-    handleSignUp(){
+    async handleSignUp(){
         if(this.state.unique_name == 1 && this.state.pwd_confirmed == 1 && this.state.agreed){
             var input_usernmame = document.getElementById("username_signup").value;
             var input_password = document.getElementById("password_signup").value;
 
-            var info = signUp(input_usernmame,input_password);
+            // var info = signUp(input_usernmame,input_password);
+
+            // Test
+            const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+            this.accounts = await web3.eth.getAccounts();
+            console.log(this.accounts);
+            this.contractAddr = this.accounts[0];
+            this.sellerAddr = this.accounts[1];
+            this.buyerAddr = this.accounts[2];
+            this.myAgent = new Agent();
+            this.myAgent.initialize(this.contractAddr);
+            
+            
+            let callback = await this.myAgent.registeration(input_usernmame, input_password, this.sellerAddr);
+            
+            console.log(callback[1]);
+            
             this.setState({
-                signedup : info.success,
+                signedup : callback[0],
                 isModalVisible : true,
-                free_token : info.free_token
+                free_token : 100
             })
             return;
         }
@@ -94,7 +115,7 @@ class SignUpPage extends React.Component{
 
     render(){
         return(
-            <Form className = "SignUpFrom" layout = "vertical" onFinish = {()=>this.handleSignUp()}>
+            <Form className = "SignUpFrom" layout = "vertical" onFinish = {async ()=>this.handleSignUp()}>
                 <h1>Create an account</h1>
                 <Form.Item id = "myForm" label="Username" rules={[{ required: true, message: 'Please input your username!' }]} 
                     hasFeedback = {this.state.unique_name != 0} validateStatus = {this.state.unique_name == -1 ? "error" : "success"}

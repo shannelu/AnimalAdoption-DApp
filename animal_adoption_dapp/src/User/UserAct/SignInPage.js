@@ -8,6 +8,7 @@ import { Redirect } from 'react-router';
 class SignInPage extends React.Component{
     constructor(props){
         super(props);
+
         this.state = {
             signedin : false,
             signedin_msg : "not signed in"

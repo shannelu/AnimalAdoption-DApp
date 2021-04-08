@@ -15,6 +15,7 @@ class Agent {
         this.networkId = await this.web3.eth.net.getId();
         this.networkData = AdoptionCentre.networks[this.networkId];
         this.deployedAdoptionCentre = new this.web3.eth.Contract(AdoptionCentre.abi, this.networkData.address);
+        console.log(this.deployedAdoptionCentre);
         this.isDeployed = function() {
             if (this.networkData) {
                 return true;
