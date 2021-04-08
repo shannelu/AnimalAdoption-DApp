@@ -1,0 +1,14 @@
+.ant-form{
+    text-align: center;
+    padding-left: 500px;
+    width: 1000px;
+}
+
+h1{
+    text-align: center;
+}
+
+#myForm{
+    border: 2px solid red;
+    border-radius: 8px;
+  }
