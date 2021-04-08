@@ -62,6 +62,14 @@ contract AdoptionCentre {
 
     }
 
+    function getMyBalance(bytes32 uuid) public returns(bool, string memory, uint256) {
+        if (!checkUUID(msg.sender, uuid) && transRecords[msg.sender].length == 1) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            return (false, "Get user balance failed!", 0);
+        }
+        return (true, "Get user balance success!", msg.sender.balance);
+    }
+
     // Get user transaction records
     function getTransRecords(bytes32 uuid) public returns(TransactionInfo[] memory, string memory, bool, uint256) {
         if (!checkUUID(msg.sender, uuid) && transRecords[msg.sender].length == 1) {
