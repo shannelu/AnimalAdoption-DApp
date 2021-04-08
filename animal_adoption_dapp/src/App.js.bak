@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import './App.css';
+import React from 'react';
 import Web3 from 'web3';
 import Agent from './Agent/Agent.js';
 
@@ -22,13 +21,8 @@ class App extends React.Component{
   }
 
   async initializeAgent() {
-    const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-    this.accounts = await web3.eth.getAccounts();
-    this.contractAddr = this.accounts[0];
-    this.sellerAddr = this.accounts[1];
-    this.buyerAddr = this.accounts[2];
     this.myAgent = new Agent();
-    this.myAgent.initialize(this.contractAddr);
+    this.myAgent.initialize();
     this.setState(
       {
         initialize : !this.state.initialize
@@ -37,7 +31,7 @@ class App extends React.Component{
   }
 
   async handleAdoption() {
-    let result = await this.myAgent.adoptAnimal(this.sellerAddr, this.buyerAddr);
+    let result = await this.myAgent.adoptAnimal(0);
     if (result[0]) {
       this.setState(
       {
@@ -49,7 +43,7 @@ class App extends React.Component{
   }
 
   async handleGetTransRecords() {
-    let result = await this.myAgent.getTransRecords(this.sellerAddr);
+    let result = await this.myAgent.getTransRecords();
     if (result[0]) {
       this.setState(
       {
@@ -60,7 +54,7 @@ class App extends React.Component{
   }
 
   async handleResetPassword() {
-    let result = await this.myAgent.resetPassword("0402", "0330", this.sellerAddr);
+    let result = await this.myAgent.resetPassword("0402", "0330");
     if (result[0]) {
       this.setState(
       {
@@ -72,7 +66,10 @@ class App extends React.Component{
   }
 
   async handleRegisteration() {
-    let result = await this.myAgent.registeration('bevis123', '0402', this.sellerAddr);
+    // let balance = await window.web3.eth.getBalance(this.accounts[0]);
+    // console.log("Balance:");
+    // console.log(balance);
+    let result = await this.myAgent.registeration('bevis123', '0402');
     if (result[0]) {
       this.setState(
       {
@@ -84,7 +81,7 @@ class App extends React.Component{
   }
 
   async handleLogin() {
-    let result = await this.myAgent.login('bevis123', '0402', this.sellerAddr);
+    let result = await this.myAgent.login('bevis123', '0402');
     if (result[0]) {
       this.setState(
       {
@@ -98,7 +95,7 @@ class App extends React.Component{
   }
 
   async handleLogout(){
-    let result = await this.myAgent.logout(this.sellerAddr);
+    let result = await this.myAgent.logout();
     if (result[0]) {
       this.setState(
       {
@@ -111,7 +108,7 @@ class App extends React.Component{
   }
 
   async handlePost() {
-    let result = await this.myAgent.postAnimal(0, 0, 10, 'imageBase64', 'Maomao', 'so cute', this.sellerAddr);
+    let result = await this.myAgent.postAnimal(0, 0, 10, 'imageBase64', 'Maomao', 'so cute');
     if (result[0]) {
       this.setState(
       {
@@ -123,7 +120,7 @@ class App extends React.Component{
   }
 
   async handleGet() {
-    let result = await this.myAgent.getAnimalNearBy(this.sellerAddr);
+    let result = await this.myAgent.getAnimalNearBy();
     console.log(result);
   }
 

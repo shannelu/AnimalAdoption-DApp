@@ -1,6 +1,11 @@
 import React from 'react';
 import {getAllAnimalInfo} from '../transaction_middleware';
-import {Button, Form, Input, message} from 'antd';
+import "./AnimalInfoPage.css";
+import {Button, Form, Input, message, Row, Col} from 'antd';
+import { Content, Header } from 'antd/lib/layout/layout';
+// import ReactDOM from "react-dom";
+// import "antd/dist/antd.css";
+
 
 
 class AnimalInfoPage extends React.Component{
@@ -62,13 +67,31 @@ class AnimalInfoPage extends React.Component{
             initialValues={{ remember: true }}
             onFinish = {()=>this.addMyTokens()}
             >
-            <div>
-                <table>
-                    {animal_info_html}
-                    <p><Button href="/OrderConfirm">I want to adopt him/her</Button></p>
-                    <p><Button href="">Find more animals</Button></p>
-                </table>
-            </div>
+            <layout>
+                <Header style={{
+                    backgroundColor: '#fff',
+                }}>
+                <h2>Animal Information</h2>
+                </Header>
+                <Content>
+                    <Form.Item>
+                        <div>
+                            <table>
+                                {animal_info_html}
+                            </table>
+                        </div>
+                    </Form.Item>
+                    <Form.Item>
+                            <Button type="primary" htmlType = 'submit' href="/OrderConfirm">
+                            I want to adopt him/her
+                            </Button><br/>
+                            <p></p>
+                            <Button type="primary" htmlType = 'submit' href="/main">
+                            Find more animals
+                            </Button><br/>
+                        </Form.Item>
+                </Content>
+            </layout>
             </Form>
         )
     }
