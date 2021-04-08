@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Menu, Button} from 'antd';
+import {Layout, Menu, Button, Space, Divider, Col, PageHeader} from 'antd';
 import {} from '@ant-design/icons';
 import './Nav.css'
 
@@ -7,22 +7,23 @@ class Nav extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            currentIndex : 0
         }
     }
 
     check_title_index( index ){
-        return index === this.state.currentIndex ? "tab_title active" : "tab_title"
+        return index === this.state.currentIndex ? "nav_title active" : "nav_title"
     }
 
     check_item_index( index ){
-        return index === this.state.currentIndex ? "tab_item show" : "tab_item"
+        return index === this.state.currentIndex ? "nav_item show" : "nav_item"
     }
 
     render(){
         return(
             <Layout>
-                <Layout.Header className="header">
-                    <Menu classname = "tab_title_wrap" theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                <Layout.Header className="header" extra>
+                    <Menu classname = "nav_title_wrap" theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                         { 
                             React.Children.map( this.props.children , ( element,index ) => {
                                 return(
@@ -32,12 +33,10 @@ class Nav extends React.Component{
                                 )
                             }) 
                         }
-                        <a href="/signin">Sign in</a>
-                        <a href="/signup">Sign up</a>
                     </Menu>
-                    
+                
                 </Layout.Header>
-                <Layout.Content className = "tab_item_wrap">
+                <Layout.Content className = "nav_item_wrap">
                     {
                         React.Children.map(this.props.children,( element,index )=>{
                             return(
