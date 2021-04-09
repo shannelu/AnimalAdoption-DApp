@@ -37,8 +37,7 @@ class App extends React.Component{
             </Route>
             <Route path="/animalinfo/*" component = {AnimalInfoPage}>
             </Route>
-            <Route path="/orderconfirm">
-              <OrderConfirmPage />
+            <Route path="/orderconfirm/*" component = {OrderConfirmPage}>
             </Route>
           </Switch>
       </BrowserRouter>
