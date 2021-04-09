@@ -12,6 +12,8 @@ contract AdoptionCentre {
         string userName;
         bytes32 passHash;
         address accountAddress;
+        uint256 adoptedNum;
+        uint256 userNameIndex;
     }
 
     // longitude = (longitude from js) * 10^6
@@ -27,7 +29,7 @@ contract AdoptionCentre {
         string description;
         // status = "MISSING", "FOUND"
         string status;
-        address seller;
+        address payable seller;
     }
 
     struct TransactionInfo {
@@ -35,6 +37,7 @@ contract AdoptionCentre {
         address to;
         string fromUser;
         string toUser;
+        string time;
         uint256 animalIndex;
     }
 
@@ -49,6 +52,9 @@ contract AdoptionCentre {
 
     // all animal information
     AnimalInfo[] animalInfos;
+
+    // all existing user name
+    string[] userNames;
 
     // Events
     // eventType = "ANIMAL_INFO_OPS", "USER_ACTIVE", "TRANSACTION", "REGISTRATION", "LOGOUT", "PASSWORD_RESET", "USERNAME_RESET"
@@ -82,7 +88,7 @@ contract AdoptionCentre {
 
     // Get user transaction records
     function getTransRecords(bytes32 uuid) public returns(TransactionInfo[] memory, string memory, bool, uint256) {
-        if (!checkUUID(msg.sender, uuid) && transRecords[msg.sender].length == 1) {
+        if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             TransactionInfo[] memory tmp;
             return (tmp, "Get transactions failed!", false, 0);
@@ -90,9 +96,17 @@ contract AdoptionCentre {
         return (transRecords[msg.sender], "Get transactions!", true, transRecords[msg.sender].length);
     }
 
+    function getOneAnimalInfo(uint256 _index, bytes32 uuid) public returns(AnimalInfo memory, string memory, bool) {
+        if (!checkUUID(msg.sender, uuid)) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            AnimalInfo memory tmp;
+            return (tmp, "Get animal info failed!", false);
+        }
+        return (animalInfos[_index], "Get one animal info!", true);
+    }
+
     function getPostedAnimal(bytes32 uuid) public returns(AnimalInfo[] memory, string memory, bool, uint256) {
-        
-        if (!checkUUID(msg.sender, uuid) && transRecords[msg.sender].length == 1) {
+        if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             AnimalInfo[] memory tmp;
             return (tmp, "Get animal info failed!", false, 0);
@@ -137,12 +151,12 @@ contract AdoptionCentre {
         return (animalInfos, animalInfos.length, true);
     }
 
-    function depositPayment(uint256 _index) public payable {
-        AnimalInfo storage animal = animalInfos[_index];
-        msg.sender.transfer(animal.price);
-    }
+    // function depositPayment(uint256 _index) public payable {
+    //     AnimalInfo storage animal = animalInfos[_index];
+        
+    // }
 
-    function adoptAnimal(uint256 _index, bytes32 uuid) public payable returns(bool) {
+    function adoptAnimal(uint256 _index, string memory _time, bytes32 uuid) public payable returns(bool) {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             return false;
@@ -165,15 +179,13 @@ contract AdoptionCentre {
             return false;
         }
 
-        //tokenContract.approve(msg.sender, animal.price);
-        //address payable _seller = animal.seller;
-
-        // if (animal.seller.transfer(animal.price)){
+        animal.seller.transfer(animal.price);
 
         UserInfo storage userInfo = users[msg.sender];
 
         animal.status = "FOUND";
         TransactionInfo memory trans;
+        trans.time = _time;
         trans.fromUser = userInfo.userName;
         trans.from = msg.sender;
         trans.toUser = animal.contactUserName;
@@ -181,12 +193,11 @@ contract AdoptionCentre {
         trans.animalIndex = _index;
         transRecords[msg.sender].push(trans);
         transRecords[animal.seller].push(trans);
+        userInfo.adoptedNum++;
+    
+
         emit OperationEvents("TRANSACTION", "Transaction success!", true);
         return true;
-        // } else {
-        //     emit OperationEvents("TRANSACTION", "Transaction failed with unknown cause!", false);
-        //     return false;
-        // }
         
     }
 
@@ -219,7 +230,7 @@ contract AdoptionCentre {
         return true;
     }
 
-    function getUserInfo(bytes32 uuid) public view returns(bool, string memory, address) {
+    function getUserName(bytes32 uuid) public view returns(bool, string memory, address) {
         if (!checkUUID(msg.sender, uuid)) {
             return (false, "User is not login, request is refused", msg.sender);
         }
@@ -232,6 +243,16 @@ contract AdoptionCentre {
             OperationEvents("REGISTRATION", "There is an existing user!", false);
             return false;
         }
+
+        for (uint256 i = 0; i < userNames.length; i++) {
+            if (compareStrings(userNames[i], _userName)) {
+                 OperationEvents("REGISTRATION", "There is an existing user name!", false);
+                 return false;
+            }
+        }
+        userNames.push(_userName);
+
+        user.userNameIndex = userNames.length - 1;
         user.userName = _userName;
         user.passHash = hash(_password);
         user.accountAddress = msg.sender;

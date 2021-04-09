@@ -42,16 +42,25 @@ class Agent {
         };
     }
 
+    // Get user name
+    aysnc getUserName() {
+        let callsReceipt = await this.deployedAdoptionCentre.methods.getUserName(this.uuid).call({from: this.myAccount});
+        console.log(callsReceipt);
+        return callsReceipt;
+    }
+
     // Get user all transaction records
     async getTransRecords() {
         let callsReceipt = await this.deployedAdoptionCentre.methods.getTransRecords(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
+        return callsReceipt;
     }
 
     // Get user all posted animal records
-    async getAnimalRecords() {
+    async getPostedAnimalRecords() {
         let callsReceipt = await this.deployedAdoptionCentre.methods.getPostedAnimal(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
+        return callsReceipt;
     }
 
     // Reset password
