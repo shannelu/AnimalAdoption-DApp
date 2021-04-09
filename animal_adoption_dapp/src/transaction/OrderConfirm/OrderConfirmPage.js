@@ -3,23 +3,15 @@ import {getMyUsername, getMyTotalToken, getMyGasFee, getAllAnimalInfo} from '../
 import './OrderConfirm.css';
 import {Button, Form, message, Layout, Row, Col } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
-// import ReactDOM from "react-dom";
-// import "antd/dist/antd.css";
-
 
 var total_token = 10000; 
-/* If put function getAllConfirmOrder in the middleware, there is an error: 
-Objects are not valid as a React child. If you meant to render a collection of children, use an array instead.
-
-Update (April 1st: Some issues related with predefined Array. I will fix it later)
-*/
-
 
 class OrderConfirmPage extends React.Component{
     constructor(props){
         super(props)
+        console.log(this.props)
         this.state = {
-            order_num : 0
+            animal_index : 0
         }
     }
 
@@ -58,6 +50,8 @@ class OrderConfirmPage extends React.Component{
 
     render(){
         var animal_info = getAllAnimalInfo(this.props.animal_id);
+        console.log(this.props.match.params[0]);
+        this.animal_index = this.props.match.params[0];
         return(
             <layout>
                 <Header style={{
@@ -68,35 +62,32 @@ class OrderConfirmPage extends React.Component{
                 <Row>
                 <Col span={12}>
                     <h2 >Animal Information</h2>
-                    <table><tr>
+                    <table>
                         <tr>
-                            <th>Animal ID</th>
-                            <td>{animal_info[0].animal_id}</td>
+                            <tr>
+                                <th>Animal ID:</th>
+                                <td>{animal_info[this.animal_index].animal_id}</td>
+                            </tr>
+                            <tr>
+                                    <th>Position:</th>
+                                    <td>({animal_info[this.animal_index].position.lat}, {animal_info[this.animal_index].position.lng})</td>
+                                    </tr>
+                            <tr>
+                                <th>Reporter:</th>
+                                <td>{animal_info[this.animal_index].contactUserName}</td>
+                            </tr>
+                            <tr>
+                                <th>Price:</th>
+                                <td>{animal_info[this.animal_index].price}</td>
+                            </tr>
+                            <tr>
+                                {/* <th>image</th> */}
+                                {/* <th>Title</th> */}
+                                <th>Description:</th>
+                                <td>{animal_info[this.animal_index].description}</td>   
+                            </tr>                    
                         </tr>
-                        <tr>
-                            <th>X Coordinate</th>
-                            <td>{animal_info[0].x}</td>
-                        </tr>
-                        <tr>
-                            <th>Y Coordinate</th>
-                            <td>{animal_info[0].y}</td>
-                        </tr>
-                        <tr>
-                            <th>Reporter</th>
-                            <td>{animal_info[0].contactUserName}</td>
-                        </tr>
-                        <tr>
-                            <th>Price</th>
-                            <td>{animal_info[0].price}</td>
-                        </tr>
-                        <tr>
-                            {/* <th>image</th> */}
-                            {/* <th>Title</th> */}
-                            <th>Description</th>
-                            <td>{animal_info[0].description}</td>   
-                        </tr>
-
-                    </tr></table>
+                    </table>
                 </Col>
                 <Col span={12}>
                         <h2>Confirm your personal information</h2>    
@@ -114,7 +105,7 @@ class OrderConfirmPage extends React.Component{
                             Confirm and Pay
                             </Button><br/>
                             <p></p>
-                            <Button type="primary" htmlType = 'submit'  className="login-form-button" href="/AnimalInfo">
+                            <Button type="primary" htmlType = 'submit'  className="login-form-button" href={'/animalinfo/animal_marker_'+this.animal_index} >
                             Return to Last Page
                             </Button><br/>
                         </Form.Item>

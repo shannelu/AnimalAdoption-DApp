@@ -6,10 +6,10 @@ import SignUpPage from './User/UserAct/SignUpPage';
 import PostInfoPage from './User/UserAct/PostInfoPage'
 import MapContainer from './Map/MapContainer';
 import UserInfoPage from './User/UserInfo/UserInfoPage'
-import Nav from './Nav';
 import AnimalInfoPage from './transaction/AnimalInfo/AnimalInfoPage';
 import AddTokensPage from './transaction/AddTokens/AddTokensPage';
 import OrderConfirmPage from './transaction/OrderConfirm/OrderConfirmPage';
+import Nav from './Nav';
 
 class App extends React.Component{
   render(){
@@ -20,7 +20,7 @@ class App extends React.Component{
               <Nav>
                   <MapContainer name = "Animal Map"/>
                   <AddTokensPage name = "Shop"/>
-                  <UserInfoPage name = "User"/>
+                  <UserInfoPage name = "User"/>  
               </Nav>
             </Route>
             <Route path="/map">
@@ -37,8 +37,7 @@ class App extends React.Component{
             </Route>
             <Route path="/animalinfo/*" component = {AnimalInfoPage}>
             </Route>
-            <Route path="/orderconfirm">
-              <OrderConfirmPage />
+            <Route path="/orderconfirm/*" component = {OrderConfirmPage}>
             </Route>
           </Switch>
       </BrowserRouter>
