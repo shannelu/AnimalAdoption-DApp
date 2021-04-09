@@ -1,8 +1,8 @@
 import React from 'react';
-import {getMyUsername, getMyTotalToken, setMyUsername, setMyPassword} from '../user_middleware';
-import {PageHeader, Tag, Button, Statistic, Row, Input, Form, Modal, message} from 'antd';
+import {PageHeader, Tag, Button, Statistic, Row, Input, Form, Modal, message, Empty} from 'antd';
 import {isUniqueName} from '../user_middleware'
-
+import Agent, {logout} from '../../Agent/Agent'
+import { Redirect } from 'react-router';
 
 class UserProfilePage extends React.Component{
     constructor(props){
@@ -14,19 +14,22 @@ class UserProfilePage extends React.Component{
             setPwdSuccess : 0,
             pwd_format : 0, //-1 for wrong format, 0 for not yet set pwd, 1 for corrent format
             pwd_confirmed : 0, //-1 for not confirmed, 0 for not yet set pwd, 1 for confirmed
+            logOutModalVisible: false,
+            loggedOut: false,
+            myAgent: this.props.agent
         }
     }
 
     getUsername(){
-        return getMyUsername(this.props.uuid);
+        return this.state.myAgent.getUsername()
     }
 
     getPostsNum(){
-        return 1;
+        return this.state.myAgent.getPostsNum()
     }
 
     getAdoptedNum(){
-        return 10;
+        return this.state.myAgent.getAdoptedNum()
     }
 
     changeUsername(){
@@ -60,7 +63,6 @@ class UserProfilePage extends React.Component{
     checkPwdConfirmed(){
         var input_password = document.getElementById("new_pwd").value;
         var input_confirmed = document.getElementById("confirm_pwd").value;
-        console.log(input_password,input_confirmed)
         this.setState({
             pwd_confirmed : input_password.length > 0 && input_confirmed.length > 0 ? (input_confirmed == input_password ? 1 : -1) : 0 
         })
@@ -68,7 +70,7 @@ class UserProfilePage extends React.Component{
 
     updateUsername(){
         var new_name = document.getElementById("new_username").value;
-        setMyUsername(this.props.uuid, new_name);
+        this.myAgent.setUsername(this.props.uuid, new_name);
         this.setState({
             settingUname : false,
             unique_name : 0
@@ -78,7 +80,7 @@ class UserProfilePage extends React.Component{
     updatePwd(){
         var old_pwd = document.getElementById("old_pwd").value;
         var new_pwd = document.getElementById("new_pwd").value;
-        var info = setMyPassword(this.props.uuid, old_pwd, new_pwd);
+        var info = this.state.myAgent.resetPassword(this.props.uuid, old_pwd, new_pwd);
         if(info.success){
             this.setState({
                 settingPwd : false,
@@ -108,10 +110,6 @@ class UserProfilePage extends React.Component{
         })
     }
 
-    getTotalToken(){
-        return getMyTotalToken(this.props.uuid);
-    }
-
     checkUniqueUsername(){
         var input_usernmame = document.getElementById("new_username").value;
         if(input_usernmame.length == 0){
@@ -126,17 +124,39 @@ class UserProfilePage extends React.Component{
         }
     }
 
+    readyLogOut(){
+        this.setState({
+            logOutModalVisible : true
+        })
+    }
+
+    async logOut(){
+        var logOutInfo = this.state.myAgent.logout()
+        if(logOutInfo[0]){
+            message.success(logOutInfo[1])
+            this.setState({
+                loggedOut : true
+            })
+        }else{
+            message.error(logOutInfo[1])
+            this.setState({
+                logOutModalVisible : false
+            })
+        }
+    }
+
     render(){
         return(
             <div>
+                {this.state.loggedOut ? <Redirect to='/main'/> : ""}
                 <PageHeader 
                     title = {this.getUsername()}
                     tags={<Tag color="green">Online</Tag>}
                     extra={[
                         <Button key="3" onClick = {()=>this.changeUsername()} >Change Username</Button>,
                         <Button key="2" onClick = {()=>this.changePwd()}>Change Password</Button>,
-                        <Button key="1" type="primary">
-                          Buy Tokens
+                        <Button key="1" type="primary" onClick = {()=>this.readyLogOut()}>
+                          Log Out
                         </Button>,
                       ]}
                 >
@@ -209,6 +229,15 @@ class UserProfilePage extends React.Component{
                                 <Input type = "password" id = "confirm_pwd" placeholder = "confirm your new password" onChange = {()=>this.checkPwdConfirmed()} style = {{width:335}}/>
                             </Form.Item>
                         </Form>
+                    </Modal>
+                    <Modal
+                        tilte = "Log out"
+                        visible = {this.state.logOutModalVisible}
+                        onOk = {()=>this.logOut()}
+                        okText = "log out"
+                        destroyOnClose
+                    >
+                        Are you sure to log out?
                     </Modal>
                 </PageHeader>
             </div>

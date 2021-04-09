@@ -30,3 +30,9 @@ myAgent.initialize(contractAddress);
 ### How to use Agent's functions
 
 Sample code is in the App.js file.
+
+### TODO:
+1. Page Transition (Done);
+2. Solve the Array related bugs;
+3. CSS
+4. ...

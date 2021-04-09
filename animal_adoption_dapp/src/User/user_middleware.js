@@ -8,7 +8,7 @@ export function signUp(username,passsword){
 }
 
 export function isUniqueName(username){
-    return username == "111";
+    return true;
 }
 
 export function signIn(input_username, input_password){

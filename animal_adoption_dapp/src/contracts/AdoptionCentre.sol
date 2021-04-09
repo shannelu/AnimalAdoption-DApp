@@ -2,34 +2,24 @@
 pragma solidity ^0.7.6;
 pragma abicoder v2;
 
-import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Burnable.sol";
+contract AdoptionCentre {
 
-contract AdoptionCentre is ERC20, ERC20Burnable {
-    constructor(
-        string memory name,
-        string memory symbol,
-        uint256 amount
-    )
-    ERC20Burnable()
-    ERC20(name, symbol)
-    {
-        _mint(msg.sender, amount * (10 ** decimals()));
+    constructor() {
+
     }
 
     struct UserInfo {
         string userName;
         bytes32 passHash;
-        uint256 tokens;
         address accountAddress;
-        uint256[] postedAnimalIndex;
-        uint256[] transactionIndex;
+        uint256 adoptedNum;
+        uint256 userNameIndex;
     }
 
     // longitude = (longitude from js) * 10^6
     // latitude = (latitude from js) * 10^6
     struct AnimalInfo {
-        bytes32 animalID;
+        uint256 animalID;
         int64 longitude;
         int64 latitude;
         string contactUserName;
@@ -39,11 +29,15 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         string description;
         // status = "MISSING", "FOUND"
         string status;
+        address payable seller;
     }
 
     struct TransactionInfo {
         address from;
         address to;
+        string fromUser;
+        string toUser;
+        string time;
         uint256 animalIndex;
     }
 
@@ -53,27 +47,71 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
     mapping (address => bytes32) activeUsers;
     // user address to user related transaction information
     mapping (address => TransactionInfo[]) transRecords;
+    // user address to user related posted animal information
+    mapping (address => AnimalInfo[]) postAnimalRecords;
 
     // all animal information
     AnimalInfo[] animalInfos;
-    // all transaction inforamtion
-    TransactionInfo[] transactionInfos;
+
+    // all existing user name
+    string[] userNames;
 
     // Events
-    // eventType = "ANIMAL_INFO_OPS", "USER_ACTIVE", "TRANSACTION", "REGISTRATION", "LOGOUT", "PASSWORDRESET"
+    // eventType = "ANIMAL_INFO_OPS", "USER_ACTIVE", "TRANSACTION", "REGISTRATION", "LOGOUT", "PASSWORD_RESET", "USERNAME_RESET"
     event OperationEvents(string eventType, string eventMsg, bool success);
     event AcquireUserInfo(string userName, address addr);
     event LoginEvent(bytes32 uuid, string eventMsg, bool success);
     event TransactionRecords(TransactionInfo[] records, string eventMsg, bool success);
 
+    function payment() public payable {
+
+    }
+
+    function resetUserName(string memory newName, bytes32 uuid) public returns(bool) {
+        if (!checkUUID(msg.sender, uuid)) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            return false;
+        }
+        UserInfo storage user = users[msg.sender];
+        user.userName = newName;
+        emit OperationEvents("USERNAME_RESET", "Username reset success!", true);
+        return true;
+    }
+
+    function getMyBalance(bytes32 uuid) public returns(bool, string memory, uint256) {
+        if (!checkUUID(msg.sender, uuid)) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            return (false, "Get user balance failed!", 0);
+        }
+        return (true, "Get user balance success!", msg.sender.balance);
+    }
+
     // Get user transaction records
     function getTransRecords(bytes32 uuid) public returns(TransactionInfo[] memory, string memory, bool, uint256) {
-        if (!checkUUID(msg.sender, uuid) && transRecords[msg.sender].length == 1) {
+        if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             TransactionInfo[] memory tmp;
             return (tmp, "Get transactions failed!", false, 0);
         }
         return (transRecords[msg.sender], "Get transactions!", true, transRecords[msg.sender].length);
+    }
+
+    function getOneAnimalInfo(uint256 _index, bytes32 uuid) public returns(AnimalInfo memory, string memory, bool) {
+        if (!checkUUID(msg.sender, uuid)) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            AnimalInfo memory tmp;
+            return (tmp, "Get animal info failed!", false);
+        }
+        return (animalInfos[_index], "Get one animal info!", true);
+    }
+
+    function getPostedAnimal(bytes32 uuid) public returns(AnimalInfo[] memory, string memory, bool, uint256) {
+        if (!checkUUID(msg.sender, uuid)) {
+            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            AnimalInfo[] memory tmp;
+            return (tmp, "Get animal info failed!", false, 0);
+        }
+        return (postAnimalRecords[msg.sender], "Get posted animal information!", true, postAnimalRecords[msg.sender].length);
     }
 
     // Reset password
@@ -86,7 +124,7 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         bytes32 old_pass_hash = hash(_old_password);
         UserInfo storage user = users[msg.sender];
         if (old_pass_hash != user.passHash) {
-            emit OperationEvents("PASSWORDRESET", "Old password does not match!", false);
+            emit OperationEvents("PASSWORD_RESET", "Old password does not match!", false);
             return false;
         }
         user.passHash = new_pass_hash;
@@ -113,7 +151,12 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         return (animalInfos, animalInfos.length, true);
     }
 
-    function adoptAnimal(address _seller, uint256 _index, bytes32 uuid) public returns(bool) {
+    // function depositPayment(uint256 _index) public payable {
+    //     AnimalInfo storage animal = animalInfos[_index];
+        
+    // }
+
+    function adoptAnimal(uint256 _index, string memory _time, bytes32 uuid) public payable returns(bool) {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             return false;
@@ -123,28 +166,38 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
             emit OperationEvents("TRANSACTION", "Requested animal has already been adopted!", false);
             return false;
         }
-        uint256 buyerBalance = getBalanceof(msg.sender);
+
+        address _sender = msg.sender;
+        uint256 buyerBalance = _sender.balance;
         if (buyerBalance < animal.price) {
             emit OperationEvents("TRANSACTION", "Buyer has insufficient fund for this payment!", false);
             return false;
         }
 
-        approve(msg.sender, animal.price);
-
-        if (transferFrom(msg.sender, _seller, animal.price)){
-            animal.status = "FOUND";
-            TransactionInfo memory trans;
-            trans.from = msg.sender;
-            trans.to = _seller;
-            trans.animalIndex = _index;
-            transRecords[msg.sender].push(trans);
-            transRecords[_seller].push(trans);
-            emit OperationEvents("TRANSACTION", "Transaction success!", true);
-            return true;
-        } else {
-            emit OperationEvents("TRANSACTION", "Transaction failed with unknown cause!", false);
+        if (msg.value < animal.price) {
+            emit OperationEvents("TRANSACTION", "Buyer has not payed enough ether for this payment!", false);
             return false;
         }
+
+        animal.seller.transfer(animal.price);
+
+        UserInfo storage userInfo = users[msg.sender];
+
+        animal.status = "FOUND";
+        TransactionInfo memory trans;
+        trans.time = _time;
+        trans.fromUser = userInfo.userName;
+        trans.from = msg.sender;
+        trans.toUser = animal.contactUserName;
+        trans.to = animal.seller;
+        trans.animalIndex = _index;
+        transRecords[msg.sender].push(trans);
+        transRecords[animal.seller].push(trans);
+        userInfo.adoptedNum++;
+    
+
+        emit OperationEvents("TRANSACTION", "Transaction success!", true);
+        return true;
         
     }
 
@@ -153,8 +206,11 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             return false;
         }
+
+        UserInfo storage userInfo = users[msg.sender];
+
         AnimalInfo memory info;
-        info.animalID = hash(_title);
+        info.animalID = animalInfos.length;
         info.longitude = _longitude;
         info.latitude = _latitude;
         info.price = _price;
@@ -162,38 +218,43 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         info.title = _title;
         info.description = _description;
         info.status = "MISSING";
-        address userAddr = msg.sender;
-        UserInfo storage userInfo = users[userAddr];
+        info.seller = msg.sender;
         info.contactUserName = userInfo.userName;
+        
         animalInfos.push(info);
-        uint256 loc = animalInfos.length - 1;
-        uint256[] storage animalSerial = userInfo.postedAnimalIndex;
-        animalSerial.push(loc);
+        postAnimalRecords[msg.sender].push(info);
+        // uint256 loc = animalInfos.length - 1;
+        // uint256[] storage animalSerial = userInfo.postedAnimalIndex;
+        // animalSerial.push(loc);
         emit OperationEvents("ANIMAL_INFO_OPS", "Animal information added successfully!", true);
         return true;
     }
 
-    function getUserInfo(bytes32 uuid) public view returns(bool, string memory, address) {
+    function getUserName(bytes32 uuid) public view returns(bool, string memory, address) {
         if (!checkUUID(msg.sender, uuid)) {
             return (false, "User is not login, request is refused", msg.sender);
         }
         return (true, users[msg.sender].userName, msg.sender);
     }
 
-    function issueFreeTokens(uint256 _tokens, address _to) public {
-        approve(_to, _tokens);
-        transfer(_to, _tokens);
-    }
-
-    function register(string memory _userName, string memory _password, uint256 _tokens) public payable returns(bool) {
+    function register(string memory _userName, string memory _password) public returns(bool) {
         UserInfo storage user = users[msg.sender];
         if (!compareStrings(user.userName, "")) {
             OperationEvents("REGISTRATION", "There is an existing user!", false);
             return false;
         }
+
+        for (uint256 i = 0; i < userNames.length; i++) {
+            if (compareStrings(userNames[i], _userName)) {
+                 OperationEvents("REGISTRATION", "There is an existing user name!", false);
+                 return false;
+            }
+        }
+        userNames.push(_userName);
+
+        user.userNameIndex = userNames.length - 1;
         user.userName = _userName;
         user.passHash = hash(_password);
-        user.tokens = _tokens;
         user.accountAddress = msg.sender;
         UserInfo storage newUser = users[msg.sender];
         if (compareStrings(newUser.userName, _userName)) {
@@ -221,11 +282,6 @@ contract AdoptionCentre is ERC20, ERC20Burnable {
         }
         emit LoginEvent('0', "Login failed!", false);
         return false;
-    }
-
-    // Token operation funcs
-    function getBalanceof(address _accountAddr) public view returns(uint256) {
-        return balanceOf(_accountAddr);
     }
 
     // Helper funcs

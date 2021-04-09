@@ -1,35 +1,39 @@
 import React from 'react';
 import {signIn} from '../user_middleware';
-import {Form, Input, Checkbox, Button, message} from 'antd';
+import {Form, Input, Checkbox, Button, message, Space} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import './SignIn.css'
 import { Redirect } from 'react-router';
+import Agent from '../../Agent/Agent';
 
 class SignInPage extends React.Component{
     constructor(props){
         super(props);
+
         this.state = {
             signedin : false,
-            signedin_msg : "not signed in"
+            signedin_msg : "not signed in",
+            myAgent : new Agent(null,null)
         }
     }
 
-    logIn(){
+    async logIn(){
         var input_usernmame = document.getElementById("username").value;
         var input_password = document.getElementById("password").value;
-        var success = signIn(input_usernmame,input_password);
-        if(success){
+        var logInfo = await this.state.myAgent.login(input_usernmame,input_password);
+        if(logInfo[0]){
             this.setState({
-                signedin : success
+                signedin : logInfo[0]
             })
         }
         else{
-            message.info('Your password does not match!');
+            message.error(logInfo[1]);
         }
     }
 
     render(){
-        console.log(this.state.signedin);
+        this.state.myAgent.initialize();
+        localStorage.setItem(this.state.myAgent.myAccount, null);
         return(
             <Form
                 name="normal_login"
