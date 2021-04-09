@@ -49,7 +49,7 @@ class Agent {
     }
 
     // Get user all posted animal records
-    async getTransRecords() {
+    async getAnimalRecords() {
         let callsReceipt = await this.deployedAdoptionCentre.methods.getPostedAnimal(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
     }

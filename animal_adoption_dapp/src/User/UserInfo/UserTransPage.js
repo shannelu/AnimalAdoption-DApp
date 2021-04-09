@@ -6,9 +6,8 @@ import "./transTable.css"
 const columns = [
     {title : "Date", dataIndex : "date", width: 150},
     {title : "Transaction number", dataIndex : "t_num",  width: 150},
-    {title : "From", dataIndex : "from",  width: 150},
-    {title : "To", dataIndex : "to",  width: 150},
-    {title : "Token", dataIndex : "tokens",  width: 150},
+    {title : "From", dataIndex : "fromUser",  width: 150},
+    {title : "To", dataIndex : "toUser",  width: 150},
     {title : "Status", dataIndex : "status", 
         render : (stat) => (
             <Badge status = {stat} text = {stat == "success" ? "success" : "pending"}/>
@@ -33,10 +32,6 @@ class UserTransPage extends React.Component{
         return this.state.myAgent.getTransRecords();
     }
 
-    changePage = (page,pageSize) => {
-        console.log(page);
-    }
-
     render(){
         trans_records = this.getMyTransRecords()
         return(
@@ -54,6 +49,7 @@ class UserTransPage extends React.Component{
                             showTotal : total => `Total ${total} items`
                         }
                     }
+                    expandable = {{expandedRow}}
                 />
             </div>
         )

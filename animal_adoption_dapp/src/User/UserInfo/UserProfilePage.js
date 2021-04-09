@@ -1,7 +1,6 @@
 import React from 'react';
 import {PageHeader, Tag, Button, Statistic, Row, Input, Form, Modal, message, Empty} from 'antd';
-import {isUniqueName} from '../user_middleware'
-import Agent, {logout} from '../../Agent/Agent'
+import {isUniqueName} from '../user_middleware';
 import { Redirect } from 'react-router';
 
 class UserProfilePage extends React.Component{
@@ -25,7 +24,7 @@ class UserProfilePage extends React.Component{
     }
 
     getPostsNum(){
-        return this.state.myAgent.getPostsNum()
+        return this.state.myAgent.getAnimalRecords()
     }
 
     getAdoptedNum(){
@@ -70,7 +69,7 @@ class UserProfilePage extends React.Component{
 
     updateUsername(){
         var new_name = document.getElementById("new_username").value;
-        this.myAgent.setUsername(this.props.uuid, new_name);
+        this.state.myAgent.resetUsername(new_name);
         this.setState({
             settingUname : false,
             unique_name : 0
@@ -80,8 +79,8 @@ class UserProfilePage extends React.Component{
     updatePwd(){
         var old_pwd = document.getElementById("old_pwd").value;
         var new_pwd = document.getElementById("new_pwd").value;
-        var info = this.state.myAgent.resetPassword(this.props.uuid, old_pwd, new_pwd);
-        if(info.success){
+        var resetPwdInfo = this.state.myAgent.resetPassword(old_pwd, new_pwd);
+        if(resetPwdInfo[0]){
             this.setState({
                 settingPwd : false,
                 pwd_format : 0,
@@ -90,7 +89,7 @@ class UserProfilePage extends React.Component{
             message.success("password has been reset!")
         }
         else{
-            message.error(info.msg)
+            message.error(resetPwdInfo[1])
         }
     }
 
