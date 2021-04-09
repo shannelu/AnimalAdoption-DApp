@@ -43,7 +43,7 @@ class Agent {
     }
 
     // Get user name
-    aysnc getUserName() {
+    async getUserName() {
         let callsReceipt = await this.deployedAdoptionCentre.methods.getUserName(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
         return callsReceipt;
@@ -123,8 +123,9 @@ class Agent {
 
     // Add missing animal, image data must be converted to base64
     async postAnimal(longitude, latitude, price, imageBase64, title, description) {
-        const gasAmount = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, this.uuid).estimateGas({from: this.myAccount});
-        let transReceipt = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, this.uuid).send({from: this.myAccount, gas: gasAmount});
+        var currentTime = new Date();
+        const gasAmount = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, currentTime, this.uuid).estimateGas({from: this.myAccount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, currentTime, this.uuid).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.OperationEvents.returnValues;
         console.log(transReturn);
         return [transReturn.success, transReturn.eventMsg];  
@@ -137,8 +138,9 @@ class Agent {
     }
 
     async adoptAnimal(index) {
-        const gasAmount = await this.deployedAdoptionCentre.methods.adoptAnimal(index, this.uuid).estimateGas({from: this.myAccount});
-        let transReceipt = await this.deployedAdoptionCentre.methods.adoptAnimal(index, this.uuid).send({from: this.myAccount, gas: gasAmount});
+        var currentTime = new Date();
+        const gasAmount = await this.deployedAdoptionCentre.methods.adoptAnimal(index, currentTime,this.uuid).estimateGas({from: this.myAccount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.adoptAnimal(index, currentTime,this.uuid).send({from: this.myAccount, gas: gasAmount});
         console.log(transReceipt);
         return [transReceipt.success, transReceipt.eventMsg];
     }

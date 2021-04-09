@@ -121,7 +121,7 @@ class PostInfoPage extends React.Component{
         var city = document.getElementById("city").value;
         var street = document.getElementById("street").value;
         var description = document.getElementById("description").value;
-        post(date,type,city,street,imgUrlBase64,description);
+        postAnimal(date,type,city,street,imgUrlBase64,description);
     }
 
     

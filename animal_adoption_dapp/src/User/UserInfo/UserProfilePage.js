@@ -20,7 +20,7 @@ class UserProfilePage extends React.Component{
     }
 
     getUsername(){
-        return this.state.myAgent.getUsername()
+        return this.state.myAgent.getUserName()
     }
 
     getPostsNum(){

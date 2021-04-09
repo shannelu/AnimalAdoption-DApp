@@ -18,6 +18,15 @@ const columns = [
 
 var trans_records = [];
 
+const expandedRow = () => {
+    const columns = [
+        {title: 'From', dataIndex: 'from'},
+        {title: 'To', dataIndex: 'to'}
+    ];
+    const data = trans_records;
+    return <Table columns = {columns} dataSource = {data} pagination = {false}></Table>
+}
+
 class UserTransPage extends React.Component{
     constructor(props){
         super(props)
