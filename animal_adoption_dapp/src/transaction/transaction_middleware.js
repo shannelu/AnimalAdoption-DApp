@@ -24,8 +24,9 @@ export function getAllAnimalInfo(animal_id){
     return [
         {
             animal_id: "001",  // Does it need to be here?
-            x: 199.01,
-            y: 198.02,
+            // x: 199.01,
+            // y: 198.02,
+            position: { lat: 49.267132, lng: -122.968941 },
             contactUserName: "Jessica",
             price: 1000,
             sold: false,
