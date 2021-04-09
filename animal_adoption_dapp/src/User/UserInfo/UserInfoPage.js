@@ -29,7 +29,7 @@ class UserInfoPage extends React.Component{
             <div className = "UserInfo">
                 <TabsMenu>
                     <UserProfilePage name = "My Profile" agent = {this.state.myAgent}></UserProfilePage>
-                    <UserTransPage name = "My Transactions" agent = {this.state.myAgent}> </UserTransPage>
+                    {/* <UserTransPage name = "My Transactions" agent = {this.state.myAgent}> </UserTransPage> */}
                 </TabsMenu>
             </div>
         )

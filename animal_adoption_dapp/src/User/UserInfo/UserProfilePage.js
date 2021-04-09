@@ -36,7 +36,7 @@ class UserProfilePage extends React.Component{
         this.setState({
             settingUname : true
         })
-    }
+    } 
 
     changePwd(){
         this.setState({
