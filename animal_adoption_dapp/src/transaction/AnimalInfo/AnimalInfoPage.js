@@ -1,10 +1,19 @@
 import React from 'react';
 import {getAllAnimalInfo} from '../transaction_middleware';
 import "./AnimalInfoPage.css";
-import {Button, Form, Input, message, Row, Col} from 'antd';
+import {Button, Form, Carousel, Image, Input, message, Row, Col} from 'antd';
 import { Content, Header } from 'antd/lib/layout/layout';
 import OrderConfirmPage from '../OrderConfirm/OrderConfirmPage';
+import FormItem from 'antd/lib/form/FormItem';
 
+
+const contentStyle = {
+    height: "160px",
+    color: "#fff",
+    lineHeight: "160px",
+    textAlign: "center",
+    // background: "#364d79"
+  };
 
 class AnimalInfoPage extends React.Component{
     constructor(props){
@@ -19,11 +28,12 @@ class AnimalInfoPage extends React.Component{
         return getAllAnimalInfo(this.props.animal_id);
     }
 
+
+
     render(){
         var animal_info = this.getMyAnimalInfo();
         var marker_str = this.props.match.params[0];
         this.animal_index = marker_str.split("_")[2];
-        console.log(animal_info[this.animal_index].position.lat);
         return(
             <Form
             name="addTokens"
@@ -39,6 +49,25 @@ class AnimalInfoPage extends React.Component{
                 <h2>Animal Information</h2>
                 </Header>
                 <Content>
+                <Form.Item>
+                    <Carousel>
+                        <div>
+                        <h3 style={contentStyle}><Image
+                        width={200}
+                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                        /></h3>
+                        </div>
+                        <div>
+                        <h3 style={contentStyle}>2</h3>
+                        </div>
+                        <div>
+                        <h3 style={contentStyle}>3</h3>
+                        </div>
+                        <div>
+                        <h3 style={contentStyle}>4</h3>
+                        </div>
+                    </Carousel>,
+                </Form.Item>
                     <Form.Item>
                         <div>
                             <table>
