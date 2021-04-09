@@ -1,19 +1,11 @@
 import React from 'react';
 import {getAllAnimalInfo} from '../transaction_middleware';
 import "./AnimalInfoPage.css";
-<<<<<<< HEAD
-import {Button, Form, Input, message, Row, Col} from 'antd';
-import { Content, Header } from 'antd/lib/layout/layout';
-import OrderConfirmPage from '../OrderConfirm/OrderConfirmPage';
-import Agent from '../../Agent/Agent';
-=======
 import {Button, Form, Carousel, Image, Input, message, Row, Col} from 'antd';
 import { Content, Header } from 'antd/lib/layout/layout';
 import OrderConfirmPage from '../OrderConfirm/OrderConfirmPage';
 import FormItem from 'antd/lib/form/FormItem';
->>>>>>> shanny
 
-var agent = new Agent(null,null);
 
 const contentStyle = {
     height: "160px",
@@ -28,12 +20,7 @@ class AnimalInfoPage extends React.Component{
         super(props);
         console.log(this.props)
         this.state = {
-<<<<<<< HEAD
-            animal_index : 0,
-            myAgent: null
-=======
             animal_index : 0
->>>>>>> shanny
         }
     }
 
@@ -41,25 +28,12 @@ class AnimalInfoPage extends React.Component{
         return getAllAnimalInfo(this.props.animal_id);
     }
 
-<<<<<<< HEAD
-    async componentDidMount(){
-        await agent.initialize()
-        this.setState({
-            myAgent: agent
-        })
-    }
-=======
 
->>>>>>> shanny
 
     render(){
         var animal_info = this.getMyAnimalInfo();
         var marker_str = this.props.match.params[0];
         this.animal_index = marker_str.split("_")[2];
-<<<<<<< HEAD
-        console.log(animal_info[this.animal_index].position.lat);
-=======
->>>>>>> shanny
         return(
             <Form
             name="addTokens"
@@ -75,8 +49,6 @@ class AnimalInfoPage extends React.Component{
                 <h2>Animal Information</h2>
                 </Header>
                 <Content>
-<<<<<<< HEAD
-=======
                 <Form.Item>
                     <Carousel>
                         <div>
@@ -96,7 +68,6 @@ class AnimalInfoPage extends React.Component{
                         </div>
                     </Carousel>,
                 </Form.Item>
->>>>>>> shanny
                     <Form.Item>
                         <div>
                             <table>
