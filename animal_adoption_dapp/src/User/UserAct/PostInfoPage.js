@@ -1,7 +1,7 @@
 import React from 'react';
 import {Form, DatePicker, Select, Cascader, Input, Space, Button, message, Upload} from 'antd';
 import moment from 'moment';
-import {post} from "../user_middleware"
+import Agent from '../../Agent/Agent'
 import {UploadOutlined} from '@ant-design/icons'
 const {Option} = Select;
 
@@ -107,6 +107,7 @@ class PostInfoPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            myAgent : new Agent(null, null)
         }
     }
 
@@ -115,18 +116,18 @@ class PostInfoPage extends React.Component{
     }
 
     post(){
-        console.log(imgUrlBase64)
+        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
         var date = document.getElementById("date").value;
-        var type = document.getElementById("type").value;
+        var title = document.getElementById("title").value;
         var city = document.getElementById("city").value;
         var street = document.getElementById("street").value;
         var description = document.getElementById("description").value;
-        postAnimal(date,type,city,street,imgUrlBase64,description);
+        var price = document.getElementById("id").value;
+        this.state.myAgent.postAnimal(0,0,date,price, imgUrlBase64, title,description);
     }
 
-    
-
     render(){
+        this.state.myAgent.initialize()
         return(
             <Form {...layout} onFinish = {()=>this.post()}>
                 <h1>Thank you for your warm heart! Provide detailed information about this little thing!</h1>
@@ -138,15 +139,8 @@ class PostInfoPage extends React.Component{
                         style = {{width:300}}
                     />
                 </Form.Item>
-                <Form.Item label = "What type is it?" rules={[{ required: true, message: 'Please select a type!' }]} >
-                    <Select
-                        id = "type"
-                        style = {{width : 300}}
-                        placeholder = "Select animal type"
-                    >
-                        <Option value = "cat">Cat</Option>
-                        <Option value = "dog">Dog</Option>
-                    </Select>
+                <Form.Item label = "What title is it?" rules={[{ required: true, message: 'Please select a type!' }]} >
+                    <Input id = "title" placeholder = "write a title for your post" ></Input>
                 </Form.Item>
                 <Form.Item label = "Where are you" rules={[{ required: true, message: 'Please input your location!' }]} >
                     <Space>
@@ -159,6 +153,9 @@ class PostInfoPage extends React.Component{
                 </Form.Item>
                 <Form.Item>
                     <Button icon = {<UploadOutlined/>} id = "test" onClick = {upload}>Upload some pictures about it!</Button>
+                </Form.Item>
+                <Form.Item label = "how much does it cost to adopt it?">
+                    <InputNumber id = "price" min = {0.1} max = {10} defaultValue = {1} step = {0.1}/>
                 </Form.Item>
                 <Form.Item layout = 'horizontal' label = "Description" rules={[{ required: true, message: 'This is a required field!' }]} >
                     <Input.TextArea id = "description" 

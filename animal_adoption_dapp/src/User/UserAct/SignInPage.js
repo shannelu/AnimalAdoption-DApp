@@ -3,12 +3,8 @@ import {signIn} from '../user_middleware';
 import {Form, Input, Checkbox, Button, message, Space} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import './SignIn.css'
-<<<<<<< HEAD
 import { Redirect } from 'react-router';
 import Agent from '../../Agent/Agent';
-=======
-import { Redirect } from 'react-router-dom';
->>>>>>> julia
 
 class SignInPage extends React.Component{
     constructor(props){
@@ -36,11 +32,8 @@ class SignInPage extends React.Component{
     }
 
     render(){
-<<<<<<< HEAD
         this.state.myAgent.initialize();
         localStorage.setItem(this.state.myAgent.myAccount, null);
-=======
->>>>>>> julia
         return(
             <Form
                 name="normal_login"

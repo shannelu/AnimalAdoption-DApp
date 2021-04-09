@@ -24,7 +24,7 @@ class UserProfilePage extends React.Component{
     }
 
     getPostsNum(){
-        return this.state.myAgent.getAnimalRecords()
+        return this.state.myAgent.getPostedAnimalRecords()
     }
 
     getAdoptedNum(){
