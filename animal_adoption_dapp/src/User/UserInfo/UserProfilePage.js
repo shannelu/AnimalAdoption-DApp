@@ -19,16 +19,18 @@ class UserProfilePage extends React.Component{
         }
     }
 
-    getUsername(){
-        return this.state.myAgent.getUserName()
+    async getUsername(){
+        console.log(this.props)
+        console.log(this.state.myAgent.deployedAdoptionCentre)
+        return await this.state.myAgent.getUserName()
     }
 
-    getPostsNum(){
-        return this.state.myAgent.getPostedAnimalRecords()
+    async getPostsNum(){
+        return await this.state.myAgent.getPostedAnimalRecords()
     }
 
-    getAdoptedNum(){
-        return this.state.myAgent.getAdoptedNum()
+    async getAdoptedNum(){
+        return await this.state.myAgent.getAdoptedNum()
     }
 
     changeUsername(){
@@ -67,19 +69,19 @@ class UserProfilePage extends React.Component{
         })
     }
 
-    updateUsername(){
+    async updateUsername(){
         var new_name = document.getElementById("new_username").value;
-        this.state.myAgent.resetUsername(new_name);
+        await this.state.myAgent.resetUsername(new_name);
         this.setState({
             settingUname : false,
             unique_name : 0
         })
     }
 
-    updatePwd(){
+    async updatePwd(){
         var old_pwd = document.getElementById("old_pwd").value;
         var new_pwd = document.getElementById("new_pwd").value;
-        var resetPwdInfo = this.state.myAgent.resetPassword(old_pwd, new_pwd);
+        var resetPwdInfo = await this.state.myAgent.resetPassword(old_pwd, new_pwd);
         if(resetPwdInfo[0]){
             this.setState({
                 settingPwd : false,
@@ -109,7 +111,7 @@ class UserProfilePage extends React.Component{
         })
     }
 
-    checkUniqueUsername(){
+    async checkUniqueUsername(){
         var input_usernmame = document.getElementById("new_username").value;
         if(input_usernmame.length == 0){
             this.setState({
@@ -118,7 +120,7 @@ class UserProfilePage extends React.Component{
         }
         else{
             this.setState({
-                unique_name: isUniqueName(input_usernmame) ? 1 : -1
+                unique_name: await this.state.myAgent.isUniqueName(input_usernmame) ? 1 : -1
             })
         }
     }
@@ -130,7 +132,7 @@ class UserProfilePage extends React.Component{
     }
 
     async logOut(){
-        var logOutInfo = this.state.myAgent.logout()
+        var logOutInfo = await this.state.myAgent.logout()
         if(logOutInfo[0]){
             message.success(logOutInfo[1])
             this.setState({
@@ -168,7 +170,6 @@ class UserProfilePage extends React.Component{
                                 margin: '0 32px',
                             }}
                         />
-                        <Statistic title="Tokens" value= {this.getTotalToken()} />
                     </Row>
                     <Modal
                         title = "Reset username"

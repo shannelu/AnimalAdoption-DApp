@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, DatePicker, Select, Cascader, Input, Space, Button, message, Upload} from 'antd';
+import {Form, DatePicker, Select, Cascader, Input, Space, Button, message, InputNumber} from 'antd';
 import moment from 'moment';
 import Agent from '../../Agent/Agent'
 import {UploadOutlined} from '@ant-design/icons'
@@ -115,7 +115,9 @@ class PostInfoPage extends React.Component{
         return current > moment().endOf('day');
     }
 
-    post(){
+    async post(){
+        var lat = localStorage.getItem("lat");
+        var lng = localStorage.getItem("lng");
         this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
         var date = document.getElementById("date").value;
         var title = document.getElementById("title").value;
@@ -123,7 +125,7 @@ class PostInfoPage extends React.Component{
         var street = document.getElementById("street").value;
         var description = document.getElementById("description").value;
         var price = document.getElementById("id").value;
-        this.state.myAgent.postAnimal(0,0,date,price, imgUrlBase64, title,description);
+        await this.state.myAgent.postAnimal(lat, lng, date, price, imgUrlBase64, title, description);
     }
 
     render(){

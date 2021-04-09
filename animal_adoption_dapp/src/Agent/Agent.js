@@ -29,7 +29,6 @@ class Agent {
         this.networkData = AdoptionCentre.networks[this.networkId];
         //this.contractAddr = this.networkData.address;
         this.deployedAdoptionCentre = new window.web3.eth.Contract(AdoptionCentre.abi, this.networkData.address);
-        console.log(accounts);
         //console.log("this.deployedAdoptionCentre");
         //console.log(this.deployedAdoptionCentre);
         this.isDeployed = function() {
@@ -40,6 +39,10 @@ class Agent {
                 return false;
             }
         };
+    }
+
+    async getAdoptedNum(){
+        return 1;
     }
 
     // Get user name
@@ -122,8 +125,7 @@ class Agent {
     }
 
     // Add missing animal, image data must be converted to base64
-    async postAnimal(longitude, latitude, price, imageBase64, title, description) {
-        var currentTime = new Date();
+    async postAnimal(longitude, latitude, currentTime, price, imageBase64, title, description) {
         const gasAmount = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, currentTime, this.uuid).estimateGas({from: this.myAccount});
         let transReceipt = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, currentTime, this.uuid).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.OperationEvents.returnValues;

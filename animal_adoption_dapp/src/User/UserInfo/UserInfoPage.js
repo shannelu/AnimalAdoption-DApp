@@ -4,6 +4,8 @@ import UserTransPage from "./UserTransPage"
 import TabsMenu from "./TabsMenu"
 import Agent from "../../Agent/Agent"
 import {Empty, Button} from 'antd'
+import SkeletonInput from "antd/lib/skeleton/Input"
+const sleep = require("sleep")
 
 class UserInfoPage extends React.Component{
     constructor(props){
@@ -14,8 +16,9 @@ class UserInfoPage extends React.Component{
     }
 
     render(){
-        this.state.myAgent.initialize()
-        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount)
+        this.state.myAgent.initialize();
+        sleep.sleep(3);
+        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
         if(this.state.myAgent.uuid == null){
             return(
                 <Empty
@@ -28,8 +31,9 @@ class UserInfoPage extends React.Component{
         return(
             <div className = "UserInfo">
                 <TabsMenu>
+                    <h1>hello</h1>
                     <UserProfilePage name = "My Profile" agent = {this.state.myAgent}></UserProfilePage>
-                    <UserTransPage name = "My Transactions" agent = {this.state.myAgent}> </UserTransPage>
+                    {/* <UserTransPage name = "My Transactions" agent = {this.state.myAgent}> </UserTransPage> */}
                 </TabsMenu>
             </div>
         )
