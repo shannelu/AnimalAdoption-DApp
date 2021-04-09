@@ -3,11 +3,9 @@ import AdoptionCentre from '../abis/AdoptionCentre';
 //const truffleAssert = require('truffle-assertions');
 
 class Agent {
-    constructor() {
-        this.myAccount = null;
-        this.uuid = null;
-        this.freeTokens = 100;
-        
+    constructor(myAccount,uuid){
+        this.myAccount = myAccount;
+        this.uuid = uuid;
     }
 
     async getWeb3Provider(){
@@ -31,9 +29,9 @@ class Agent {
         this.networkData = AdoptionCentre.networks[this.networkId];
         //this.contractAddr = this.networkData.address;
         this.deployedAdoptionCentre = new window.web3.eth.Contract(AdoptionCentre.abi, this.networkData.address);
-
-        console.log("this.deployedAdoptionCentre");
-        console.log(this.deployedAdoptionCentre);
+        console.log(accounts);
+        //console.log("this.deployedAdoptionCentre");
+        //console.log(this.deployedAdoptionCentre);
         this.isDeployed = function() {
             if (this.networkData) {
                 return true;
@@ -61,11 +59,10 @@ class Agent {
 
     // User registeration
     async registeration(username, password) {
-        await this.deployedAdoptionCentre.methods.payment().send({from: this.myAccount, value: 1000000000000000000})
-        const gasAmount = await this.deployedAdoptionCentre.methods.register(username, password, this.freeTokens).estimateGas({from: this.myAccount});
+        const gasAmount = await this.deployedAdoptionCentre.methods.register(username, password).estimateGas({from: this.myAccount});
         console.log("gasAmount");
         console.log(gasAmount);
-        let transReceipt = await this.deployedAdoptionCentre.methods.register(username, password, this.freeTokens).send({from: this.myAccount, gas: gasAmount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.register(username, password).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.OperationEvents.returnValues;
         console.log(transReturn);
         return [transReturn.success, transReturn.eventMsg];         

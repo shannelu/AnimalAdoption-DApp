@@ -3,6 +3,10 @@ export function signUp(username,passsword){
     return {success: true, msg: "sign up successfully!"};
 }
 
+export function isUniqueName(name){
+    return true;
+}
+
 export function signIn(username, passsword){
     return {success: true, msg: "sign in successfully!"};
 }

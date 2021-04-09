@@ -12,6 +12,7 @@ class Nav extends React.Component{
     }
 
     check_title_index( index ){
+        console.log(index)
         return index === this.state.currentIndex ? "nav_title active" : "nav_title"
     }
 
@@ -23,7 +24,7 @@ class Nav extends React.Component{
         return(
             <Layout>
                 <Layout.Header className="header" extra>
-                    <Menu classname = "nav_title_wrap" theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                    <Menu classname = "nav_title_wrap" theme="dark" mode="horizontal">
                         { 
                             React.Children.map( this.props.children , ( element,index ) => {
                                 return(
@@ -34,7 +35,7 @@ class Nav extends React.Component{
                             }) 
                         }
                     </Menu>
-                
+                    <h1>hello</h1>
                 </Layout.Header>
                 <Layout.Content className = "nav_item_wrap">
                     {

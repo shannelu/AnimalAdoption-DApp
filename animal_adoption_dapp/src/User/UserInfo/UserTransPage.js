@@ -24,12 +24,13 @@ class UserTransPage extends React.Component{
         super(props)
         this.state = {
             trans_num : 0,
-            current : 1
+            current : 1,
+            myAgent: this.props.agent
         }
     }
 
     getMyTransRecords(){
-        return getAllMyTransRecords(this.props.uuid);
+        return this.state.myAgent.getTransRecords();
     }
 
     changePage = (page,pageSize) => {

@@ -36,7 +36,7 @@ contract('AdoptionCentre', (accounts) => {
     });
 
     it('Register user1', async () => {
-        let transReceipt = await adoptionCentreInstance.register.sendTransaction("bevis", "0402", 100, { from: user_1_address });
+        let transReceipt = await adoptionCentreInstance.register.sendTransaction("bevis", "0402", { from: user_1_address });
         truffleAssert.eventEmitted(transReceipt, 'OperationEvents', (ev) => {
             if (ev.success) {
                 return true;
@@ -128,7 +128,7 @@ contract('AdoptionCentre', (accounts) => {
     });
 
     it('Register User2', async () => {
-        let transReceipt_1 = await adoptionCentreInstance.register.sendTransaction("vincent", "0330", 100, { from: user_2_address });
+        let transReceipt_1 = await adoptionCentreInstance.register.sendTransaction("vincent", "0330", { from: user_2_address });
         truffleAssert.eventEmitted(transReceipt_1, 'OperationEvents', (ev) => {
             if (ev.success) {
                 return true;

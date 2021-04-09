@@ -11,7 +11,6 @@ contract AdoptionCentre {
     struct UserInfo {
         string userName;
         bytes32 passHash;
-        uint256 tokens;
         address accountAddress;
         uint256[] postedAnimalIndex;
         uint256[] transactionIndex;
@@ -20,7 +19,7 @@ contract AdoptionCentre {
     // longitude = (longitude from js) * 10^6
     // latitude = (latitude from js) * 10^6
     struct AnimalInfo {
-        bytes32 animalID;
+        uint256 animalID;
         int64 longitude;
         int64 latitude;
         string contactUserName;
@@ -171,7 +170,7 @@ contract AdoptionCentre {
             return false;
         }
         AnimalInfo memory info;
-        info.animalID = hash(_title);
+        info.animalID = animalInfos.length;
         info.longitude = _longitude;
         info.latitude = _latitude;
         info.price = _price;
@@ -198,7 +197,7 @@ contract AdoptionCentre {
         return (true, users[msg.sender].userName, msg.sender);
     }
 
-    function register(string memory _userName, string memory _password, uint256 _tokens) public payable returns(bool) {
+    function register(string memory _userName, string memory _password) public returns(bool) {
         UserInfo storage user = users[msg.sender];
         if (!compareStrings(user.userName, "")) {
             OperationEvents("REGISTRATION", "There is an existing user!", false);
@@ -206,7 +205,6 @@ contract AdoptionCentre {
         }
         user.userName = _userName;
         user.passHash = hash(_password);
-        user.tokens = _tokens;
         user.accountAddress = msg.sender;
         UserInfo storage newUser = users[msg.sender];
         if (compareStrings(newUser.userName, _userName)) {

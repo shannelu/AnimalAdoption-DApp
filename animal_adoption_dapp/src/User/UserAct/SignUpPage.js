@@ -13,9 +13,6 @@ const PwdIcon = createFromIconfontCN({
 class SignUpPage extends React.Component{
     constructor(){
         super();
-        
-        
-
         this.state = {
             unique_name : 0, //-1 for duplicate name, 0 for not yet set name, 1 for unique name
             pwd_format : 0, //-1 for wrong format, 0 for not yet set pwd, 1 for corrent format
@@ -23,7 +20,6 @@ class SignUpPage extends React.Component{
             signedup : false,
             isModalVisible: false,
             fail_msg : "not sign up yet",
-            free_token : 0,
             agreed : false
         }
     }
@@ -79,31 +75,23 @@ class SignUpPage extends React.Component{
     }
 
     async handleSignUp(){
+        console.log(this.state.unique_name)
+        console.log(this.state.pwd_confirmed)
+        console.log(this.state.agreed)
         if(this.state.unique_name == 1 && this.state.pwd_confirmed == 1 && this.state.agreed){
             var input_usernmame = document.getElementById("username_signup").value;
             var input_password = document.getElementById("password_signup").value;
-
-            // var info = signUp(input_usernmame,input_password);
-
-            // Test
-            const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-            this.accounts = await web3.eth.getAccounts();
-            console.log(this.accounts);
-            this.contractAddr = this.accounts[0];
-            this.sellerAddr = this.accounts[1];
-            this.buyerAddr = this.accounts[2];
-            this.myAgent = new Agent();
-            this.myAgent.initialize(this.contractAddr);
-            
-            
-            let callback = await this.myAgent.registeration(input_usernmame, input_password, this.sellerAddr);
-            
-            console.log(callback[1]);
+            var myAgent = new Agent(null,null)
+            await myAgent.initialize()
+            console.log(myAgent.myAccount)
+            var uuid = localStorage.getItem(myAgent.myAccount)
+            //let callback = await this.myAgent.registeration(input_usernmame, input_password, this.sellerAddr);
+            let callback = await myAgent.registeration(input_usernmame, input_password);
             
             this.setState({
                 signedup : callback[0],
                 isModalVisible : true,
-                free_token : 100
+                fail_msg: callback[1]
             })
             return;
         }

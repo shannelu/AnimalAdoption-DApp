@@ -22,7 +22,7 @@ class App extends React.Component{
               <Nav>
                   <MapContainer name = "Animal Map"/>
                   <AddTokensPage name = "Shop"/>
-                  <UserInfoPage name = "User"/>  
+                  <UserInfoPage name = "User"/>
               </Nav>
             </Route>
             <Route path="/map">
