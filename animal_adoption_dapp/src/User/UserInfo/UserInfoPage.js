@@ -4,22 +4,34 @@ import UserTransPage from "./UserTransPage"
 import TabsMenu from "./TabsMenu"
 import Agent from "../../Agent/Agent"
 import {Empty, Button} from 'antd'
-import SkeletonInput from "antd/lib/skeleton/Input"
-const sleep = require("sleep")
+
+var agent = new Agent(null,null);
 
 class UserInfoPage extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            myAgent : new Agent(null,null)
+            myAgent : null
         }
     }
 
+    // static async getDerivedStateFromProps(props, state){
+    //     await this.state.myAgent.initialize();
+    //     console.log("hello")
+    //     return {myAgent : this.state.myAgent}
+    // }
+
+    async componentDidMount(){
+        await agent.initialize()
+        agent.uuid = localStorage.getItem(agent.uuid)
+        console.log("hello");
+        this.setState({
+            myAgent: agent
+        })
+    }
+
     render(){
-        this.state.myAgent.initialize();
-        sleep.sleep(3);
-        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
-        if(this.state.myAgent.uuid == null){
+        if(agent.uuid == null){
             return(
                 <Empty
                     description = "You have not logged in!"
@@ -31,9 +43,8 @@ class UserInfoPage extends React.Component{
         return(
             <div className = "UserInfo">
                 <TabsMenu>
-                    <h1>hello</h1>
                     <UserProfilePage name = "My Profile" agent = {this.state.myAgent}></UserProfilePage>
-                    {/* <UserTransPage name = "My Transactions" agent = {this.state.myAgent}> </UserTransPage> */}
+                    <UserTransPage name = "My Transactions" agent = {this.state.myAgent}> </UserTransPage>
                 </TabsMenu>
             </div>
         )

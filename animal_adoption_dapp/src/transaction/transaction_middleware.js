@@ -33,7 +33,19 @@ export function getAllAnimalInfo(animal_id){
             // imageBase64: ,   // add image later
             // title: ,
             description: "Please contact Jessica for further information."
-        }
+        },
+        {
+            animal_id: "002", 
+
+            position: { lat: 49.166592, lng: -123.133568 },
+            contactUserName: "Jessica",
+            price: 2000,
+            sold: false,
+            // imageBase64: ,   // add image later
+            // title: ,
+            description: "Please contact Jessica for further information."
+          }
+
     ]
 }
 

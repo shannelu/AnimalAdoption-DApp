@@ -232,7 +232,7 @@ contract AdoptionCentre {
         return true;
     }
 
-    function getUserName(bytes32 uuid) public view returns(bool, string memory, address) {
+    function getUserName(bytes32 uuid) public returns(bool, string memory, address) {
         if (!checkUUID(msg.sender, uuid)) {
             return (false, "User is not login, request is refused", msg.sender);
         }

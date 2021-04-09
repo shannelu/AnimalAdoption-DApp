@@ -94,9 +94,10 @@ import React, { Component } from 'react';
 import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 import {getAllAnimalsInfo} from './map_middleware'
 import CurrentLocation from './Map';
+import Agent from '../Agent/Agent';
 
+var agent = new Agent(null,null);
 const animals = getAllAnimalsInfo();
-
 export class MapContainer extends Component {
   constructor(props){
       super(props);
@@ -104,7 +105,9 @@ export class MapContainer extends Component {
         showingInfoWindow: false,
         activeMarker: null,
         selectedPlace: {},
-        readyJump: false
+        readyJump: false,
+        myAgent : null,
+        animals: []
       };
   }
   
@@ -136,19 +139,34 @@ export class MapContainer extends Component {
     })
   }
 
-  
+  async componentDidMount(){
+    await agent.initialize()
+    agent.uuid = localStorage.getItem(agent.myAccount)
+    var temp = await agent.getAnimalNearBy()
+    var lat = localStorage.getItem("lat")
+    var lng = localStorage.getItem("lng")
+    temp.push({
+      title:"I am here",
+      position: {lat:lat, lng:lng},
+      imageBase64: null
+    })
+    this.setState({
+      myAgent : agent,
+      animals: temp
+    })
+  }
 
   render() {
     return (
       <div>
-
         <CurrentLocation
           centerAroundCurrentLocation
           google={this.props.google}
         >
 
-          <Marker onClick={this.onMarkerClick} name="I am here" id="hello7"/>
-          {animals.map((animal, index) => (
+          {/* <Marker onClick={this.onMarkerClick} name="I am here" id="hello7"/> */}
+          
+          {this.state.animals.map((animal, index) => (
             <Marker
               key={index} // Need to be unique
               onClick={this.onMarkerClick}
@@ -159,9 +177,6 @@ export class MapContainer extends Component {
             >
             </Marker>
           ))}
-         
-
-          
 
           <InfoWindow
               marker={this.state.activeMarker}
@@ -183,17 +198,8 @@ export class MapContainer extends Component {
                 this.state.activeMarker != null && this.state.activeMarker.name == "I am here" ?  
                 <a href={'/post'}>{this.state.activeMarker.name}</a> : ""
               }
-
-
-           
-
-            
-
           </InfoWindow>
-          
-
         </CurrentLocation>
-
       </div>
             
     );

@@ -1,11 +1,16 @@
 import Web3 from 'web3';
 import AdoptionCentre from '../abis/AdoptionCentre';
+import {getImage} from "../Map/image"
 //const truffleAssert = require('truffle-assertions');
 
 class Agent {
     constructor(myAccount,uuid){
         this.myAccount = myAccount;
         this.uuid = uuid;
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async getWeb3Provider(){
@@ -20,7 +25,6 @@ class Agent {
             window.alert('Non-Ethereum browser detected. You should consider trying       MetaMask!');
         }
     }
-
     async initialize() {
         await this.getWeb3Provider();
         let accounts = await window.web3.eth.getAccounts();
@@ -47,7 +51,12 @@ class Agent {
 
     // Get user name
     async getUserName() {
+        if(this.uuid == "null"){
+            console.log("nulllll");
+            return "unknown";
+        }
         let callsReceipt = await this.deployedAdoptionCentre.methods.getUserName(this.uuid).call({from: this.myAccount});
+        let callsReturn = await this.deployedAdoptionCentre.methods.getAnimalNearBy(0, 0, 0, 0, 0, this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
         return callsReceipt;
     }
@@ -55,12 +64,46 @@ class Agent {
     // Get user all transaction records
     async getTransRecords() {
         let callsReceipt = await this.deployedAdoptionCentre.methods.getTransRecords(this.uuid).call({from: this.myAccount});
-        console.log(callsReceipt);
+        console.log(callsReceipt); 
         return callsReceipt;
+    }
+
+    async getFakeRecords(){
+        await this.sleep(2000);
+        var fake_records = [
+            {
+                from: 'runze',
+                to : 'juli',
+                fromUser: 'runzw',
+                toUser: 'julia',
+                time: '2021/04/09',
+                animalIndex : '1'
+            },
+            {
+                from: 'runze',
+                to : 'juli',
+                fromUser: 'runzw',
+                toUser: 'julia',
+                time: '2021/04/09',
+                animalIndex : '1'
+            },
+            {
+                from: 'runze',
+                to : 'juli',
+                fromUser: 'runzw',
+                toUser: 'julia',
+                time: '2021/04/09',
+                animalIndex : '1'
+            }
+        ]
+        return fake_records;
     }
 
     // Get user all posted animal records
     async getPostedAnimalRecords() {
+        if(this.uuid == "null"){
+            return -1;
+        }
         let callsReceipt = await this.deployedAdoptionCentre.methods.getPostedAnimal(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
         return callsReceipt;
@@ -135,6 +178,23 @@ class Agent {
 
     // Acquire nearby missing animal based on your current position(WARNING: this function is incomplete for now, only will return full list)
     async getAnimalNearBy() {
+        if(this.uuid == "null"){
+            var image = getImage()
+            return [
+                {
+                    index:0,
+                    title: "marker0",
+                    position: { lat: 49.246292, lng: -123.116226 },
+                    imageBase64: image[0]
+                  },
+                  {
+                    index:1,
+                    title: "marker1",
+                    position: { lat: 49.166592, lng: -123.133568 },
+                    imageBase64: image[1]
+                  }
+            ]
+        }
         let callsReturn = await this.deployedAdoptionCentre.methods.getAnimalNearBy(0, 0, 0, 0, 0, this.uuid).call({from: this.myAccount});
         return callsReturn;
     }

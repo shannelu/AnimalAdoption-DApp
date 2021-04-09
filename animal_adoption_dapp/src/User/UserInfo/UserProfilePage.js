@@ -15,22 +15,39 @@ class UserProfilePage extends React.Component{
             pwd_confirmed : 0, //-1 for not confirmed, 0 for not yet set pwd, 1 for confirmed
             logOutModalVisible: false,
             loggedOut: false,
+            Username: "unknown",
+            PostedAnimalRecords: 0,
+            AdoptedNum: 0,
             myAgent: this.props.agent
         }
     }
 
-    async getUsername(){
-        console.log(this.props)
-        console.log(this.state.myAgent.deployedAdoptionCentre)
-        return await this.state.myAgent.getUserName()
-    }
+    // async getUsername(){
+    //     console.log("profile agent");
+    //     console.log(this.props.agent);
+    //     return await this.state.myAgent.getUserName();
+    // }
 
-    async getPostsNum(){
-        return await this.state.myAgent.getPostedAnimalRecords()
-    }
+    // async getPostsNum(){
+    //     return await this.state.myAgent.getPostedAnimalRecords();
+    // }
 
-    async getAdoptedNum(){
-        return await this.state.myAgent.getAdoptedNum()
+    // async getAdoptedNum(){
+    //     return await this.state.myAgent.getAdoptedNum();
+    // }
+
+    async componentDidMount(){
+        console.log(this.state.myAgent.myAccount);
+        let res = await this.state.myAgent.getUserName();
+        
+        console.log("Debugger point");
+        console.log(res);
+        //console.log(await this.state.myAgent.getUserName());
+        this.setState({
+            Username: await this.state.myAgent.getUserName(),
+            PostedAnimalRecords : await this.state.myAgent.getPostedAnimalRecords(),
+            AdoptedNum: await this.state.myAgent.getAdoptedNum()
+        })
     }
 
     changeUsername(){
@@ -151,7 +168,7 @@ class UserProfilePage extends React.Component{
             <div>
                 {this.state.loggedOut ? <Redirect to='/main'/> : ""}
                 <PageHeader 
-                    title = {this.getUsername()}
+                    title = {this.state.Username}
                     tags={<Tag color="green">Online</Tag>}
                     extra={[
                         <Button key="3" onClick = {()=>this.changeUsername()} >Change Username</Button>,
@@ -162,10 +179,10 @@ class UserProfilePage extends React.Component{
                       ]}
                 >
                     <Row>
-                        <Statistic title="Posts" value={this.getPostsNum()} />
+                        <Statistic title="Posts" value={this.state.PostedAnimalRecords} />
                         <Statistic
                             title="Adopted"
-                            value={this.getAdoptedNum()}
+                            value={this.state.AdoptedNum}
                             style={{
                                 margin: '0 32px',
                             }}

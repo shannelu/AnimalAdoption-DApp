@@ -4,19 +4,29 @@ import "./AnimalInfoPage.css";
 import {Button, Form, Input, message, Row, Col} from 'antd';
 import { Content, Header } from 'antd/lib/layout/layout';
 import OrderConfirmPage from '../OrderConfirm/OrderConfirmPage';
+import Agent from '../../Agent/Agent';
 
+var agent = new Agent(null,null);
 
 class AnimalInfoPage extends React.Component{
     constructor(props){
         super(props);
         console.log(this.props)
         this.state = {
-            animal_index : 0
+            animal_index : 0,
+            myAgent: null
         }
     }
 
     getMyAnimalInfo(){
         return getAllAnimalInfo(this.props.animal_id);
+    }
+
+    async componentDidMount(){
+        await agent.initialize()
+        this.setState({
+            myAgent: agent
+        })
     }
 
     render(){
