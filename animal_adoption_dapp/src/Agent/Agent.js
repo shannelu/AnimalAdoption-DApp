@@ -42,10 +42,25 @@ class Agent {
         };
     }
 
-    // Get user transaction records
+    // Get user all transaction records
     async getTransRecords() {
         let callsReceipt = await this.deployedAdoptionCentre.methods.getTransRecords(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
+    }
+
+    // Get user all posted animal records
+    async getTransRecords() {
+        let callsReceipt = await this.deployedAdoptionCentre.methods.getPostedAnimal(this.uuid).call({from: this.myAccount});
+        console.log(callsReceipt);
+    }
+
+    // Reset password
+    async resetUserName(newUsername) {
+        const gasAmount = await this.deployedAdoptionCentre.methods.resetUserName(newUsername, this.uuid).estimateGas({from: this.myAccount});
+        console.log(gasAmount);
+        let transReceipt = await this.deployedAdoptionCentre.methods.resetUserName(newUsername, this.uuid).send({from: this.myAccount, gas: gasAmount});
+        let transReturn = transReceipt.events.OperationEvents.returnValues;
+        return [transReturn.success, transReturn.eventMsg];         
     }
 
     // Reset password
@@ -74,7 +89,7 @@ class Agent {
         const gasAmount = await this.deployedAdoptionCentre.methods.login(username, password, currentTime.toLocaleString()).estimateGas({from: this.myAccount});
         let transReceipt = await this.deployedAdoptionCentre.methods.login(username, password, currentTime.toLocaleString()).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.LoginEvent.returnValues;
-        console.log(transReturn);
+        //console.log(transReturn);
         this.uuid = transReturn.uuid;
         console.log('login uuid');
         console.log(this.uuid);
