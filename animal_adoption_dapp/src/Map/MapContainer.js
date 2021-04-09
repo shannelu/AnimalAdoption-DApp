@@ -94,8 +94,6 @@ import React, { Component } from 'react';
 import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 import {getAllAnimalsInfo} from './map_middleware'
 import CurrentLocation from './Map';
-import { Redirect, Link} from 'react-router-dom';
-import {Button, Form, Switch} from 'antd';
 
 const animals = getAllAnimalsInfo();
 
@@ -112,7 +110,9 @@ export class MapContainer extends Component {
   
 
   onMarkerClick = (props, marker, e) =>{
-    console.log(this.state.activeMarker)
+    var lat = localStorage.getItem('lat');
+    var lng = localStorage.getItem('lng');
+    console.log(lat,lng);
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
@@ -152,13 +152,14 @@ export class MapContainer extends Component {
             <Marker
               key={index} // Need to be unique
               onClick={this.onMarkerClick}
-              name={animal.name}
+              name={animal.title}
               position={animal.position}
-              // url={animal.url}
               id = {`animal_marker_${index}`}
+              imageBase64 = {animal.imageBase64}
             >
             </Marker>
           ))}
+         
 
           
 
@@ -166,18 +167,37 @@ export class MapContainer extends Component {
               marker={this.state.activeMarker}
               visible={this.state.showingInfoWindow}
               onClose={this.onClose}
-            >
-            {
-              this.state.activeMarker != null ?  
-              <a href={'/animalinfo/'+this.state.activeMarker.id}>jump</a> : ""
-            }
-              
+          >
+
+              {
+                this.state.activeMarker != null && this.state.activeMarker.name != "I am here" ?  
+                <img width="80" height="80" alt="star" src={this.state.activeMarker.imageBase64}/> : ""
+              }
+  
+              {
+                this.state.activeMarker != null && this.state.activeMarker.name != "I am here" ?  
+                <a href={'/animalinfo/'+this.state.activeMarker.id}>{this.state.activeMarker.name}</a> : ""
+              }
+            
+              {
+                this.state.activeMarker != null && this.state.activeMarker.name == "I am here" ?  
+                <a href={'/post'}>{this.state.activeMarker.name}</a> : ""
+              }
+
+
+           
+
+            
+
           </InfoWindow>
           
 
         </CurrentLocation>
+
       </div>
+            
     );
+
 }
 }
 
