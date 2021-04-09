@@ -11,7 +11,6 @@ const mapStyles = {
 export class CurrentLocation extends React.Component {
   constructor(props) {
     super(props);
-
     const { lat, lng } = this.props.initialCenter;
     this.state = {
       currentLocation: {
@@ -25,6 +24,8 @@ export class CurrentLocation extends React.Component {
       if (navigator && navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
           const coords = pos.coords;
+          localStorage.setItem('lat',coords.latitude);
+          localStorage.setItem('lng',coords.longitude)
           this.setState({
             currentLocation: {
               lat: coords.latitude,
