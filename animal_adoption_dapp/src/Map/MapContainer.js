@@ -147,7 +147,7 @@ export class MapContainer extends Component {
           google={this.props.google}
         >
 
-          <Marker onClick={this.onMarkerClick} name="I am here" id="hello7"/>
+          <Marker onClick={this.onMarkerClick} name="Post Animal" id="hello7"/>
           {animals.map((animal, index) => (
             <Marker
               key={index} // Need to be unique
@@ -168,20 +168,22 @@ export class MapContainer extends Component {
               visible={this.state.showingInfoWindow}
               onClose={this.onClose}
           >
-
+            
+            <div align="center">
               {
-                this.state.activeMarker != null && this.state.activeMarker.name != "I am here" ?  
+                this.state.activeMarker != null && this.state.activeMarker.name != "Post Animal" ?  
                 <img width="80" height="80" alt="star" src={this.state.activeMarker.imageBase64}/> : ""
               }
-  
+            </div>
+            <div align="center">
               {
-                this.state.activeMarker != null && this.state.activeMarker.name != "I am here" ?  
-                <a href={'/animalinfo/'+this.state.activeMarker.id}>{this.state.activeMarker.name}</a> : ""
+                this.state.activeMarker != null && this.state.activeMarker.name != "Post Animal" ?  
+                <a href={'/animalinfo/'+this.state.activeMarker.id}><font size="3">{this.state.activeMarker.name}</font></a> : ""
               }
-            
+            </div>
               {
-                this.state.activeMarker != null && this.state.activeMarker.name == "I am here" ?  
-                <a href={'/post'}>{this.state.activeMarker.name}</a> : ""
+                this.state.activeMarker != null && this.state.activeMarker.name == "Post Animal" ?  
+                <a href={'/post'}><font size="5">{this.state.activeMarker.name}</font></a> : ""
               }
 
 
