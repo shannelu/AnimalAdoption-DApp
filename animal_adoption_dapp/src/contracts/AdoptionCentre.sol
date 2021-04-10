@@ -20,8 +20,8 @@ contract AdoptionCentre {
     // latitude = (latitude from js) * 10^6
     struct AnimalInfo {
         uint256 animalID;
-        int64 longitude;
-        int64 latitude;
+        string longitude;
+        string latitude;
         string contactUserName;
         uint256 price;
         string imageBase64;
@@ -68,7 +68,7 @@ contract AdoptionCentre {
 
     }
 
-    function getAdoptedNum(bytes32 uuid) public returns(uint256) {
+    function getAdoptedNum(bytes32 uuid) public view returns(uint256) {
         UserInfo storage user = users[msg.sender];
         return user.adoptedNum;
     }
@@ -207,7 +207,7 @@ contract AdoptionCentre {
         
     }
 
-    function postAnimalInfo(int64 _longitude, int64 _latitude, uint256 _price, string memory _imageBase64, string memory _title, string memory _description, string memory _time, bytes32 uuid) public returns(bool) {
+    function postAnimalInfo(string memory _longitude, string memory _latitude, uint256 _price, string memory _imageBase64, string memory _title, string memory _description, string memory _time, bytes32 uuid) public returns(bool) {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             return false;

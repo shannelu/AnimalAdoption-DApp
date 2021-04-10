@@ -49,14 +49,27 @@ export class MapContainer extends Component {
   async componentDidMount(){
     await agent.initialize()
     agent.uuid = localStorage.getItem(agent.myAccount)
-    var temp = await agent.getAnimalNearBy()
+    var temp;
+    var getResult = await agent.getAnimalNearBy()
     var lat = localStorage.getItem("lat")
     var lng = localStorage.getItem("lng")
-    temp.push({
-      title:"Post Animal",
-      position: {lat:lat, lng:lng},
-      imageBase64: null
-    })
+    temp = [{
+        title:"Post Animal",
+        position: {lat:lat, lng:lng},
+        imageBase64: null
+    }];
+    if (getResult.length != 0) {
+        console.log(getResult);
+        var i;
+        for (i = 0; i < getResult.length; i++) {
+          temp.push({
+              title: getResult[i].title,
+              position: {lat:getResult[i].latitude, lng:getResult[i].longitude},
+              imageBase64: getResult[i].imageBase64
+          });
+        } 
+    }
+    
     this.setState({
       myAgent : agent,
       animals: temp

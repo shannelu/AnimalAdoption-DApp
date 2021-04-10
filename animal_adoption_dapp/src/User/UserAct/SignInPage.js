@@ -29,6 +29,7 @@ class SignInPage extends React.Component{
         else{
             message.error(logInfo[1]);
         }
+        localStorage.setItem(this.state.myAgent.myAccount, logInfo[2]);
     }
 
     render(){

@@ -46,7 +46,8 @@ class Agent {
     }
 
     async getAdoptedNum(){
-        return 1;
+        let callsReceipt = await this.deployedAdoptionCentre.methods.getAdoptedNum(this.uuid).call({from: this.myAccount});
+        return callsReceipt;
     }
 
     // Get user name
@@ -57,47 +58,48 @@ class Agent {
         }
         let callsReceipt = await this.deployedAdoptionCentre.methods.getUserName(this.uuid).call({from: this.myAccount});
         let callsReturn = await this.deployedAdoptionCentre.methods.getAnimalNearBy(0, 0, 0, 0, 0, this.uuid).call({from: this.myAccount});
-        console.log(callsReceipt);
-        return callsReceipt;
+        // console.log(callsReceipt);
+        return callsReceipt[1];
     }
 
     // Get user all transaction records
     async getTransRecords() {
         let callsReceipt = await this.deployedAdoptionCentre.methods.getTransRecords(this.uuid).call({from: this.myAccount});
+        console.log("getTransRecords");
         console.log(callsReceipt); 
-        return callsReceipt;
+        return callsReceipt[0];
     }
 
-    async getFakeRecords(){
-        await this.sleep(2000);
-        var fake_records = [
-            {
-                from: 'runze',
-                to : 'juli',
-                fromUser: 'runzw',
-                toUser: 'julia',
-                time: '2021/04/09',
-                animalIndex : '1'
-            },
-            {
-                from: 'runze',
-                to : 'juli',
-                fromUser: 'runzw',
-                toUser: 'julia',
-                time: '2021/04/09',
-                animalIndex : '1'
-            },
-            {
-                from: 'runze',
-                to : 'juli',
-                fromUser: 'runzw',
-                toUser: 'julia',
-                time: '2021/04/09',
-                animalIndex : '1'
-            }
-        ]
-        return fake_records;
-    }
+    // async getFakeRecords(){
+    //     await this.sleep(2000);
+    //     var fake_records = [
+    //         {
+    //             from: 'runze',
+    //             to : 'juli',
+    //             fromUser: 'runzw',
+    //             toUser: 'julia',
+    //             time: '2021/04/09',
+    //             animalIndex : '1'
+    //         },
+    //         {
+    //             from: 'runze',
+    //             to : 'juli',
+    //             fromUser: 'runzw',
+    //             toUser: 'julia',
+    //             time: '2021/04/09',
+    //             animalIndex : '1'
+    //         },
+    //         {
+    //             from: 'runze',
+    //             to : 'juli',
+    //             fromUser: 'runzw',
+    //             toUser: 'julia',
+    //             time: '2021/04/09',
+    //             animalIndex : '1'
+    //         }
+    //     ]
+    //     return fake_records;
+    // }
 
     // Get user all posted animal records
     async getPostedAnimalRecords() {
@@ -106,7 +108,7 @@ class Agent {
         }
         let callsReceipt = await this.deployedAdoptionCentre.methods.getPostedAnimal(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
-        return callsReceipt;
+        return {transRecords:callsReceipt[0], transNum: callsReceipt[3]};
     }
 
     // Reset password
@@ -169,8 +171,12 @@ class Agent {
 
     // Add missing animal, image data must be converted to base64
     async postAnimal(longitude, latitude, currentTime, price, imageBase64, title, description) {
-        const gasAmount = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, currentTime, this.uuid).estimateGas({from: this.myAccount});
-        let transReceipt = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, currentTime, this.uuid).send({from: this.myAccount, gas: gasAmount});
+        // in gwei
+        var _price = parseInt(price);
+        // in wei
+        _price = _price * 1000000000;
+        const gasAmount = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, _price, imageBase64, title, description, currentTime, this.uuid).estimateGas({from: this.myAccount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, _price, imageBase64, title, description, currentTime, this.uuid).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.OperationEvents.returnValues;
         console.log(transReturn);
         return [transReturn.success, transReturn.eventMsg];  
@@ -199,7 +205,9 @@ class Agent {
             ]
         }
         let callsReturn = await this.deployedAdoptionCentre.methods.getAnimalNearBy(0, 0, 0, 0, 0, this.uuid).call({from: this.myAccount});
-        return callsReturn;
+        console.log('getAnimalNearBy');
+        console.log(callsReturn);
+        return callsReturn[0];
     }
 
     async adoptAnimal(index) {

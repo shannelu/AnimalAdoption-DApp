@@ -124,14 +124,16 @@ class PostInfoPage extends React.Component{
         var city = document.getElementById("city").value;
         var street = document.getElementById("street").value;
         var description = document.getElementById("description").value;
-        var price = document.getElementById("id").value;
-        await this.state.myAgent.postAnimal(lat, lng, date, price, imgUrlBase64, title, description);
+        var price = document.getElementById("price").value; // in gwei
+        let call = await this.state.myAgent.postAnimal(lng, lat, date, price, "", title, description);
+        console.log("Post!!!");
+        console.log(call);
     }
 
     render(){
         this.state.myAgent.initialize()
         return(
-            <Form {...layout} onFinish = {()=>this.post()}>
+            <Form {...layout} onFinish = {async ()=>this.post()}>
                 <h1>Thank you for your warm heart! Provide detailed information about this little thing!</h1>
                 <Form.Item label = "When did you find it?" rules={[{ required: true, message: 'Please select a date!' }]} >
                     <DatePicker 
@@ -156,8 +158,8 @@ class PostInfoPage extends React.Component{
                 <Form.Item>
                     <Button icon = {<UploadOutlined/>} id = "test" onClick = {upload}>Upload some pictures about it!</Button>
                 </Form.Item>
-                <Form.Item label = "how much does it cost to adopt it?">
-                    <InputNumber id = "price" min = {0.1} max = {10} defaultValue = {1} step = {0.1}/>
+                <Form.Item label = "how much does it cost to adopt it?(Gwei)">
+                    <InputNumber id = "price" min = {1} max = {1000000000} defaultValue = {1} step = {1}/>
                 </Form.Item>
                 <Form.Item layout = 'horizontal' label = "Description" rules={[{ required: true, message: 'This is a required field!' }]} >
                     <Input.TextArea id = "description" 

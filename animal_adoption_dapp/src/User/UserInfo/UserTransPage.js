@@ -36,7 +36,7 @@ class UserTransPage extends React.Component{
 
     async componentDidMount(){
         this.setState({
-            records: await this.state.myAgent.getFakeRecords()
+            records: await this.state.myAgent.getTransRecords()
         })
     }
 

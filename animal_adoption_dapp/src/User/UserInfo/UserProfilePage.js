@@ -37,15 +37,18 @@ class UserProfilePage extends React.Component{
     // }
 
     async componentDidMount(){
-        console.log(this.state.myAgent.myAccount);
+        console.log(22222222);
+        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
+        console.log(this.state.myAgent.uuid);
         let res = await this.state.myAgent.getUserName();
         
         console.log("Debugger point");
         console.log(res);
         //console.log(await this.state.myAgent.getUserName());
+        var call = await this.state.myAgent.getPostedAnimalRecords();
         this.setState({
             Username: await this.state.myAgent.getUserName(),
-            PostedAnimalRecords : await this.state.myAgent.getPostedAnimalRecords(),
+            PostedAnimalRecords : call.transNum,
             AdoptedNum: await this.state.myAgent.getAdoptedNum()
         })
     }
