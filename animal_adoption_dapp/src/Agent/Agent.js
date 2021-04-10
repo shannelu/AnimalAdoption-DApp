@@ -187,9 +187,13 @@ class Agent {
         if (this.uuid === "null" || this.myAccount === "null") {
             return [false, "Not login or metamask connection lost"];
         }
+        console.log("Price");
+        console.log(price);
+        var payment = parseInt(window.web3.utils.toWei(price, "ether")).toString(10);
+        console.log(payment);
         var currentTime = new Date();
-        const gasAmount = await this.deployedAdoptionCentre.methods.adoptAnimal(index, currentTime,this.uuid).estimateGas({from: this.myAccount, value: parseInt(window.web3.utils.toWei(price,"ether")).toString(16)});
-        let transReceipt = await this.deployedAdoptionCentre.methods.adoptAnimal(index, currentTime,this.uuid).send({from: this.myAccount, gas: gasAmount, value: parseInt(window.web3.utils.toWei(price,"ether")).toString(16)});
+        const gasAmount = await this.deployedAdoptionCentre.methods.adoptAnimal(index, currentTime,this.uuid).estimateGas({from: this.myAccount, value: payment});
+        let transReceipt = await this.deployedAdoptionCentre.methods.adoptAnimal(index, currentTime,this.uuid).send({from: this.myAccount, gas: gasAmount, value: payment});
         console.log(transReceipt);
         return [transReceipt.success, transReceipt.eventMsg];
     }

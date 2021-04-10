@@ -143,7 +143,7 @@ class PostInfoPage extends React.Component{
         var lat = localStorage.getItem("lat");
         var lng = localStorage.getItem("lng");
         return(
-            <Form {...layout} onFinish = {async ()=>this.post()}>
+            <Form {...layout} onFinish = {async ()=> this.post()}>
                 <h1>Thank you for your warm heart! Provide detailed information about this little thing!</h1>
                 <Form.Item label = "When did you find it?" rules={[{ required: true, message: 'Please select a date!' }]} >
                     <DatePicker 

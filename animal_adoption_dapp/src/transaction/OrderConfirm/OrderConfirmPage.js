@@ -117,7 +117,7 @@ class OrderConfirmPage extends React.Component{
                         <b>{this.state.userAddress}</b>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType = 'submit'  className="login-form-button" onClick={async ()=> this.state.myAgent.adoptAnimal(animal_index)} >
+                            <Button type="primary" htmlType='submit' className="login-form-button" onClick={async () => this.state.myAgent.adoptAnimal(animal_index, this.state.animal_info[animal_index].price)} >
                             Confirm and Pay
                             </Button><br/>
                             <p></p>
