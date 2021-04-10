@@ -175,17 +175,17 @@ contract AdoptionCentre {
 
         address _sender = msg.sender;
         uint256 buyerBalance = _sender.balance;
-        if (buyerBalance < animal.price) {
+        if (buyerBalance < msg.value) {
             emit OperationEvents("TRANSACTION", "Buyer has insufficient fund for this payment!", false);
             return false;
         }
 
-        if (msg.value < animal.price) {
-            emit OperationEvents("TRANSACTION", "Buyer has not payed enough ether for this payment!", false);
-            return false;
-        }
+        // if (msg.value < animal.price) {
+        //     emit OperationEvents("TRANSACTION", "Buyer has not payed enough ether for this payment!", false);
+        //     return false;
+        // }
 
-        animal.seller.transfer(animal.price);
+        animal.seller.transfer(msg.value);
 
         UserInfo storage userInfo = users[msg.sender];
 
