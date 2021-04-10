@@ -4,7 +4,7 @@ import './OrderConfirm.css';
 import {Button, Form, message, Layout, Row, Col } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 
-var total_token = 10000; 
+var total_token = 10000;
 
 class OrderConfirmPage extends React.Component{
     constructor(props){
@@ -28,18 +28,20 @@ class OrderConfirmPage extends React.Component{
         return getMyGasFee(this.props.uuid);
     }
 
-    getAllConfirmOrder(){   // order_number?
+    async getAllConfirmOrder(){   // order_number?
         var success;
-            var animal_info = getAllAnimalInfo(this.props.animal_id);
-            if(animal_info.price <= total_token){
-                success = true;
-                total_token -= (animal_info.price +getMyGasFee(this.props.uuid)) ;  // 'to' account total ether will increase correspondingly (notice: gas fee deduction)
-                animal_info.sold = true;
-                // animal_info.order_num = "111"
-            }
-            else{
-                success = false;
-            }
+        //var animal_infos = await agent.getAnimalNearBy();
+        //var animal_info = animal_infos[this.props.animal_id];
+        var animal_info = getAllAnimalInfo(this.props.animal_id);
+        if(animal_info.price <= total_token){
+            success = true;
+            total_token -= (animal_info.price +getMyGasFee(this.props.uuid)) ;  // 'to' account total ether will increase correspondingly (notice: gas fee deduction)
+            animal_info.sold = true;
+            // animal_info.order_num = "111"
+        }
+        else{
+            success = false;
+        }
         return {success: success};
     }
 
@@ -67,6 +69,10 @@ class OrderConfirmPage extends React.Component{
                             <tr>
                                 <th>Animal ID:</th>
                                 <td>{animal_info[this.animal_index].animal_id}</td>
+                            </tr>
+                            <tr>
+                                <th>Animal Name:</th>
+                                <td>{animal_info[this.animal_index].title}</td>
                             </tr>
                             <tr>
                                     <th>Position:</th>

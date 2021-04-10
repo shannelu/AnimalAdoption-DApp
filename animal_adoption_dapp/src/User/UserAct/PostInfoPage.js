@@ -116,8 +116,7 @@ class PostInfoPage extends React.Component{
     }
 
     async post(){
-        var lat = localStorage.getItem("lat");
-        var lng = localStorage.getItem("lng");
+
         this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
         var date = document.getElementById("date").value;
         var title = document.getElementById("title").value;
@@ -125,13 +124,17 @@ class PostInfoPage extends React.Component{
         var street = document.getElementById("street").value;
         var description = document.getElementById("description").value;
         var price = document.getElementById("price").value; // in gwei
-        let call = await this.state.myAgent.postAnimal(lng, lat, date, price, "", title, description);
+        var longitude = document.getElementById("longitude").value;
+        var latitude = document.getElementById("latitude").value;
+        let call = await this.state.myAgent.postAnimal(longitude, latitude, date, price, "", title, description);
         console.log("Post!!!");
         console.log(call);
     }
 
     render(){
-        this.state.myAgent.initialize()
+        this.state.myAgent.initialize();
+        var lat = localStorage.getItem("lat");
+        var lng = localStorage.getItem("lng");
         return(
             <Form {...layout} onFinish = {async ()=>this.post()}>
                 <h1>Thank you for your warm heart! Provide detailed information about this little thing!</h1>
@@ -143,7 +146,7 @@ class PostInfoPage extends React.Component{
                         style = {{width:300}}
                     />
                 </Form.Item>
-                <Form.Item label = "What title is it?" rules={[{ required: true, message: 'Please select a type!' }]} >
+                <Form.Item label = "What title is it?" rules={[{ required: true, message: 'Please enter a title!' }]} >
                     <Input id = "title" placeholder = "write a title for your post" ></Input>
                 </Form.Item>
                 <Form.Item label = "Where are you" rules={[{ required: true, message: 'Please input your location!' }]} >
@@ -152,6 +155,20 @@ class PostInfoPage extends React.Component{
                         <Input id = "street" placeholder = "Street name" style = {{width:152}}></Input>
                     </Space>
                 </Form.Item>
+                <Form.Item label = "longitude" rules={[{ required: true, message: 'Please enter a longitude!' }]} >
+                    <Input id = "longitude" placeholder = "longitude"></Input>
+                </Form.Item>
+                <tr>
+                    <td>Current longitude is: </td>
+                    <td>{lng}</td>
+                </tr>
+                <Form.Item label = "latitude" rules={[{ required: true, message: 'Please enter a latitude!' }]} >
+                    <Input id = "latitude" placeholder = "latitude"></Input>
+                </Form.Item>
+                <tr>
+                    <td>Current latitude is: </td>
+                    <td>{lat}</td>
+                </tr>
                 <Form.Item hidden = {true}>
                     <Input type = "file" id = "myimg" multiple = 'multiple' onChange = {imgChange} style = {{visibility:'hidden'}}></Input>
                 </Form.Item>

@@ -18,7 +18,7 @@ class AnimalInfoPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            animal_index: [],
+            animal_index: 0,
             myAgent: null
         }
     }
@@ -27,7 +27,8 @@ class AnimalInfoPage extends React.Component{
         console.log("hello");
         await agent.initialize();
         agent.uuid = localStorage.getItem(agent.myAccount);
-        var a = await agent.getAnimalNearBy()
+        var a = await agent.getAnimalNearBy();
+        console.log(a);
         console.log(agent);
         this.setState({
             myAgent: agent,
@@ -80,12 +81,12 @@ class AnimalInfoPage extends React.Component{
                                 <tr>
                                     <tr>
                                         <th>Animal ID:</th>
-                                        <td>{this.state.animal_info[animal_index].index}</td>
+                                        <td>{this.state.animal_info[animal_index].animalID}</td>
                                         {/* <td>{this.props.match.params[0]}</td> */}
                                     </tr>
                                     <tr>
                                     <th>Position:</th>
-                                    <td>({this.state.animal_info[animal_index].position.lat},{this.state.animal_info[animal_index].position.lng})</td>
+                                    <td>({this.state.animal_info[animal_index].latitude},{this.state.animal_info[animal_index].longitude})</td>
                                     </tr>
                                     <tr>
                                         <th>Reporter:</th>

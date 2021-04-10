@@ -52,8 +52,7 @@ class Agent {
 
     // Get user name
     async getUserName() {
-        if(this.uuid == "null"){
-            console.log("nulllll");
+        if (this.uuid == "null" || this.myAccount == "null") {
             return "unknown";
         }
         let callsReceipt = await this.deployedAdoptionCentre.methods.getUserName(this.uuid).call({from: this.myAccount});
@@ -64,6 +63,9 @@ class Agent {
 
     // Get user all transaction records
     async getTransRecords() {
+        if (this.uuid == "null" || this.myAccount == "null") {
+            return null;
+        }
         let callsReceipt = await this.deployedAdoptionCentre.methods.getTransRecords(this.uuid).call({from: this.myAccount});
         console.log("getTransRecords");
         console.log(callsReceipt); 
@@ -103,7 +105,7 @@ class Agent {
 
     // Get user all posted animal records
     async getPostedAnimalRecords() {
-        if(this.uuid == "null"){
+        if (this.uuid == "null" || this.myAccount == "null") {
             return -1;
         }
         let callsReceipt = await this.deployedAdoptionCentre.methods.getPostedAnimal(this.uuid).call({from: this.myAccount});
