@@ -116,7 +116,7 @@ class PostInfoPage extends React.Component{
     }
 
     async post(){
-
+        this.state.myAgent.initialize();
         this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
         var date = document.getElementById("date").value;
         var title = document.getElementById("title").value;
@@ -126,7 +126,14 @@ class PostInfoPage extends React.Component{
         var price = document.getElementById("price").value; // in gwei
         var longitude = document.getElementById("longitude").value;
         var latitude = document.getElementById("latitude").value;
-        let call = await this.state.myAgent.postAnimal(longitude, latitude, date, price, "", title, description);
+        var transImage;
+        if (imgUrlBase64.length == 0) {
+            transImage = "";
+        } else {
+            transImage = imgUrlBase64[0];
+        }
+        
+        let call = await this.state.myAgent.postAnimal(longitude, latitude, date, price, transImage, title, description);
         console.log("Post!!!");
         console.log(call);
     }
@@ -175,8 +182,8 @@ class PostInfoPage extends React.Component{
                 <Form.Item>
                     <Button icon = {<UploadOutlined/>} id = "test" onClick = {upload}>Upload some pictures about it!</Button>
                 </Form.Item>
-                <Form.Item label = "how much does it cost to adopt it?(Gwei)">
-                    <InputNumber id = "price" min = {1} max = {1000000000} defaultValue = {1} step = {1}/>
+                <Form.Item label = "how much does it cost to adopt it?(Ether)">
+                    <InputNumber id = "price" min = {1} max = {100} defaultValue = {1} step = {1}/>
                 </Form.Item>
                 <Form.Item layout = 'horizontal' label = "Description" rules={[{ required: true, message: 'This is a required field!' }]} >
                     <Input.TextArea id = "description" 

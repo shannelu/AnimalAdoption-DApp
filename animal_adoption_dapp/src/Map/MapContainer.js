@@ -92,7 +92,7 @@ export class MapContainer extends Component {
               onClick={this.onMarkerClick}
               name={animal.title}
               position={animal.position}
-              id = {`animal_marker_${index}`}
+              id = {`animal_marker_${index - 1}`}
               imageBase64 = {animal.imageBase64}
             >
             </Marker>

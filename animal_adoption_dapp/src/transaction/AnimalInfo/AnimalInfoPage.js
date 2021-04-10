@@ -29,7 +29,7 @@ class AnimalInfoPage extends React.Component{
         agent.uuid = localStorage.getItem(agent.myAccount);
         var a = await agent.getAnimalNearBy();
         console.log(a);
-        console.log(agent);
+        console.log("aaaaaaaaaaaaaaaaaaaaaa");
         this.setState({
             myAgent: agent,
             animal_info : a
@@ -84,6 +84,12 @@ class AnimalInfoPage extends React.Component{
                                         <td>{this.state.animal_info[animal_index].animalID}</td>
                                         {/* <td>{this.props.match.params[0]}</td> */}
                                     </tr>
+
+                                    <tr>
+                                        <th>Animal Title:</th>
+                                        <td>{this.state.animal_info[animal_index].title}</td>
+                                        {/* <td>{this.props.match.params[0]}</td> */}
+                                    </tr>
                                     <tr>
                                     <th>Position:</th>
                                     <td>({this.state.animal_info[animal_index].latitude},{this.state.animal_info[animal_index].longitude})</td>
@@ -93,7 +99,7 @@ class AnimalInfoPage extends React.Component{
                                         <td>{this.state.animal_info[animal_index].contactUserName}</td>
                                     </tr>
                                     <tr>
-                                        <th>Price:</th>
+                                        <th>Price(Ether):</th>
                                         <td>{this.state.animal_info[animal_index].price}</td>
                                     </tr>
                                     <tr>
@@ -107,7 +113,7 @@ class AnimalInfoPage extends React.Component{
                         </div>
                     </Form.Item>
                     <Form.Item>
-                            <Button type="primary" htmlType = 'submit' href={'/orderconfirm/'+ this.animal_index}>
+                            <Button type="primary" htmlType = 'submit' href={'/orderconfirm/'+ this.state.animal_info[animal_index].animalID}>
                             I want to adopt him/her
                             </Button><br/>
                             <p></p>
