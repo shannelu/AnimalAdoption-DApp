@@ -68,6 +68,11 @@ contract AdoptionCentre {
 
     }
 
+    function getAdoptedNum(bytes32 uuid) public returns(uint256) {
+        UserInfo storage user = users[msg.sender];
+        return user.adoptedNum;
+    }
+
     function resetUserName(string memory newName, bytes32 uuid) public returns(bool) {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
