@@ -30,6 +30,7 @@ contract AdoptionCentre {
         // status = "MISSING", "FOUND"
         string status;
         address payable seller;
+        string time;
     }
 
     struct TransactionInfo {
@@ -206,7 +207,7 @@ contract AdoptionCentre {
         
     }
 
-    function postAnimalInfo(int64 _longitude, int64 _latitude, uint256 _price, string memory _imageBase64, string memory _title, string memory _description, bytes32 uuid) public returns(bool) {
+    function postAnimalInfo(int64 _longitude, int64 _latitude, uint256 _price, string memory _imageBase64, string memory _title, string memory _description, string memory _time, bytes32 uuid) public returns(bool) {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             return false;
@@ -225,6 +226,7 @@ contract AdoptionCentre {
         info.status = "MISSING";
         info.seller = msg.sender;
         info.contactUserName = userInfo.userName;
+        info.time = _time;
         
         animalInfos.push(info);
         postAnimalRecords[msg.sender].push(info);
@@ -235,7 +237,7 @@ contract AdoptionCentre {
         return true;
     }
 
-    function getUserName(bytes32 uuid) public view returns(bool, string memory, address) {
+    function getUserName(bytes32 uuid) public returns(bool, string memory, address) {
         if (!checkUUID(msg.sender, uuid)) {
             return (false, "User is not login, request is refused", msg.sender);
         }

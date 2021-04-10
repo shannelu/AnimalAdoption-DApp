@@ -1,7 +1,6 @@
 import React from 'react';
 import {PageHeader, Tag, Button, Statistic, Row, Input, Form, Modal, message, Empty} from 'antd';
-import {isUniqueName} from '../user_middleware'
-import Agent, {logout} from '../../Agent/Agent'
+import {isUniqueName} from '../user_middleware';
 import { Redirect } from 'react-router';
 
 class UserProfilePage extends React.Component{
@@ -16,27 +15,46 @@ class UserProfilePage extends React.Component{
             pwd_confirmed : 0, //-1 for not confirmed, 0 for not yet set pwd, 1 for confirmed
             logOutModalVisible: false,
             loggedOut: false,
+            Username: "unknown",
+            PostedAnimalRecords: 0,
+            AdoptedNum: 0,
             myAgent: this.props.agent
         }
     }
 
-    getUsername(){
-        return this.state.myAgent.getUsername()
-    }
+    // async getUsername(){
+    //     console.log("profile agent");
+    //     console.log(this.props.agent);
+    //     return await this.state.myAgent.getUserName();
+    // }
 
-    getPostsNum(){
-        return this.state.myAgent.getPostsNum()
-    }
+    // async getPostsNum(){
+    //     return await this.state.myAgent.getPostedAnimalRecords();
+    // }
 
-    getAdoptedNum(){
-        return this.state.myAgent.getAdoptedNum()
+    // async getAdoptedNum(){
+    //     return await this.state.myAgent.getAdoptedNum();
+    // }
+
+    async componentDidMount(){
+        console.log(this.state.myAgent.myAccount);
+        let res = await this.state.myAgent.getUserName();
+        
+        console.log("Debugger point");
+        console.log(res);
+        //console.log(await this.state.myAgent.getUserName());
+        this.setState({
+            Username: await this.state.myAgent.getUserName(),
+            PostedAnimalRecords : await this.state.myAgent.getPostedAnimalRecords(),
+            AdoptedNum: await this.state.myAgent.getAdoptedNum()
+        })
     }
 
     changeUsername(){
         this.setState({
             settingUname : true
         })
-    }
+    } 
 
     changePwd(){
         this.setState({
@@ -68,20 +86,20 @@ class UserProfilePage extends React.Component{
         })
     }
 
-    updateUsername(){
+    async updateUsername(){
         var new_name = document.getElementById("new_username").value;
-        this.myAgent.setUsername(this.props.uuid, new_name);
+        await this.state.myAgent.resetUsername(new_name);
         this.setState({
             settingUname : false,
             unique_name : 0
         })
     }
 
-    updatePwd(){
+    async updatePwd(){
         var old_pwd = document.getElementById("old_pwd").value;
         var new_pwd = document.getElementById("new_pwd").value;
-        var info = this.state.myAgent.resetPassword(this.props.uuid, old_pwd, new_pwd);
-        if(info.success){
+        var resetPwdInfo = await this.state.myAgent.resetPassword(old_pwd, new_pwd);
+        if(resetPwdInfo[0]){
             this.setState({
                 settingPwd : false,
                 pwd_format : 0,
@@ -90,7 +108,7 @@ class UserProfilePage extends React.Component{
             message.success("password has been reset!")
         }
         else{
-            message.error(info.msg)
+            message.error(resetPwdInfo[1])
         }
     }
 
@@ -110,7 +128,7 @@ class UserProfilePage extends React.Component{
         })
     }
 
-    checkUniqueUsername(){
+    async checkUniqueUsername(){
         var input_usernmame = document.getElementById("new_username").value;
         if(input_usernmame.length == 0){
             this.setState({
@@ -119,7 +137,7 @@ class UserProfilePage extends React.Component{
         }
         else{
             this.setState({
-                unique_name: isUniqueName(input_usernmame) ? 1 : -1
+                unique_name: await this.state.myAgent.isUniqueName(input_usernmame) ? 1 : -1
             })
         }
     }
@@ -131,7 +149,7 @@ class UserProfilePage extends React.Component{
     }
 
     async logOut(){
-        var logOutInfo = this.state.myAgent.logout()
+        var logOutInfo = await this.state.myAgent.logout()
         if(logOutInfo[0]){
             message.success(logOutInfo[1])
             this.setState({
@@ -150,7 +168,7 @@ class UserProfilePage extends React.Component{
             <div>
                 {this.state.loggedOut ? <Redirect to='/main'/> : ""}
                 <PageHeader 
-                    title = {this.getUsername()}
+                    title = {this.state.Username}
                     tags={<Tag color="green">Online</Tag>}
                     extra={[
                         <Button key="3" onClick = {()=>this.changeUsername()} >Change Username</Button>,
@@ -161,15 +179,14 @@ class UserProfilePage extends React.Component{
                       ]}
                 >
                     <Row>
-                        <Statistic title="Posts" value={this.getPostsNum()} />
+                        <Statistic title="Posts" value={this.state.PostedAnimalRecords} />
                         <Statistic
                             title="Adopted"
-                            value={this.getAdoptedNum()}
+                            value={this.state.AdoptedNum}
                             style={{
                                 margin: '0 32px',
                             }}
                         />
-                        <Statistic title="Tokens" value= {this.getTotalToken()} />
                     </Row>
                     <Modal
                         title = "Reset username"

@@ -1,20 +1,30 @@
+import {getImage} from "./image"
+
+var image = getImage()
+console.log(image[1])
 var animalInfoList = [
     {
-        name: "marker1",
+        index:0,
+        title: "marker0",
         position: { lat: 49.246292, lng: -123.116226 },
-        url:'./animalinfo'
+        imageBase64: image[0]
+        
+
       },
       {
-        name: "marker2",
+        index:1,
+        title: "marker1",
         position: { lat: 49.166592, lng: -123.133568 },
-        url:'https://www.youtube.com/'
-      },
-      {
-        name: "marker3",
-        position: { lat: 49.267132, lng: -122.968941 },
-        url:'https://www.ubc.ca/'
+        imageBase64: image[1]
       }
+      // {
+      //   index:2,
+      //   name: "marker3",
+      //   position: { lat: 49.267132, lng: -122.968941 },
+      //   imageBase64: 
+      // }
 ]
+
 export function getAllAnimalsInfo(){
     return animalInfoList;
 }

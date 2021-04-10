@@ -5,26 +5,41 @@ import TabsMenu from "./TabsMenu"
 import Agent from "../../Agent/Agent"
 import {Empty, Button} from 'antd'
 
+var agent = new Agent(null,null);
+
 class UserInfoPage extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            myAgent : new Agent(null,null)
+            myAgent : null
         }
     }
 
+    // static async getDerivedStateFromProps(props, state){
+    //     await this.state.myAgent.initialize();
+    //     console.log("hello")
+    //     return {myAgent : this.state.myAgent}
+    // }
+
+    async componentDidMount(){
+        await agent.initialize()
+        agent.uuid = localStorage.getItem(agent.uuid)
+        console.log("hello");
+        this.setState({
+            myAgent: agent
+        })
+    }
+
     render(){
-        this.state.myAgent.initialize()
-        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount)
-        // if(this.state.myAgent.uuid == null){
-        //     return(
-        //         <Empty
-        //             description = "You have not logged in!"
-        //         >
-        //             <Button type = "primary" href = '/signin'>Log in now!</Button>
-        //         </Empty>
-        //     )
-        // }
+        if(agent.uuid == null){
+            return(
+                <Empty
+                    description = "You have not logged in!"
+                >
+                    <Button type = "primary" href = '/signin'>Log in now!</Button>
+                </Empty>
+            )
+        }
         return(
             <div className = "UserInfo">
                 <TabsMenu>
