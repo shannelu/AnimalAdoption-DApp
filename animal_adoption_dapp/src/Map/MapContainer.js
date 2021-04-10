@@ -53,7 +53,7 @@ export class MapContainer extends Component {
     var lat = localStorage.getItem("lat")
     var lng = localStorage.getItem("lng")
     temp.push({
-      title:"I am here",
+      title:"Post Animal",
       position: {lat:lat, lng:lng},
       imageBase64: null
     })
