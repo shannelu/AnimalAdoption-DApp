@@ -180,18 +180,21 @@ class Agent {
     async getAnimalNearBy() {
         if(this.uuid == "null"){
             var image = getImage()
+            console.log("11111111")
             return [
                 {
                     index:0,
                     title: "marker0",
                     position: { lat: 49.246292, lng: -123.116226 },
-                    imageBase64: image[0]
+                    imageBase64: image[0],
+                    contactUserName: "julia"
                   },
                   {
                     index:1,
                     title: "marker1",
                     position: { lat: 49.166592, lng: -123.133568 },
-                    imageBase64: image[1]
+                    imageBase64: image[1],
+                    contractUserName: "shanny"
                   }
             ]
         }
