@@ -43,7 +43,7 @@ class Agent {
     }
 
     // Get user name
-    aysnc getUserName() {
+    async getUserName() {
         let callsReceipt = await this.deployedAdoptionCentre.methods.getUserName(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
         return callsReceipt;
