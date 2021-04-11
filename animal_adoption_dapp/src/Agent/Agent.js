@@ -1,20 +1,39 @@
-import React, { Component } from 'react';
 import Web3 from 'web3';
 import AdoptionCentre from '../abis/AdoptionCentre';
-const truffleAssert = require('truffle-assertions');
+//const truffleAssert = require('truffle-assertions');
 
 class Agent {
-    constructor() {
-        this.uuid = null;
-        this.freeTokens = 100;
-        this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+    constructor(myAccount,uuid){
+        this.myAccount = myAccount;
+        this.uuid = uuid;
     }
 
-    async initialize(contractAddress) {
-        this.contractAddr = contractAddress;
-        this.networkId = await this.web3.eth.net.getId();
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async getWeb3Provider(){
+        if (window.ethereum) {
+          window.web3 = new Web3(window.ethereum);
+          await window.ethereum.enable();
+        }
+        else if (window.web3) {
+          window.web3 = new Web3(window.web3.currentProvider);
+        }
+        else {
+            window.alert('Non-Ethereum browser detected. You should consider trying       MetaMask!');
+        }
+    }
+    async initialize() {
+        await this.getWeb3Provider();
+        let accounts = await window.web3.eth.getAccounts();
+        this.myAccount = accounts[0];
+        this.networkId = await window.web3.eth.net.getId();
         this.networkData = AdoptionCentre.networks[this.networkId];
-        this.deployedAdoptionCentre = new this.web3.eth.Contract(AdoptionCentre.abi, this.networkData.address);
+        //this.contractAddr = this.networkData.address;
+        this.deployedAdoptionCentre = new window.web3.eth.Contract(AdoptionCentre.abi, this.networkData.address);
+        //console.log("this.deployedAdoptionCentre");
+        //console.log(this.deployedAdoptionCentre);
         this.isDeployed = function() {
             if (this.networkData) {
                 return true;
@@ -25,40 +44,97 @@ class Agent {
         };
     }
 
-    // Get user transaction records
-    async getTransRecords(accountAddress) {
-        let callsReceipt = await this.deployedAdoptionCentre.methods.getTransRecords(this.uuid).call({from: accountAddress});
+    async isUniqueName(userName) {
+        let callsReceipt = await this.deployedAdoptionCentre.methods.isUniqueName(userName).call({from: this.myAccount});
+        return callsReceipt;
+    }
+
+    async getAdoptedNum(){
+        let callsReceipt = await this.deployedAdoptionCentre.methods.getAdoptedNum(this.uuid).call({from: this.myAccount});
+        return callsReceipt;
+    }
+
+    // Get user name
+    async getUserName() {
+        if (this.uuid === null || this.myAccount === null) {
+            return "unknown";
+        }
+        let callsReceipt = await this.deployedAdoptionCentre.methods.getUserName(this.uuid).call({from: this.myAccount});
+        // console.log(callsReceipt);
+        return callsReceipt[1];
+    }
+
+    // Get user all transaction records
+    async getTransRecords() {
+        if (this.uuid === null || this.myAccount === null) {
+            return null;
+        }
+        let callsReceipt = await this.deployedAdoptionCentre.methods.getTransRecords(this.uuid).call({from: this.myAccount});
+        console.log("getTransRecords");
+        console.log(callsReceipt); 
+        return callsReceipt[0];
+    }
+
+    // Get user all posted animal records
+    async getPostedAnimalRecords() {
+        if (this.uuid === null || this.myAccount === null) {
+            return -1;
+        }
+        console.log(this.myAccount);
+        let callsReceipt = await this.deployedAdoptionCentre.methods.getPostedAnimal(this.uuid).call({from: this.myAccount});
         console.log(callsReceipt);
+        return {transRecords:callsReceipt[0], transNum: callsReceipt[3]};
     }
 
     // Reset password
-    async resetPassword(old_password, new_password, accountAddress) {
-        const gasAmount = await this.deployedAdoptionCentre.methods.resetPassword(old_password, new_password, this.uuid).estimateGas({from: accountAddress});
+    async resetUserName(newUsername) {
+        if (this.uuid === null || this.myAccount === null) {
+            return [false, "Not login or metamask connection lost"];
+        }
+        const gasAmount = await this.deployedAdoptionCentre.methods.resetUserName(newUsername, this.uuid).estimateGas({from: this.myAccount});
         console.log(gasAmount);
-        let transReceipt = await this.deployedAdoptionCentre.methods.resetPassword(old_password, new_password, this.uuid).send({from: accountAddress, gas: gasAmount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.resetUserName(newUsername, this.uuid).send({from: this.myAccount, gas: gasAmount});
+        let transReturn = transReceipt.events.OperationEvents.returnValues;
+        return [transReturn.success, transReturn.eventMsg];         
+    }
+
+    // Reset password
+    async resetPassword(old_password, new_password) {
+        if (this.uuid === null || this.myAccount === null) {
+            return [false, "Not login or metamask connection lost"];
+        }
+        const gasAmount = await this.deployedAdoptionCentre.methods.resetPassword(old_password, new_password, this.uuid).estimateGas({from: this.myAccount});
+        console.log(gasAmount);
+        let transReceipt = await this.deployedAdoptionCentre.methods.resetPassword(old_password, new_password, this.uuid).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.OperationEvents.returnValues;
         return [transReturn.success, transReturn.eventMsg];         
     }
 
     // User registeration
-    async registeration(username, password, accountAddress) {
-        await this.deployedAdoptionCentre.methods.approve(accountAddress, this.freeTokens).send({from: this.contractAddr});
-        //await this.deployedAdoptionCentre.methods.allowance(this.contractAddr, accountAddress).send({from: this.contractAddr});
-        const gasAmount = await this.deployedAdoptionCentre.methods.register(username, password, this.freeTokens).estimateGas({from: accountAddress});
+    async registeration(username, password) {
+        if (this.myAccount === null) {
+            return [false, "Metamask connection lost"];
+        }
+        const gasAmount = await this.deployedAdoptionCentre.methods.register(username, password).estimateGas({from: this.myAccount});
+        console.log("gasAmount");
         console.log(gasAmount);
-        let transReceipt = await this.deployedAdoptionCentre.methods.register(username, password, this.freeTokens).send({from: accountAddress, gas: gasAmount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.register(username, password).send({from: this.myAccount, gas: gasAmount});
+        console.log(transReceipt);
         let transReturn = transReceipt.events.OperationEvents.returnValues;
         console.log(transReturn);
         return [transReturn.success, transReturn.eventMsg];         
     }
 
     // User login, will return uuid
-    async login(username, password, accountAddress) {
+    async login(username, password) {
+        if (this.myAccount === null) {
+            return [false, "Metamask connection lost"];
+        }
         var currentTime = new Date();
-        const gasAmount = await this.deployedAdoptionCentre.methods.login(username, password, currentTime.toLocaleString()).estimateGas({from: accountAddress});
-        let transReceipt = await this.deployedAdoptionCentre.methods.login(username, password, currentTime.toLocaleString()).send({from: accountAddress, gas: gasAmount});
+        const gasAmount = await this.deployedAdoptionCentre.methods.login(username, password, currentTime.toLocaleString()).estimateGas({from: this.myAccount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.login(username, password, currentTime.toLocaleString()).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.LoginEvent.returnValues;
-        console.log(transReturn);
+        //console.log(transReturn);
         this.uuid = transReturn.uuid;
         console.log('login uuid');
         console.log(this.uuid);
@@ -66,41 +142,68 @@ class Agent {
     }
 
     // User logout, nullify current uuid
-    async logout(accountAddress) {
+    async logout() {
         console.log('logout uuid');
         console.log(this.uuid);
-        const gasAmount = await this.deployedAdoptionCentre.methods.logout(this.uuid).estimateGas({from: accountAddress});
-        let transReceipt = await this.deployedAdoptionCentre.methods.logout(this.uuid).send({from: accountAddress, gas: gasAmount});
+        if (this.uuid === null || this.myAccount === null) {
+            return [false, "Not login or metamask connection lost"];
+        }
+        const gasAmount = await this.deployedAdoptionCentre.methods.logout(this.uuid).estimateGas({from: this.myAccount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.logout(this.uuid).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.OperationEvents.returnValues;
         console.log(transReturn);
         return [transReturn.success, transReturn.eventMsg];     
     }
 
-    async getBalanceOf(accountAddress) {
-        let balance = await this.web3.eth.getBalance(accountAddress);
+    async getBalanceOf() {
+        if (this.uuid === null || this.myAccount === null) {
+            return [false, "Not login or metamask connection lost"];
+        }
+        let balance = await this.WEB3.eth.getBalance(this.myAccount);
         return balance;
     }
 
     // Add missing animal, image data must be converted to base64
-    async postAnimal(longitude, latitude, price, imageBase64, title, description, accountAddress) {
-        const gasAmount = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, this.uuid).estimateGas({from: accountAddress});
-        let transReceipt = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, this.uuid).send({from: accountAddress, gas: gasAmount});
+    async postAnimal(longitude, latitude, currentTime, price, imageBase64, title, description, physicalAddress) {
+        if (this.uuid === null || this.myAccount === null) {
+            return [false, "Not login or metamask connection lost"];
+        }
+        // in gwei
+        // var _price = parseInt(price);
+        // in wei
+        // _price = _price * 1000000000;
+        const gasAmount = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, currentTime, physicalAddress, this.uuid).estimateGas({from: this.myAccount});
+        let transReceipt = await this.deployedAdoptionCentre.methods.postAnimalInfo(longitude, latitude, price, imageBase64, title, description, currentTime, physicalAddress, this.uuid).send({from: this.myAccount, gas: gasAmount});
         let transReturn = transReceipt.events.OperationEvents.returnValues;
         console.log(transReturn);
         return [transReturn.success, transReturn.eventMsg];  
     }
 
     // Acquire nearby missing animal based on your current position(WARNING: this function is incomplete for now, only will return full list)
-    async getAnimalNearBy(accountAddress) {
-        let callsReturn = await this.deployedAdoptionCentre.methods.getAnimalNearBy(0, 0, 0, 0, 0, this.uuid).call({from: accountAddress});
-        return callsReturn;
+    async getAnimalNearBy() {
+        if (this.uuid === null || this.myAccount === null) {
+            return null;
+        }
+        let callsReturn = await this.deployedAdoptionCentre.methods.getAnimalNearBy(0, 0, 0, 0, 0, this.uuid).call({from: this.myAccount});
+        console.log('getAnimalNearBy');
+        console.log(callsReturn);
+        return callsReturn[0];
     }
 
-    async adoptAnimal(sellerAddr, buyerAddr) {
-        const gasAmount = await this.deployedAdoptionCentre.methods.adoptAnimal(sellerAddr, 0, this.uuid).estimateGas({from: buyerAddr});
-        let transReceipt = await this.deployedAdoptionCentre.methods.adoptAnimal(sellerAddr, 0, this.uuid).send({from: buyerAddr, gas: gasAmount});
+    async adoptAnimal(index, price) {
+        if (this.uuid === null || this.myAccount === null) {
+            return [false, "Not login or metamask connection lost"];
+        }
+        console.log("Price");
+        console.log(price);
+        var payment = parseInt(window.web3.utils.toWei(price, "ether")).toString(10);
+        console.log(payment);
+        var currentTime = new Date();
+        const gasAmount = await this.deployedAdoptionCentre.methods.adoptAnimal(index, currentTime,this.uuid).estimateGas({from: this.myAccount, value: payment});
+        let transReceipt = await this.deployedAdoptionCentre.methods.adoptAnimal(index, currentTime,this.uuid).send({from: this.myAccount, gas: gasAmount, value: payment});
         console.log(transReceipt);
-        return [transReceipt.success, transReceipt.eventMsg];
+        let transReturn = transReceipt.events.OperationEvents.returnValues;
+        return [transReturn.success, transReturn.eventMsg];
     }
 
 

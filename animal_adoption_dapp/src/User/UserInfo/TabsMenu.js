@@ -24,33 +24,29 @@ class TabsMenu extends React.Component{
     render(  ){
         let _this = this
         return(
-            <Layout>
-                <Header style={{ textAlign: 'center', backgroundColor : "White"}}>Welcome</Header>
-                <Layout>   
-                    <Sider theme = "light">
-                        <Menu className="tab_title_wrap" mode = "vertical">
-                            { 
-                                React.Children.map( this.props.children , ( element,index ) => {
-                                    return(
-                                        <Menu.Item key = {element.props.name} className ={ this.check_title_index( index )} onClick={ () => { this.setState({ currentIndex : index }) } }>
-                                            {element.props.name}
-                                        </Menu.Item>
-                                    )
-                                }) 
-                            }
-                        </Menu>
-                    </Sider>
-                    <Content className="tab_item_wrap">
-                        {
-                            React.Children.map(this.props.children,( element,index )=>{
+            <Layout>   
+                <Sider theme = "light">
+                    <Menu className="tab_title_wrap" mode = "vertical">
+                        { 
+                            React.Children.map( this.props.children , ( element,index ) => {
                                 return(
-                                    <div className={ this.check_item_index( index ) }>{ element }</div>
+                                    <Menu.Item key = {element.props.name} className ={ this.check_title_index( index )} onClick={ () => { this.setState({ currentIndex : index }) } }>
+                                        {element.props.name}
+                                    </Menu.Item>
                                 )
-                            })
+                            }) 
                         }
-                    </Content>
-                </Layout>
-                <Footer style={{ textAlign: 'center' }}>Anidopt</Footer>
+                    </Menu>
+                </Sider>
+                <Content className="tab_item_wrap">
+                    {
+                        React.Children.map(this.props.children,( element,index )=>{
+                            return(
+                                <div className={ this.check_item_index( index ) }>{ element }</div>
+                            )
+                        })
+                    }
+                </Content>
             </Layout>
         )
     }

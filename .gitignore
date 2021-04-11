@@ -121,3 +121,7 @@ dist
 
 # macOS
 .DS_Store
+
+# package.json
+./animal_adoption_dapp/package.json
+./animal_adoption_dapp/package-lock.json

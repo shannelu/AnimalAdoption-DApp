@@ -1,8 +1,9 @@
 import React from 'react';
-import {Form, DatePicker, Select, Cascader, Input, Space, Button, message, Upload} from 'antd';
+import {Form, DatePicker, Select, Cascader, Input, Space, Button, message, InputNumber} from 'antd';
 import moment from 'moment';
-import {post} from "../user_middleware"
+import Agent from '../../Agent/Agent'
 import {UploadOutlined} from '@ant-design/icons'
+import { Redirect } from 'react-router';
 const {Option} = Select;
 
 var imgUrlBase64 = [];
@@ -79,13 +80,13 @@ const options = [
 const imgChange = e => {
     var fileList = e.target.files;
     var file_num = fileList.length;
-    var AllowImgFileSize = 2100000;
+    var AllowImgFileSize = 10240;
     for(let i = 0; i < fileList.length;i++){
         let reader = new FileReader();
         reader.readAsDataURL(fileList[i]);
         reader.onload = function(e){
             if (AllowImgFileSize != 0 && AllowImgFileSize < reader.result.length) {
-                message.error("file size exceeds 2MB!");
+                message.error("file size exceeds 10kB!");
                 return;
             }else{
                 console.log(reader.result)
@@ -107,6 +108,8 @@ class PostInfoPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            myAgent : new Agent(null, null),
+            posted: false
         }
     }
 
@@ -114,21 +117,44 @@ class PostInfoPage extends React.Component{
         return current > moment().endOf('day');
     }
 
-    post(){
-        console.log(imgUrlBase64)
+    async post(){
+        this.state.myAgent.initialize();
+        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
         var date = document.getElementById("date").value;
-        var type = document.getElementById("type").value;
+        var title = document.getElementById("title").value;
         var city = document.getElementById("city").value;
         var street = document.getElementById("street").value;
         var description = document.getElementById("description").value;
-        post(date,type,city,street,imgUrlBase64,description);
+        var price = document.getElementById("price").value; // in gwei
+        var longitude = document.getElementById("longitude").value;
+        var latitude = document.getElementById("latitude").value;
+        var transImage;
+        if (imgUrlBase64.length == 0) {
+            transImage = "";
+        } else {
+            transImage = imgUrlBase64[0];
+        }
+        console.log(date)
+        var physicalAddress = city + " " + street
+        let call = await this.state.myAgent.postAnimal(longitude, latitude, date, price, transImage, title, description, physicalAddress);
+        if(call[0]){
+            message.success(call[1]);
+            this.setState({
+                posted: true
+            })
+        }
+        else{
+            message.error(call[1]);
+        }
     }
 
-    
-
     render(){
+        this.state.myAgent.initialize();
+        var lat = localStorage.getItem("lat");
+        var lng = localStorage.getItem("lng");
         return(
-            <Form {...layout} onFinish = {()=>this.post()}>
+            <Form {...layout} onFinish = {()=> this.post()}>
+                {this.state.posted ? <Redirect to='/main'/> : ""}
                 <h1>Thank you for your warm heart! Provide detailed information about this little thing!</h1>
                 <Form.Item label = "When did you find it?" rules={[{ required: true, message: 'Please select a date!' }]} >
                     <DatePicker 
@@ -138,15 +164,8 @@ class PostInfoPage extends React.Component{
                         style = {{width:300}}
                     />
                 </Form.Item>
-                <Form.Item label = "What type is it?" rules={[{ required: true, message: 'Please select a type!' }]} >
-                    <Select
-                        id = "type"
-                        style = {{width : 300}}
-                        placeholder = "Select animal type"
-                    >
-                        <Option value = "cat">Cat</Option>
-                        <Option value = "dog">Dog</Option>
-                    </Select>
+                <Form.Item label = "What title is it?" rules={[{ required: true, message: 'Please enter a title!' }]} >
+                    <Input id = "title" placeholder = "write a title for your post" ></Input>
                 </Form.Item>
                 <Form.Item label = "Where are you" rules={[{ required: true, message: 'Please input your location!' }]} >
                     <Space>
@@ -154,11 +173,20 @@ class PostInfoPage extends React.Component{
                         <Input id = "street" placeholder = "Street name" style = {{width:152}}></Input>
                     </Space>
                 </Form.Item>
+                <Form.Item label = "longitude" rules={[{ required: true, message: 'Please enter a longitude!' }]} >
+                    <Input id = "longitude" placeholder = "longitude" defaultValue = {lng}></Input>
+                </Form.Item>
+                <Form.Item label = "latitude" rules={[{ required: true, message: 'Please enter a latitude!' }]} >
+                    <Input id = "latitude" placeholder = "latitude" defaultValue = {lat}></Input>
+                </Form.Item>
                 <Form.Item hidden = {true}>
                     <Input type = "file" id = "myimg" multiple = 'multiple' onChange = {imgChange} style = {{visibility:'hidden'}}></Input>
                 </Form.Item>
                 <Form.Item>
                     <Button icon = {<UploadOutlined/>} id = "test" onClick = {upload}>Upload some pictures about it!</Button>
+                </Form.Item>
+                <Form.Item label = "how much does it cost to adopt it?(Ether)">
+                    <InputNumber id = "price" min = {1} max = {100} defaultValue = {1} step = {1}/>
                 </Form.Item>
                 <Form.Item layout = 'horizontal' label = "Description" rules={[{ required: true, message: 'This is a required field!' }]} >
                     <Input.TextArea id = "description" 
