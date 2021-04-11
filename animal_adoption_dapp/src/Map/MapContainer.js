@@ -62,11 +62,14 @@ export class MapContainer extends Component {
         console.log(getResult);
         var i;
         for (i = 0; i < getResult.length; i++) {
-          temp.push({
+          if (getResult[i].status === "MISSING") {
+            temp.push({
               title: getResult[i].title,
               position: {lat:getResult[i].latitude, lng:getResult[i].longitude},
               imageBase64: getResult[i].imageBase64
-          });
+            });
+          }
+          
         } 
     }
     

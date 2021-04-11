@@ -30,10 +30,6 @@ class UserTransPage extends React.Component{
         return <Table columns = {columns} dataSource = {data} pagination = {false}></Table>
     }
 
-    async getMyTransRecords(){
-        return await this.state.myAgent.getFakeRecords();
-    }
-
     async componentDidMount(){
         this.setState({
             records: await this.state.myAgent.getTransRecords()
