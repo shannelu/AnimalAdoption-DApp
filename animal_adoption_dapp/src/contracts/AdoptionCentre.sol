@@ -175,11 +175,13 @@ contract AdoptionCentre {
     function adoptAnimal(uint256 _index, string memory _time, bytes32 uuid) public payable returns(bool) {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+            msg.sender.transfer(msg.value);
             return false;
         }
         AnimalInfo storage animal = animalInfos[_index];
         if (!compareStrings(animal.status, "MISSING")) {
             emit OperationEvents("TRANSACTION", "Requested animal has already been adopted!", false);
+            msg.sender.transfer(msg.value);
             return false;
         }
 
@@ -187,6 +189,7 @@ contract AdoptionCentre {
         uint256 buyerBalance = _sender.balance;
         if (buyerBalance < msg.value) {
             emit OperationEvents("TRANSACTION", "Buyer has insufficient fund for this payment!", false);
+            msg.sender.transfer(msg.value);
             return false;
         }
 
