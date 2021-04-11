@@ -1,17 +1,20 @@
 import React from 'react';
 import './OrderConfirm.css';
-import { Button, Form, message, Layout, Row, Col } from 'antd';
+import { Button, Form, message, Layout, Row, Col, Modal } from 'antd';
 import Agent from '../../Agent/Agent';
 const { Header, Footer, Sider, Content } = Layout;
 
 var agent = new Agent(null, null);
+var animal_index = 0;
 
 class OrderConfirmPage extends React.Component{
     constructor(props){
         super(props)
         console.log(this.props)
         this.state = {
-            animal_index : 0
+            isPaymentCompleted: false,
+            isPaymentSuccess: false,
+            msg: ""
         }
     }
 
@@ -29,43 +32,31 @@ class OrderConfirmPage extends React.Component{
         })
     }
 
+    async pay(){
+        let call = await this.state.myAgent.adoptAnimal(animal_index, this.state.animal_info[animal_index].price);
+        if(call[0]){
+            this.setState({
+                isPaymentCompleted: true,
+                isPaymentSuccess: true,
+                msg: call[1]
+            })
+        }
+        else{
+            this.setState({
+                isPaymentCompleted: true,
+                msg: call[1]
+            })
+        }
+    }
 
-    // getUsername(){
-    //     return getMyUsername(this.props.uuid);
-    // }
-
-    // getTotalToken(){
-    //     return getMyTotalToken(this.props.uuid);
-    // }
-
-    // getGasFee(){
-    //     return getMyGasFee(this.props.uuid);
-    // }
-
-    // async getAllConfirmOrder(){   // order_number?
-    //     var success;
-    //     //var animal_infos = await agent.getAnimalNearBy();
-    //     //var animal_info = animal_infos[this.props.animal_id];
-    //     var animal_info = getAllAnimalInfo(this.props.animal_id);
-    //     if(animal_info.price <= total_token){
-    //         success = true;
-    //         total_token -= (animal_info.price +getMyGasFee(this.props.uuid)) ;  // 'to' account total ether will increase correspondingly (notice: gas fee deduction)
-    //         animal_info.sold = true;
-    //         // animal_info.order_num = "111"
-    //     }
-    //     else{
-    //         success = false;
-    //     }
-    //     return {success: success};
-    // }
-
-    // getPrice(){
-    //     var animal_info = getAllAnimalInfo(this.props.animal_id);
-    //     return animal_info[0].price;   //Need to add animal_id match condtion in middleware.
-    // }
+    cancelPaymentAfterFail(){
+        this.setState({
+            isPaymentCompleted : false 
+        })
+    }
 
     render() {
-        var animal_index = this.props.match.params[0];
+        animal_index = this.props.match.params[0];
         if(this.state.animal_info == null)  return <h1>nichousha</h1>
         return(
             <layout>
@@ -117,24 +108,38 @@ class OrderConfirmPage extends React.Component{
                         <b>{this.state.userAddress}</b>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType='submit' className="login-form-button" onClick={async () => this.state.myAgent.adoptAnimal(animal_index, this.state.animal_info[animal_index].price)} >
-                            Confirm and Pay
+                            <Button type="primary" htmlType='submit' className="login-form-button" onClick={()=>this.pay()} >
+                                Confirm and Pay
                             </Button><br/>
                             <p></p>
-                            <Button type="primary" htmlType = 'submit'  className="login-form-button" href={'/animalinfo/animal_marker_'+this.animal_index} >
-                            Return to Last Page
+                            <Button type="primary" htmlType = 'submit'  className="login-form-button" href={'/animalinfo/animal_marker_'+animal_index} >
+                                Return to Last Page
                             </Button><br/>
                         </Form.Item>
                 </Col>
                 </Row>
                 <Form
-                name="orderConfirm"
-                className="OrderConfirmForm"
-                layout = "vertical"
-                initialValues={{ remember: true }}
+                    name="orderConfirm"
+                    className="OrderConfirmForm"
+                    layout = "vertical"
+                    initialValues={{ remember: true }}
                 >
                 </Form>
-
+                <Modal
+                    title = {this.state.isPaymentSuccess ? "Payment succeeds!" : "Payment fails!"}
+                    visible = {this.state.isPaymentCompleted}
+                    footer = { this.state.isPaymentSuccess ? 
+                        <Button onClick = {()=>this.cancelPaymentAfterFail()}>
+                            Cancel
+                        </Button> 
+                        :
+                        <Button type = "primary" href = "/main">
+                            Back to main menu
+                        </Button>
+                    }
+                >
+                    {this.state.msg}
+                </Modal>
             </layout>
         )
     }

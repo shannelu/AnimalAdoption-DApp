@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter,Route, Switch} from 'react-router-dom'
+import {BrowserRouter,Redirect,Route, Switch} from 'react-router-dom'
 import './App.css';
 import SignInPage from './User/UserAct/SignInPage';
 import SignUpPage from './User/UserAct/SignUpPage';
@@ -16,6 +16,9 @@ class App extends React.Component{
     return (
       <BrowserRouter>
           <Switch>
+            <Route exact path = "/">
+              <Redirect to="/signin"/>
+            </Route>
             <Route path="/main">
               <Nav>
                   <MapContainer name = "Animal Map"/>

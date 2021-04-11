@@ -28,8 +28,6 @@ class AnimalInfoPage extends React.Component{
         await agent.initialize();
         agent.uuid = localStorage.getItem(agent.myAccount);
         var a = await agent.getAnimalNearBy();
-        console.log(a);
-        console.log("aaaaaaaaaaaaaaaaaaaaaa");
         this.setState({
             myAgent: agent,
             animal_info : a

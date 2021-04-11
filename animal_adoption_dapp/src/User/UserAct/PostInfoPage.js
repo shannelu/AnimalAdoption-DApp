@@ -3,6 +3,7 @@ import {Form, DatePicker, Select, Cascader, Input, Space, Button, message, Input
 import moment from 'moment';
 import Agent from '../../Agent/Agent'
 import {UploadOutlined} from '@ant-design/icons'
+import { Redirect } from 'react-router';
 const {Option} = Select;
 
 var imgUrlBase64 = [];
@@ -107,7 +108,8 @@ class PostInfoPage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            myAgent : new Agent(null, null)
+            myAgent : new Agent(null, null),
+            posted: false
         }
     }
 
@@ -134,8 +136,15 @@ class PostInfoPage extends React.Component{
         }
         
         let call = await this.state.myAgent.postAnimal(longitude, latitude, date, price, transImage, title, description);
-        console.log("Post!!!");
-        console.log(call);
+        if(call[0]){
+            message.success(call[1]);
+            this.setState({
+                posted: true
+            })
+        }
+        else{
+            message.error(call[1]);
+        }
     }
 
     render(){
@@ -143,7 +152,8 @@ class PostInfoPage extends React.Component{
         var lat = localStorage.getItem("lat");
         var lng = localStorage.getItem("lng");
         return(
-            <Form {...layout} onFinish = {async ()=> this.post()}>
+            <Form {...layout} onFinish = {()=> this.post()}>
+                {this.state.posted ? <Redirect to='/main'/> : ""}
                 <h1>Thank you for your warm heart! Provide detailed information about this little thing!</h1>
                 <Form.Item label = "When did you find it?" rules={[{ required: true, message: 'Please select a date!' }]} >
                     <DatePicker 

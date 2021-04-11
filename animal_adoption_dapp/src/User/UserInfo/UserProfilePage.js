@@ -166,10 +166,16 @@ class UserProfilePage extends React.Component{
         }
     }
 
+    cancelLogOut(){
+        this.setState({
+            logOutModalVisible : false
+        })
+    }
+
     render(){
         return(
             <div>
-                {this.state.loggedOut ? <Redirect to='/main'/> : ""}
+                {this.state.loggedOut ? <Redirect to='/signin'/> : ""}
                 <PageHeader 
                     title = {this.state.Username}
                     tags={<Tag color="green">Online</Tag>}
@@ -251,10 +257,11 @@ class UserProfilePage extends React.Component{
                         </Form>
                     </Modal>
                     <Modal
-                        tilte = "Log out"
+                        title = "Log out"
                         visible = {this.state.logOutModalVisible}
                         onOk = {()=>this.logOut()}
-                        okText = "log out"
+                        okText = "Yes"
+                        onCancel = {()=>this.cancelLogOut()}
                         destroyOnClose
                     >
                         Are you sure to log out?
