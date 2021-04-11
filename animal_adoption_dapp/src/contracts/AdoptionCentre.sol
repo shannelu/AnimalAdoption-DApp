@@ -68,6 +68,16 @@ contract AdoptionCentre {
 
     }
 
+    function isUniqueName(string memory _userName) public returns(bool) {
+        for (uint256 i = 0; i < userNames.length; i++) {
+            if (compareStrings(userNames[i], _userName)) {
+                 emit OperationEvents("REGISTRATION", "There is an existing user name!", false);
+                 return false;
+            }
+        }
+        return true;
+    }
+
     function getAdoptedNum(bytes32 uuid) public view returns(uint256) {
         UserInfo storage user = users[msg.sender];
         return user.adoptedNum;
@@ -211,6 +221,16 @@ contract AdoptionCentre {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             return false;
+        }
+
+        for (uint256 i = 0; i < animalInfos.length; i++) {
+            if (compareStrings(animalInfos[i].longitude, _longitude)) {
+                if (compareStrings(animalInfos[i].latitude, _latitude)) {
+                    emit OperationEvents("ANIMAL_INFO_OPS", "Duplicate location!", false);
+                    return false;
+                }
+                
+            }
         }
 
         UserInfo storage userInfo = users[msg.sender];

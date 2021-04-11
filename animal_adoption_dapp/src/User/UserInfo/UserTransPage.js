@@ -1,6 +1,5 @@
 import React from 'react';
-import {getAllMyTransRecords} from '../user_middleware'
-import {PageHeader, Table, Badge, Pagination} from 'antd'
+import {PageHeader, Table, Badge, Pagination} from 'antd';
 import "./transTable.css"
 
 const columns = [
@@ -28,10 +27,6 @@ class UserTransPage extends React.Component{
         console.log(this.state.records);
         const data = this.state.records;
         return <Table columns = {columns} dataSource = {data} pagination = {false}></Table>
-    }
-
-    async getMyTransRecords(){
-        return await this.state.myAgent.getFakeRecords();
     }
 
     async componentDidMount(){

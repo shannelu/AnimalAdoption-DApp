@@ -1,5 +1,4 @@
 import React from 'react';
-import {signUp, isUniqueName, signIn} from '../user_middleware';
 import {Button,Form,Input, Tooltip, Checkbox,Modal} from 'antd';
 import {UserAddOutlined, CloseCircleOutlined, CheckCircleOutlined, createFromIconfontCN, LockOutlined} from '@ant-design/icons'
 import './SignUp.css';
@@ -33,7 +32,7 @@ class SignUpPage extends React.Component{
         }
         else{
             this.setState({
-                unique_name: isUniqueName(input_usernmame) ? 1 : -1
+                unique_name: true ? 1 : -1
             })
         }
     }

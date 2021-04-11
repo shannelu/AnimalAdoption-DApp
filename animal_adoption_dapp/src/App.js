@@ -7,7 +7,6 @@ import PostInfoPage from './User/UserAct/PostInfoPage'
 import MapContainer from './Map/MapContainer';
 import UserInfoPage from './User/UserInfo/UserInfoPage'
 import AnimalInfoPage from './transaction/AnimalInfo/AnimalInfoPage';
-import AddTokensPage from './transaction/AddTokens/AddTokensPage';
 import OrderConfirmPage from './transaction/OrderConfirm/OrderConfirmPage';
 import Nav from './Nav';
 
@@ -22,7 +21,6 @@ class App extends React.Component{
             <Route path="/main">
               <Nav>
                   <MapContainer name = "Animal Map"/>
-                  <AddTokensPage name = "Shop"/>
                   <UserInfoPage name = "User"/>  
               </Nav>
             </Route>
