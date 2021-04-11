@@ -1,21 +1,30 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router,Route, Switch} from 'react-router-dom'
+import {BrowserRouter,Route, Switch, Link} from 'react-router-dom'
 import './App.css';
-
 import SignInPage from './User/UserAct/SignInPage';
 import SignUpPage from './User/UserAct/SignUpPage';
 import PostInfoPage from './User/UserAct/PostInfoPage'
-import Main from './Main';
-import UserInfoPage from './User/UserInfo/UserInfoPage';
+import MapContainer from './Map/MapContainer';
+import UserInfoPage from './User/UserInfo/UserInfoPage'
+import Nav from './Nav';
+import AnimalInfoPage from './transaction/AnimalInfo/AnimalInfoPage';
+import AddTokensPage from './transaction/AddTokens/AddTokensPage';
+import OrderConfirmPage from './transaction/OrderConfirm/OrderConfirmPage';
 
 class App extends React.Component{
   render(){
     return (
-      <Router>
-        <div>
+      <BrowserRouter>
           <Switch>
             <Route path="/main">
-              <Main />
+              <Nav>
+                  <MapContainer name = "Animal Map"/>
+                  <AddTokensPage name = "Shop"/>
+                  <UserInfoPage name = "User"/>  
+              </Nav>
+            </Route>
+            <Route path="/map">
+              <MapContainer/>
             </Route>
             <Route path="/signin">
               <SignInPage />
@@ -26,11 +35,18 @@ class App extends React.Component{
             <Route path="/post">
               <PostInfoPage />
             </Route>
+            <Route path="/animalinfo/*" component = {AnimalInfoPage}>
+            </Route>
+            <Route path="/orderconfirm">
+              <OrderConfirmPage />
+            </Route>
           </Switch>
-        </div>
-      </Router>
+      </BrowserRouter>
     )
   }
 }
 
-export default App;
+export default App
+
+
+
