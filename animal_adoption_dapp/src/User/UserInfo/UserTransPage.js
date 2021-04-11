@@ -1,5 +1,5 @@
 import React from 'react';
-import {PageHeader, Table, Badge, Pagination} from 'antd'
+import {PageHeader, Table, Badge, Pagination} from 'antd';
 import "./transTable.css"
 
 const columns = [
