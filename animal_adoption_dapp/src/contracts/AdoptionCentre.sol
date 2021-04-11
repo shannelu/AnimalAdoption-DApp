@@ -313,7 +313,7 @@ contract AdoptionCentre {
             emit LoginEvent(uuid, "Login success!", true);
             return true;
         }
-        emit LoginEvent('0', "Login failed!", false);
+        emit LoginEvent('0', "Wrong username or password!", false);
         return false;
     }
 

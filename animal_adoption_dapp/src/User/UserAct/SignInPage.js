@@ -17,6 +17,7 @@ class SignInPage extends React.Component{
     }
 
     async logIn(){
+        this.state.myAgent.initialize();
         var input_usernmame = document.getElementById("username").value;
         var input_password = document.getElementById("password").value;
         var logInfo = await this.state.myAgent.login(input_usernmame,input_password);
@@ -28,12 +29,15 @@ class SignInPage extends React.Component{
         else{
             message.error(logInfo[1]);
         }
+        console.log("Store uuid")
+        console.log(this.state.myAgent.myAccount);
+        console.log(logInfo[2]);
         localStorage.setItem(this.state.myAgent.myAccount, logInfo[2]);
     }
 
     render(){
-        this.state.myAgent.initialize();
-        localStorage.setItem(this.state.myAgent.myAccount, null);
+        //this.state.myAgent.initialize();
+        //localStorage.setItem(this.state.myAgent.myAccount, null);
         return(
             <Form
                 name="normal_login"

@@ -23,7 +23,9 @@ class UserProfilePage extends React.Component{
     }
 
     async componentDidMount(){
+        await this.state.myAgent.initialize();
         this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
+        console.log(this.state.myAgent.myAccount);
         console.log("this uuid");
         console.log(this.state.myAgent.uuid);
         var call = await this.state.myAgent.getPostedAnimalRecords();
@@ -164,9 +166,11 @@ class UserProfilePage extends React.Component{
 
     render(){
         console.log("rendering");
+        this.state.myAgent.initialize();
+        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
         return(
             <div>
-                {this.state.loggedOut ? <Redirect to='/signin'/> : ""}
+                {this.state.loggedOut ? <Redirect to='/signup'/> : ""}
                 <PageHeader 
                     title = {this.state.Username}
                     tags={<Tag color="green">Online</Tag>}
@@ -251,7 +255,7 @@ class UserProfilePage extends React.Component{
                     <Modal
                         title = "Log out"
                         visible = {this.state.logOutModalVisible}
-                        onOk = {()=>this.logOut()}
+                        onOk = {async ()=>this.logOut()}
                         okText = "Yes"
                         onCancel = {async ()=>this.cancelLogOut()}
                         destroyOnClose
