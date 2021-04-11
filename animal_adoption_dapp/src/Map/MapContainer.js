@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
-import {getAllAnimalsInfo} from './map_middleware'
 import CurrentLocation from './Map';
 import Agent from '../Agent/Agent';
 

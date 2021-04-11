@@ -1,5 +1,4 @@
 import React from 'react';
-import {getAllMyTransRecords} from '../user_middleware'
 import {PageHeader, Table, Badge, Pagination} from 'antd'
 import "./transTable.css"
 

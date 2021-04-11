@@ -1,6 +1,5 @@
 import React from 'react';
 import {PageHeader, Tag, Button, Statistic, Row, Input, Form, Modal, message, Empty} from 'antd';
-import {isUniqueName} from '../user_middleware';
 import { Redirect } from 'react-router';
 
 class UserProfilePage extends React.Component{
@@ -21,20 +20,6 @@ class UserProfilePage extends React.Component{
             myAgent: this.props.agent
         }
     }
-
-    // async getUsername(){
-    //     console.log("profile agent");
-    //     console.log(this.props.agent);
-    //     return await this.state.myAgent.getUserName();
-    // }
-
-    // async getPostsNum(){
-    //     return await this.state.myAgent.getPostedAnimalRecords();
-    // }
-
-    // async getAdoptedNum(){
-    //     return await this.state.myAgent.getAdoptedNum();
-    // }
 
     async componentDidMount(){
         console.log(22222222);

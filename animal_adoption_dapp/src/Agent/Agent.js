@@ -44,6 +44,11 @@ class Agent {
         };
     }
 
+    async isUniqueName(userName) {
+        let callsReceipt = await this.deployedAdoptionCentre.methods.isUniqueName(userName).call({from: this.myAccount});
+        return callsReceipt;
+    }
+
     async getAdoptedNum(){
         let callsReceipt = await this.deployedAdoptionCentre.methods.getAdoptedNum(this.uuid).call({from: this.myAccount});
         return callsReceipt;

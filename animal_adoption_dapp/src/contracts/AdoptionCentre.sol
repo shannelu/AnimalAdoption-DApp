@@ -68,6 +68,16 @@ contract AdoptionCentre {
 
     }
 
+    function isUniqueName(string memory _userName) public view returns(bool) {
+        for (uint256 i = 0; i < userNames.length; i++) {
+            if (compareStrings(userNames[i], _userName)) {
+                 OperationEvents("REGISTRATION", "There is an existing user name!", false);
+                 return false;
+            }
+        }
+        return true;
+    }
+
     function getAdoptedNum(bytes32 uuid) public view returns(uint256) {
         UserInfo storage user = users[msg.sender];
         return user.adoptedNum;
