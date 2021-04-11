@@ -1,6 +1,7 @@
 import React from 'react';
 import {PageHeader, Tag, Button, Statistic, Row, Input, Form, Modal, message, Empty} from 'antd';
 import { Redirect } from 'react-router';
+import "./transTable.css"
 
 class UserProfilePage extends React.Component{
     constructor(props){
@@ -22,14 +23,9 @@ class UserProfilePage extends React.Component{
     }
 
     async componentDidMount(){
-        console.log(22222222);
         this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
+        console.log("this uuid");
         console.log(this.state.myAgent.uuid);
-        let res = await this.state.myAgent.getUserName();
-        
-        console.log("Debugger point");
-        console.log(res);
-        //console.log(await this.state.myAgent.getUserName());
         var call = await this.state.myAgent.getPostedAnimalRecords();
         this.setState({
             Username: await this.state.myAgent.getUserName(),
@@ -76,11 +72,18 @@ class UserProfilePage extends React.Component{
 
     async updateUsername(){
         var new_name = document.getElementById("new_username").value;
-        await this.state.myAgent.resetUsername(new_name);
-        this.setState({
-            settingUname : false,
-            unique_name : 0
-        })
+        let call = await this.state.myAgent.resetUserName(new_name);
+        if(call[0]){
+            message.success(call[1]);
+            console.log("prepare for did mount!")
+            this.setState({
+                settingUname : false,
+                unique_name : 0
+            })
+        }
+        else{
+            message.error(call[1]);
+        }
     }
 
     async updatePwd(){
@@ -93,7 +96,7 @@ class UserProfilePage extends React.Component{
                 pwd_format : 0,
                 pwd_confirmed : 0
             })
-            message.success("password has been reset!")
+            message.success(resetPwdInfo[1])
         }
         else{
             message.error(resetPwdInfo[1])
@@ -116,19 +119,19 @@ class UserProfilePage extends React.Component{
         })
     }
 
-    async checkUniqueUsername(){
-        var input_usernmame = document.getElementById("new_username").value;
-        if(input_usernmame.length == 0){
-            this.setState({
-                unique_name: 0
-            })
-        }
-        else{
-            this.setState({
-                unique_name: await this.state.myAgent.isUniqueName(input_usernmame) ? 1 : -1
-            })
-        }
-    }
+    // async checkUniqueUsername(){
+    //     var input_usernmame = document.getElementById("new_username").value;
+    //     if(input_usernmame.length == 0 || ! (await this.state.myAgent.isUniqueName(input_usernmame))){
+    //         this.setState({
+    //             unique_name: 0
+    //         })
+    //     }
+    //     else{
+    //         this.setState({
+    //             unique_name: await this.state.myAgent.isUniqueName(input_usernmame) ? 1 : -1
+    //         })
+    //     }
+    // }
 
     readyLogOut(){
         this.setState({
@@ -137,7 +140,9 @@ class UserProfilePage extends React.Component{
     }
 
     async logOut(){
-        var logOutInfo = await this.state.myAgent.logout()
+        this.state.myAgent.initialize();
+        this.state.myAgent.uuid = localStorage.getItem(this.state.myAgent.myAccount);
+        var logOutInfo = await this.state.myAgent.logout();
         if(logOutInfo[0]){
             message.success(logOutInfo[1])
             this.setState({
@@ -158,6 +163,7 @@ class UserProfilePage extends React.Component{
     }
 
     render(){
+        console.log("rendering");
         return(
             <div>
                 {this.state.loggedOut ? <Redirect to='/signin'/> : ""}
@@ -170,7 +176,8 @@ class UserProfilePage extends React.Component{
                         <Button key="1" type="primary" onClick = {()=>this.readyLogOut()}>
                           Log Out
                         </Button>,
-                      ]}
+                      ]
+                      }
                 >
                     <Row>
                         <Statistic title="Posts" value={this.state.PostedAnimalRecords} />
@@ -181,6 +188,7 @@ class UserProfilePage extends React.Component{
                                 margin: '0 32px',
                             }}
                         />
+                        <Statistic title = "Account Address" value = {this.state.myAgent.myAccount} style={{textAlign:"left"}}/>
                     </Row>
                     <Modal
                         title = "Reset username"
@@ -188,7 +196,6 @@ class UserProfilePage extends React.Component{
                         visible = {this.state.settingUname}
                         onOk = {()=>this.updateUsername()}
                         okText = "Reset"
-                        okButtonProps = {{disabled : this.state.unique_name != 1}}
                         onCancel = {()=>this.cancelChangeUname()}
                         destroyOnClose
                     >
@@ -202,7 +209,7 @@ class UserProfilePage extends React.Component{
                                 help = {this.state.unique_name == -1 ? "Your name has been taken! Chooese another one" : " "  }
                                 style = {{textAlign:"left"}}
                             >
-                                <Input placeholder = "new username" id = "new_username" onChange = {()=>this.checkUniqueUsername()} style = {{width:400}} />
+                                <Input placeholder = "new username" id = "new_username" style = {{width:400}} />
                             </Form.Item>
                         </Form>
                     </Modal>
@@ -246,7 +253,7 @@ class UserProfilePage extends React.Component{
                         visible = {this.state.logOutModalVisible}
                         onOk = {()=>this.logOut()}
                         okText = "Yes"
-                        onCancel = {()=>this.cancelLogOut()}
+                        onCancel = {async ()=>this.cancelLogOut()}
                         destroyOnClose
                     >
                         Are you sure to log out?

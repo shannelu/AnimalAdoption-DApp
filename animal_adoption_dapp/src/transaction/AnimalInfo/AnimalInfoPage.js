@@ -24,7 +24,6 @@ class AnimalInfoPage extends React.Component{
     }
 
     async componentDidMount(){
-        console.log("hello");
         await agent.initialize();
         agent.uuid = localStorage.getItem(agent.myAccount);
         var a = await agent.getAnimalNearBy();
@@ -39,7 +38,7 @@ class AnimalInfoPage extends React.Component{
         var animal_index = marker_str.split("_")[2];
         console.log(marker_str);
         console.log(animal_index);
-        if(this.state.animal_info == null)  return <h1>nichousha</h1>
+        if(this.state.animal_info == null)  return <h1>laoding...</h1>
         return(
             <Form
             name="addTokens"
@@ -91,6 +90,10 @@ class AnimalInfoPage extends React.Component{
                                     <tr>
                                     <th>Position:</th>
                                     <td>({this.state.animal_info[animal_index].latitude},{this.state.animal_info[animal_index].longitude})</td>
+                                    </tr>
+                                    <tr>
+                                    <th>Physical Address:</th>
+                                    <td>{this.state.animal_info[animal_index].physicalAddress}</td>
                                     </tr>
                                     <tr>
                                         <th>Reporter:</th>

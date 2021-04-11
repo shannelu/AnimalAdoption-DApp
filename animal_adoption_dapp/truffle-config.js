@@ -106,6 +106,10 @@ module.exports = {
       //  },
       //  evmVersion: "byzantium"
       // }
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
     }
   }
 }

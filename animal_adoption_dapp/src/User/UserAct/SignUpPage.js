@@ -23,19 +23,24 @@ class SignUpPage extends React.Component{
         }
     }
 
-    checkUniqueUsername(){
-        var input_usernmame = document.getElementById("username_signup").value;
-        if(input_usernmame.length == 0){
-            this.setState({
-                unique_name: 0
-            })
-        }
-        else{
-            this.setState({
-                unique_name: true ? 1 : -1
-            })
-        }
-    }
+    // async checkUniqueUsername(){
+    //     var input_usernmame = document.getElementById("username_signup").value;
+    //     var myAgent = new Agent(null,null)
+    //     await myAgent.initialize()
+    //     let a = await myAgent.isUniqueName();
+    //     console.log("hello")
+    //     if(input_usernmame.length == 0){
+    //         this.setState({
+    //             unique_name: 0
+    //         })
+    //     }
+    //     else{
+    //         console.log("fuck")
+    //         this.setState({
+    //             unique_name: a ? 1 : -1
+    //         })
+    //     }
+    // }
 
     checkPwdFormat(){
         var input_password = document.getElementById("password_signup").value;
@@ -74,44 +79,32 @@ class SignUpPage extends React.Component{
     }
 
     async handleSignUp(){
-        console.log(this.state.unique_name)
-        console.log(this.state.pwd_confirmed)
-        console.log(this.state.agreed)
-        if(this.state.unique_name == 1 && this.state.pwd_confirmed == 1 && this.state.agreed){
-            var input_usernmame = document.getElementById("username_signup").value;
-            var input_password = document.getElementById("password_signup").value;
-            var myAgent = new Agent(null,null)
-            await myAgent.initialize()
-            console.log(myAgent.myAccount)
-            var uuid = localStorage.getItem(myAgent.myAccount)
-            //let callback = await this.myAgent.registeration(input_usernmame, input_password, this.sellerAddr);
-            let callback = await myAgent.registeration(input_usernmame, input_password);
-            
-            this.setState({
-                signedup : callback[0],
-                isModalVisible : true,
-                fail_msg: callback[1]
-            })
-            return;
-        }
+        var input_usernmame = document.getElementById("username_signup").value;
+        var input_password = document.getElementById("password_signup").value;
+        var myAgent = new Agent(null,null)
+        await myAgent.initialize()
+        let callback = await myAgent.registeration(input_usernmame, input_password);
+        console.log("hello")
         this.setState({
+            signedup : callback[0],
             isModalVisible : true,
-            fail_msg : "Sign up failed! Please try again!"
+            fail_msg: callback[1]
         })
+        return;
     }
 
     render(){
         return(
-            <Form className = "SignUpFrom" layout = "vertical" onFinish = {async ()=>this.handleSignUp()}>
+            <Form className = "SignUpFrom" layout = "vertical" onFinish = {()=>this.handleSignUp()}>
                 <h1>Create an account</h1>
                 <Form.Item id = "myForm" label="Username" rules={[{ required: true, message: 'Please input your username!' }]} 
                     hasFeedback = {this.state.unique_name != 0} validateStatus = {this.state.unique_name == -1 ? "error" : "success"}
                     help = {this.state.unique_name == -1 ? "Your name has been taken! Chooese another one" : " "  }
                 >
-                    <Input id = "username_signup" 
+                    <Input id = "username_signup"
                         placeholder="Everyone in our community has a unique name" 
                         prefix = {<UserAddOutlined/>} 
-                        onChange = {()=>this.checkUniqueUsername()}
+                        // onChange = {()=>this.checkUniqueUsername()}
                     />
                 </Form.Item>
                 <Form.Item label="Password" rules={[{ required: true, message: 'Please input your password!' }]}
@@ -142,17 +135,19 @@ class SignUpPage extends React.Component{
                     </Checkbox>
                 </Form.Item>
                 <Form.Item >
-                    <Button type="primary" htmlType = 'submit'>Sign Up</Button>
+                    <Button type="primary" htmlType = 'submit' disabled = {!(this.state.pwd_format && this.state.pwd_confirmed && this.state.agreed)}>Sign Up</Button>
+                    <p></p>
+                    Or <a href="/signin">Sign in now!</a>
                 </Form.Item>
                 <Modal title={this.state.signedup ? "Sign up successfully!" : "Sign up failed!"}
                        visible = {this.state.isModalVisible}
                        okButtonProps = {{href:"/SignIn"}}
                        okText = "Sign in"
                        cancelText = "Sign up another account"
-                       cancelButtonProps = {{href:"/Signup"}}
-                       closable = 'true'
+                       cancelButtonProps = {{href:"/signup"}}
+                       closable = {false}
                 >
-                {this.state.signedup ? "Welcome to our community! You just earned 10 tokens as a gift from us for free!" : this.state.fail_msg}
+                {this.state.signedup ? "Welcome to our community!" : this.state.fail_msg}
                 </Modal>
             </Form>
         )

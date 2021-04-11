@@ -80,13 +80,13 @@ const options = [
 const imgChange = e => {
     var fileList = e.target.files;
     var file_num = fileList.length;
-    var AllowImgFileSize = 2100000;
+    var AllowImgFileSize = 10240;
     for(let i = 0; i < fileList.length;i++){
         let reader = new FileReader();
         reader.readAsDataURL(fileList[i]);
         reader.onload = function(e){
             if (AllowImgFileSize != 0 && AllowImgFileSize < reader.result.length) {
-                message.error("file size exceeds 2MB!");
+                message.error("file size exceeds 10kB!");
                 return;
             }else{
                 console.log(reader.result)
@@ -134,8 +134,9 @@ class PostInfoPage extends React.Component{
         } else {
             transImage = imgUrlBase64[0];
         }
-        
-        let call = await this.state.myAgent.postAnimal(longitude, latitude, date, price, transImage, title, description);
+        console.log(date)
+        var physicalAddress = city + " " + street
+        let call = await this.state.myAgent.postAnimal(longitude, latitude, date, price, transImage, title, description, physicalAddress);
         if(call[0]){
             message.success(call[1]);
             this.setState({
@@ -173,19 +174,11 @@ class PostInfoPage extends React.Component{
                     </Space>
                 </Form.Item>
                 <Form.Item label = "longitude" rules={[{ required: true, message: 'Please enter a longitude!' }]} >
-                    <Input id = "longitude" placeholder = "longitude"></Input>
+                    <Input id = "longitude" placeholder = "longitude" defaultValue = {lng}></Input>
                 </Form.Item>
-                <tr>
-                    <td>Current longitude is: </td>
-                    <td>{lng}</td>
-                </tr>
                 <Form.Item label = "latitude" rules={[{ required: true, message: 'Please enter a latitude!' }]} >
-                    <Input id = "latitude" placeholder = "latitude"></Input>
+                    <Input id = "latitude" placeholder = "latitude" defaultValue = {lat}></Input>
                 </Form.Item>
-                <tr>
-                    <td>Current latitude is: </td>
-                    <td>{lat}</td>
-                </tr>
                 <Form.Item hidden = {true}>
                     <Input type = "file" id = "myimg" multiple = 'multiple' onChange = {imgChange} style = {{visibility:'hidden'}}></Input>
                 </Form.Item>

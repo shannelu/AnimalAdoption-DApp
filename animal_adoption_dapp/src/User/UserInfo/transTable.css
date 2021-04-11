@@ -10,3 +10,16 @@
    {
        margin:auto;
    }
+
+   .ant-page-header-heading{
+       width: 90%;
+   }
+
+   .ant-form{
+       width: 100%;
+   }
+
+   .ant-statistic{
+       text-align: right;
+   }
+

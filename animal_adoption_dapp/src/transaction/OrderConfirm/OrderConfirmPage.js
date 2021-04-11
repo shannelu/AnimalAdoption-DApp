@@ -33,6 +33,7 @@ class OrderConfirmPage extends React.Component{
     }
 
     async pay(){
+        console.log("111")
         let call = await this.state.myAgent.adoptAnimal(animal_index, this.state.animal_info[animal_index].price);
         if(call[0]){
             this.setState({
@@ -129,13 +130,13 @@ class OrderConfirmPage extends React.Component{
                     title = {this.state.isPaymentSuccess ? "Payment succeeds!" : "Payment fails!"}
                     visible = {this.state.isPaymentCompleted}
                     footer = { this.state.isPaymentSuccess ? 
-                        <Button onClick = {()=>this.cancelPaymentAfterFail()}>
-                            Cancel
-                        </Button> 
-                        :
                         <Button type = "primary" href = "/main">
                             Back to main menu
                         </Button>
+                        :
+                        <Button onClick = {()=>this.cancelPaymentAfterFail()}>
+                            Cancel
+                        </Button> 
                     }
                 >
                     {this.state.msg}

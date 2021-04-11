@@ -23,7 +23,7 @@ contract AdoptionCentre {
         string longitude;
         string latitude;
         string contactUserName;
-        uint256 price;
+        uint64 price;
         string imageBase64;
         string title;
         string description;
@@ -31,6 +31,7 @@ contract AdoptionCentre {
         string status;
         address payable seller;
         string time;
+        string physicalAddress;
     }
 
     struct TransactionInfo {
@@ -40,6 +41,8 @@ contract AdoptionCentre {
         string toUser;
         string time;
         uint256 animalIndex;
+        string animalTitle;
+        uint64 animalPrice;
     }
 
     // user address to user information
@@ -66,16 +69,6 @@ contract AdoptionCentre {
 
     function payment() public payable {
 
-    }
-
-    function isUniqueName(string memory _userName) public returns(bool) {
-        for (uint256 i = 0; i < userNames.length; i++) {
-            if (compareStrings(userNames[i], _userName)) {
-                 emit OperationEvents("REGISTRATION", "There is an existing user name!", false);
-                 return false;
-            }
-        }
-        return true;
     }
 
     function getAdoptedNum(bytes32 uuid) public view returns(uint256) {
@@ -112,14 +105,14 @@ contract AdoptionCentre {
         return (transRecords[msg.sender], "Get transactions!", true, transRecords[msg.sender].length);
     }
 
-    function getOneAnimalInfo(uint256 _index, bytes32 uuid) public returns(AnimalInfo memory, string memory, bool) {
-        if (!checkUUID(msg.sender, uuid)) {
-            emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
-            AnimalInfo memory tmp;
-            return (tmp, "Get animal info failed!", false);
-        }
-        return (animalInfos[_index], "Get one animal info!", true);
-    }
+    // function getOneAnimalInfo(uint256 _index, bytes32 uuid) public returns(AnimalInfo memory, string memory, bool) {
+    //     if (!checkUUID(msg.sender, uuid)) {
+    //         emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
+    //         AnimalInfo memory tmp;
+    //         return (tmp, "Get animal info failed!", false);
+    //     }
+    //     return (animalInfos[_index], "Get one animal info!", true);
+    // }
 
     function getPostedAnimal(bytes32 uuid) public returns(AnimalInfo[] memory, string memory, bool, uint256) {
         if (!checkUUID(msg.sender, uuid)) {
@@ -198,9 +191,15 @@ contract AdoptionCentre {
         //     return false;
         // }
 
-        animal.seller.transfer(msg.value);
+        
 
         UserInfo storage userInfo = users[msg.sender];
+
+        if (compareStrings(userInfo.userName, animal.contactUserName)) {
+            emit OperationEvents("TRANSACTION", "Cannot adopt your own animal!", false);
+            msg.sender.transfer(msg.value);
+            return false;
+        }
 
         animal.status = "FOUND";
         TransactionInfo memory trans;
@@ -210,17 +209,20 @@ contract AdoptionCentre {
         trans.toUser = animal.contactUserName;
         trans.to = animal.seller;
         trans.animalIndex = _index;
+        trans.time = animal.time;
+        trans.animalTitle = animal.title;
+        trans.animalPrice = animal.price;
         transRecords[msg.sender].push(trans);
         transRecords[animal.seller].push(trans);
         userInfo.adoptedNum++;
     
-
+        animal.seller.transfer(msg.value);
         emit OperationEvents("TRANSACTION", "Transaction success!", true);
         return true;
         
     }
 
-    function postAnimalInfo(string memory _longitude, string memory _latitude, uint256 _price, string memory _imageBase64, string memory _title, string memory _description, string memory _time, bytes32 uuid) public returns(bool) {
+    function postAnimalInfo(string memory _longitude, string memory _latitude, uint64 _price, string memory _imageBase64, string memory _title, string memory _description, string memory _time, string memory _physicalAddress, bytes32 uuid) public returns(bool) {
         if (!checkUUID(msg.sender, uuid)) {
             emit OperationEvents("USER_ACTIVE", "User is not login, request is refused", false);
             return false;
@@ -250,6 +252,7 @@ contract AdoptionCentre {
         info.seller = msg.sender;
         info.contactUserName = userInfo.userName;
         info.time = _time;
+        info.physicalAddress = _physicalAddress;
         
         animalInfos.push(info);
         postAnimalRecords[msg.sender].push(info);

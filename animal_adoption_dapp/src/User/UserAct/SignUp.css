@@ -1,8 +1,8 @@
-.ant-form{
-    text-align: center;
-    padding-left: 600px;
-    width: 1400px;
-}
+.ant-form-item-has-success{
+    align-items: center;
+    padding-left: 0;
+    width: 100%;
+}   
 
 h1{
     text-align: center;
