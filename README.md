@@ -1,5 +1,6 @@
-# EECE 571G Term Project
+# EECE 571G Term Project: Animadopt <img src="DappLogo.JPEG" width="50">
 Code & documentation for the EECE 571G term project: Animal Adoption DApp
+
 
 Authored by Li Ju, Runze Wang, Shanny Lu, Shijun Shen
 
