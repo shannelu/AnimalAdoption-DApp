@@ -43,7 +43,7 @@ $ ./ganache-cli
 $  truffle migrate
 ```
 
-### Run Animal AdoptionRun Dapp
+##### Run Animal AdoptionRun Dapp
 ```sh
 $ npm start
 ```
