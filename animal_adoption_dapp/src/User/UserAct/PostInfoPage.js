@@ -167,7 +167,7 @@ class PostInfoPage extends React.Component{
                 <Form.Item label = "What title is it?" rules={[{ required: true, message: 'Please enter a title!' }]} >
                     <Input id = "title" placeholder = "write a title for your post" ></Input>
                 </Form.Item>
-                <Form.Item label = "Where are you" rules={[{ required: true, message: 'Please input your location!' }]} >
+                <Form.Item label = "Where are you?" rules={[{ required: true, message: 'Please input your location!' }]} >
                     <Space>
                         <Cascader id = "city" placeholder = "Select your city" options = {options} style = {{width:140}}/>
                         <Input id = "street" placeholder = "Street name" style = {{width:152}}></Input>
@@ -182,8 +182,8 @@ class PostInfoPage extends React.Component{
                 <Form.Item hidden = {true}>
                     <Input type = "file" id = "myimg" multiple = 'multiple' onChange = {imgChange} style = {{visibility:'hidden'}}></Input>
                 </Form.Item>
-                <Form.Item>
-                    <Button icon = {<UploadOutlined/>} id = "test" onClick = {upload}>Upload some pictures about it!</Button>
+                <Form.Item label = "Upload picture">
+                    <Button icon = {<UploadOutlined/>} id = "test" onClick = {upload}>Upload pictures here</Button>
                 </Form.Item>
                 <Form.Item label = "how much does it cost to adopt it?(Ether)">
                     <InputNumber id = "price" min = {1} max = {100} defaultValue = {1} step = {1}/>
