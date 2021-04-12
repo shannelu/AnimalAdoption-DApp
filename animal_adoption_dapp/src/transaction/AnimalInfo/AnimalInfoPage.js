@@ -58,7 +58,7 @@ class AnimalInfoPage extends React.Component{
                         <div>
                         <h3 style={contentStyle}><Image
                         width={200}
-                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                        src={this.state.animal_info[animal_index].imageBase64}
                         /></h3>
                         </div>
                         <div>
