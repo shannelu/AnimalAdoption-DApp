@@ -14,7 +14,7 @@ nvm use 12.13.0
 ##### How to check your nvm version
 
 ```sh
-$ . ~/.nvm/nvm.sh
+$ nvm version
 ```
 
 ### 1. Clone Repository
