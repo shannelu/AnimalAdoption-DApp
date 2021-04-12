@@ -79,7 +79,7 @@ const options = [
 
 const imgChange = e => {
     var fileList = e.target.files;
-    var file_num = fileList.length;
+    var file_num = fileList.length + 1;
     var AllowImgFileSize = 10240;
     for(let i = 0; i < fileList.length;i++){
         let reader = new FileReader();
@@ -95,14 +95,14 @@ const imgChange = e => {
             return;
         }
     }
-    message.success(`${file_num} file${file_num > 1 ? "s" : ""} ha${file_num > 1 ? "ve" : "s"} been successfully uploaded`);
+    // message.success(`${file_num} file${file_num > 1 ? "s" : ""} ha${file_num > 1 ? "ve" : "s"} been successfully uploaded`);
     console.log(imgUrlBase64);
 }
 
-const upload = ()=>{
-    //message.success("clicked");
-    document.getElementById("myimg").click();
-}
+// const upload = ()=>{
+//     //message.success("clicked");
+//     document.getElementById("myimg").click();
+// }
 
 class PostInfoPage extends React.Component{
     constructor(props){
@@ -180,12 +180,11 @@ class PostInfoPage extends React.Component{
                 <Form.Item label = "latitude" rules={[{ required: true, message: 'Please enter a latitude!' }]} >
                     <Input id = "latitude" placeholder = "latitude" defaultValue = {lat}></Input>
                 </Form.Item>
-                <Form.Item hidden = {true}>
+                {/* <Form.Item hidden = {true} action="/action_page.php">
                     <Input type = "file" id = "myimg" multiple = 'multiple' onChange = {imgChange} style = {{visibility:'hidden'}}></Input>
-                </Form.Item>
-                <Form.Item label = "Upload picture" action="/action_page.php">
-                    <Input type="file" id="test" name="filename" onClick = {upload}></Input>
-                    {/* <Button id = "test" onClick = {upload}>Choose File</Button> */}
+                </Form.Item> */}
+                <Form.Item label = "Upload picture">
+                    <Input type="file" id="test" name="filename" multiple = 'multiple' onChange = {imgChange}></Input>
                 </Form.Item>
                 <Form.Item label = "how much does it cost to adopt it?(Ether)">
                     <InputNumber id = "price" min = {1} max = {100} defaultValue = {1} step = {1}/>
