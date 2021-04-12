@@ -21,7 +21,7 @@ $ . ~/.nvm/nvm.sh
 
     ```sh
     $ git clone https://github.com/shannelu/AnimalAdoption-DApp.git
-    $ cd AnimalAdoption-DApp
+    $ cd AnimalAdoption-DApp/animal_adoption_dapp
     ```
     
 ### 2. Install Dependencies
@@ -30,7 +30,7 @@ $ . ~/.nvm/nvm.sh
     $ npm install
     ```
     
-### 3. Animal AdoptionRun Dapp
+### 3. Run Dapp
 
 ##### Start up Ganache-cli or GUI
 
@@ -40,10 +40,10 @@ $ ./ganache-cli
 
 ##### Deploy contract
 ```sh
-$ cd ./animal_adoption_dapp && truffle migrate
+$  truffle migrate
 ```
 
-
+### Run Animal AdoptionRun Dapp
 ```sh
 $ npm start
 ```
