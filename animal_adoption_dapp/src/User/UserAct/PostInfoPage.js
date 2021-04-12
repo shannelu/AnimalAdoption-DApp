@@ -155,7 +155,8 @@ class PostInfoPage extends React.Component{
         return(
             <Form {...layout} onFinish = {()=> this.post()}>
                 {this.state.posted ? <Redirect to='/main'/> : ""}
-                <h1>Thank you for your warm heart! Provide detailed information about this little thing!</h1>
+                <h1>Post Animal Information</h1>
+                <h2>Thanks for your warm heart! Provide detailed information about this little thing!</h2>
                 <Form.Item label = "When did you find it?" rules={[{ required: true, message: 'Please select a date!' }]} >
                     <DatePicker 
                         id = "date"
@@ -165,9 +166,9 @@ class PostInfoPage extends React.Component{
                     />
                 </Form.Item>
                 <Form.Item label = "What title is it?" rules={[{ required: true, message: 'Please enter a title!' }]} >
-                    <Input id = "title" placeholder = "write a title for your post" ></Input>
+                    <Input id = "title" placeholder = "Write a title for your post" ></Input>
                 </Form.Item>
-                <Form.Item label = "Where are you?" rules={[{ required: true, message: 'Please input your location!' }]} >
+                <Form.Item label = "What is your current location?" rules={[{ required: true, message: 'Please input your location!' }]} >
                     <Space>
                         <Cascader id = "city" placeholder = "Select your city" options = {options} style = {{width:140}}/>
                         <Input id = "street" placeholder = "Street name" style = {{width:152}}></Input>
@@ -182,8 +183,9 @@ class PostInfoPage extends React.Component{
                 <Form.Item hidden = {true}>
                     <Input type = "file" id = "myimg" multiple = 'multiple' onChange = {imgChange} style = {{visibility:'hidden'}}></Input>
                 </Form.Item>
-                <Form.Item label = "Upload picture">
-                    <Button icon = {<UploadOutlined/>} id = "test" onClick = {upload}>Upload pictures here</Button>
+                <Form.Item label = "Upload picture" action="/action_page.php">
+                    <Input type="file" id="test" name="filename" onClick = {upload}></Input>
+                    {/* <Button id = "test" onClick = {upload}>Choose File</Button> */}
                 </Form.Item>
                 <Form.Item label = "how much does it cost to adopt it?(Ether)">
                     <InputNumber id = "price" min = {1} max = {100} defaultValue = {1} step = {1}/>
@@ -198,6 +200,8 @@ class PostInfoPage extends React.Component{
                 </Form.Item>
                 <Form.Item>
                     <Button type = "primary" htmlType = 'submit' >Post</Button>
+                    <p></p>
+                    <Button type = "primary" htmlType = 'submit' href="/main">Return to Main Page</Button>
                 </Form.Item>
             </Form>
         )
