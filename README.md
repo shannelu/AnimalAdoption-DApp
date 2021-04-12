@@ -3,10 +3,20 @@ Code & documentation for the EECE 571G term project: Animal Adoption DApp
 
 Authored by Li Ju, Runze Wang, Shanny Lu, Shijun Shen
 
-## How to power up backend
+## Getting Started
+
+Note: Make sure the version of **nvm** you are using is *v12.13.0*. If your nvm current version is not *v12.13.0*. Switch to version *12.13.0* by using
+<code>
+nvm use 12.13.0
+</code>.
+
+### How to check your nvm version
+<code>
+. ~/.nvm/nvm.sh
+</code>
+
 
 ### Start up Ganache-cli or GUI
-
 <code>
 ./ganache-cli
 </code>
@@ -17,22 +27,7 @@ Authored by Li Ju, Runze Wang, Shanny Lu, Shijun Shen
 cd ./animal_adoption_dapp && truffle migrate
 </code>
 
-### How to create an Agent object
-
-<code> 
-let myAgent = new Agent();
+### Run Animal Adoption Dapp on local machine
+<code>
+npm start
 </code>
-
-<code> 
-myAgent.initialize(contractAddress);
-</code>
-
-### How to use Agent's functions
-
-Sample code is in the App.js file.
-
-### TODO:
-1. Page Transition (Done);
-2. Solve the Array related bugs;
-3. CSS
-4. ...
