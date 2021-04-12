@@ -1,8 +1,8 @@
-# EECE 571G Term Project: Animadopt <img src="DappLogo.JPEG" width="50">
+# EECE 571G Term Project: Animadopt <img src="docs/DappLogo.JPEG" width="50">
 Code & documentation for the EECE 571G term project: Animal Adoption DApp
 
-
 Authored by Li Ju, Runze Wang, Shanny Lu, Shijun Shen
+
 
 ## Getting Started
 
@@ -11,24 +11,40 @@ Note: Make sure the version of **nvm** you are using is *v12.13.0*. If your nvm 
 nvm use 12.13.0
 </code>.
 
-### How to check your nvm version
-<code>
-. ~/.nvm/nvm.sh
-</code>
+##### How to check your nvm version
+
+```sh
+$ . ~/.nvm/nvm.sh
+```
+
+### 1. Clone Repository
+
+    ```sh
+    $ git clone https://github.com/shannelu/AnimalAdoption-DApp.git
+    $ cd AnimalAdoption-DApp
+    ```
+    
+### 2. Install Dependencies
+
+    ```sh
+    $ npm install
+    ```
+    
+### 3. Animal AdoptionRun Dapp
+
+##### Start up Ganache-cli or GUI
+
+```sh
+$ ./ganache-cli
+```
+
+##### Deploy contract
+```sh
+$ cd ./animal_adoption_dapp && truffle migrate
+```
 
 
-### Start up Ganache-cli or GUI
-<code>
-./ganache-cli
-</code>
-
-### Deploy contract
-
-<code>
-cd ./animal_adoption_dapp && truffle migrate
-</code>
-
-### Run Animal Adoption Dapp on local machine
-<code>
-npm start
-</code>
+```sh
+$ npm start
+```
+Browser will launch on [http://localhost:3000/signin](http://localhost:3000/signin).
