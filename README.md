@@ -19,16 +19,16 @@ $ nvm version
 
 ### 1. Clone Repository
 
-    ```sh
-    $ git clone https://github.com/shannelu/AnimalAdoption-DApp.git
-    $ cd AnimalAdoption-DApp/animal_adoption_dapp
-    ```
+```sh
+$ git clone https://github.com/shannelu/AnimalAdoption-DApp.git
+$ cd AnimalAdoption-DApp/animal_adoption_dapp
+```
     
 ### 2. Install Dependencies
 
-    ```sh
-    $ npm install
-    ```
+```sh
+$ npm install
+```
     
 ### 3. Run Dapp
 
