@@ -40,7 +40,7 @@ $ ./ganache-cli
 
 ##### Deploy contract
 ```sh
-$  truffle migrate
+$ truffle migrate
 ```
 
 ##### Run Animal AdoptionRun Dapp
