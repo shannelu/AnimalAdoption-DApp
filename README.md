@@ -5,34 +5,41 @@ Authored by Li Ju, Runze Wang, Shanny Lu, Shijun Shen
 
 ## Brief Introducion to Our Project
 Stray animal mobile applications are popular all over the world to resolve the stray animal issues. However, according to the current situation, those issues haven't been effectively resolved in most cities. So, there is still a long way to go in resolving stray animals’ problems. To help solve these issues, in our project report, an short-distance animal adoption decentralized application, Animadopt, was designed and programmed using React.js with Javascript as the main front-end language and Solidity as the back-end programming language. The application enables users to post, share and adopt the stray animals on the Google Maps APIs in the form of markers and secures the transaction as users in Dapps can transact directly with each other using cryptocurrencies without third-party disturbing. This work provides a relatively convenient tool for pet-lovers to put their joint efforts to help stray animals find their new home.
-<img src="screenshots/user_case.jpg" width="100">
+<br/>
+<img src="screenshots/user_case.jpg" width="1000">
 
 ## Screenshots of Our Project
 
-#### map
+### map
 To present users with a map including all the information of stray animals, we invoke Google Maps APIs for animal position visualization. Every animal posted on our site can be represented by a mark in the real-time map, with a preview image popping up for users to browse. 
-<img src="screenshots/map.jpg" width="100">
+<br/>
+<img src="screenshots/map.jpg" width="1000">
 
-#### animal information
+### animal information
 Once a user clicks on a marker, the user will be redirected to a page containing specified animal information related to the marker, with its photos displayed in carousel mode, location, price in ether, and people who post this information.
 If a user is interested in adopting this animal, he/she can choose to adopt this animal by clicking the “I want to adopt it” button. Otherwise, they can also return to the main page to browse more options.
-<img src="screenshots/animal_information.jpg" width="100">
+<br/>
+<img src="screenshots/animal_information.jpg" width="1000">
 
-#### order confirmation
+### order confirmation
 If a user decides to adopt an animal, he/she will be linked to the order confirmation page. In this page, After reviewing everything he/she needs to know about this transaction, the user can choose to confirm the payment, which will awake metamask to deal with the ether transfer part, or to change his/her mind and go back to the animal information page.
-<img src="screenshots/order.jpg" width="100">
+<br/>
+<img src="screenshots/order.jpg" width="1000">
 
-#### post
+### post
 This page is designed for users to post any animal he/she has found and look for potential adopters. In this page, user should enter as many details as they can about the stray animal, including but not limited to: the time when they find the animal, their current location(displayed in latitude and longitude), the price they want to put on the animal(unit: ether), photos the user takes about the animal, and all other necessary information for other animal lovers to know more about this animal.
-<img src="screenshots/post.jpg" width="100">
+<br/>
+<img src="screenshots/post.jpg" width="1000">
 
-#### user profile
+### user profile
 User profile page consists of a user’s personal information, including user’s username, ethereum account address, and the number of animals he has ever adopted and posted. Besides, the user can change his/her username, password, or log out to sign in using another account.
-<img src="screenshots/profile.jpg" width="100">
+<br/>
+<img src="screenshots/profile.jpg" width="1000">
 
-#### user transacion records
+### user transacion records
 User transaction page is designed to collect all the transaction records of a user and display it in the form of an expandable table. The table entry in the main table shows the username of your seller/buyer and the date when the transaction happened. When you click the “+” button on the left of every table entry, a sub table appears and every entry of it records the information about the ether transaction with regards to the transaction in our site.
-<img src="screenshots/transaction_records.jpg" width="100">
+<br/>
+<img src="screenshots/transaction_records.jpg" width="1000">
 
 ## How to run
 
