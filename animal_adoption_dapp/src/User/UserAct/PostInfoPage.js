@@ -113,9 +113,9 @@ class PostInfoPage extends React.Component{
         }
     }
 
-    disabledDate(current){
-        return current > moment().endOf('day');
-    }
+disabledDate(current){
+    return current > moment().endOf('day');
+}
 
     async post(){
         this.state.myAgent.initialize();
@@ -157,12 +157,12 @@ class PostInfoPage extends React.Component{
                 {this.state.posted ? <Redirect to='/main'/> : ""}
                 <h1>Thank you for your warm heart! Provide detailed information about this little thing!</h1>
                 <Form.Item label = "When did you find it?" rules={[{ required: true, message: 'Please select a date!' }]} >
-                    <DatePicker 
-                        id = "date"
-                        showTime
-                        disabledDate = {this.disabledDate}
-                        style = {{width:300}}
-                    />
+<DatePicker 
+    id = "date"
+    showTime
+    disabledDate = {this.disabledDate}
+    style = {{width:300}}
+/>
                 </Form.Item>
                 <Form.Item label = "What title is it?" rules={[{ required: true, message: 'Please enter a title!' }]} >
                     <Input id = "title" placeholder = "write a title for your post" ></Input>
@@ -173,12 +173,12 @@ class PostInfoPage extends React.Component{
                         <Input id = "street" placeholder = "Street name" style = {{width:152}}></Input>
                     </Space>
                 </Form.Item>
-                <Form.Item label = "longitude" rules={[{ required: true, message: 'Please enter a longitude!' }]} >
-                    <Input id = "longitude" placeholder = "longitude" defaultValue = {lng}></Input>
-                </Form.Item>
-                <Form.Item label = "latitude" rules={[{ required: true, message: 'Please enter a latitude!' }]} >
-                    <Input id = "latitude" placeholder = "latitude" defaultValue = {lat}></Input>
-                </Form.Item>
+<Form.Item label = "longitude" rules={[{ required: true, message: 'Please enter a longitude!' }]} >
+    <Input id = "longitude" placeholder = "longitude" defaultValue = {lng}></Input>
+</Form.Item>
+<Form.Item label = "latitude" rules={[{ required: true, message: 'Please enter a latitude!' }]} >
+    <Input id = "latitude" placeholder = "latitude" defaultValue = {lat}></Input>
+</Form.Item>
                 <Form.Item hidden = {true}>
                     <Input type = "file" id = "myimg" multiple = 'multiple' onChange = {imgChange} style = {{visibility:'hidden'}}></Input>
                 </Form.Item>
@@ -190,11 +190,11 @@ class PostInfoPage extends React.Component{
                 </Form.Item>
                 <Form.Item layout = 'horizontal' label = "Description" rules={[{ required: true, message: 'This is a required field!' }]} >
                     <Input.TextArea id = "description" 
-                                    placeholder = "Tell us more about this little thing~" 
-                                    allowClear
-                                    showCount
-                                    maxLength = {200}
-                                    />
+                        placeholder = "Tell us more about this little thing~" 
+                        allowClear
+                        showCount
+                        maxLength = {200}
+                    />
                 </Form.Item>
                 <Form.Item>
                     <Button type = "primary" htmlType = 'submit' >Post</Button>
