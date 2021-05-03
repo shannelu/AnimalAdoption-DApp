@@ -4,9 +4,9 @@ Code & documentation for the EECE 571G term project: Animal Adoption DApp
 Authored by Li Ju, Runze Wang, Shanny Lu, Shijun Shen
 
 ## Brief Introducion to Our Project
-Stray animal mobile applications are popular all over the world to resolve the stray animal issues. However, according to the current situation, those issues haven't been effectively resolved in most cities. So, there is still a long way to go in resolving stray animals’ problems.<br/> 
-To help solve these issues, in our project report, an short-distance animal adoption decentralized application, **Animadopt**, was designed and programmed using React.js with Javascript as the main front-end language and Solidity as the back-end programming language. <br/> 
-The application enables users to post, share and adopt the stray animals on the Google Maps APIs in the form of markers and secures the transaction as users in Dapps can transact directly with each other using cryptocurrencies without third-party disturbing. This work provides a relatively convenient tool for pet-lovers to put their joint efforts to help stray animals find their new home.
+- Stray animal mobile applications are popular all over the world to resolve the stray animal issues. However, according to the current situation, those issues haven't been effectively resolved in most cities. So, there is still a long way to go in resolving stray animals’ problems.<br/> 
+- To help solve these issues, in our project report, an short-distance animal adoption decentralized application, **Animadopt**, was designed and programmed using React.js with Javascript as the main front-end language and Solidity as the back-end programming language. <br/> 
+- The application enables users to post, share and adopt the stray animals on the Google Maps APIs in the form of markers and secures the transaction as users in Dapps can transact directly with each other using cryptocurrencies without third-party disturbing. This work provides a relatively convenient tool for pet-lovers to put their joint efforts to help stray animals find their new home.
 <br/>
 <img src="screenshots/user_case.jpg" width="1000">
 
